@@ -1,8 +1,8 @@
 package com.nhb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nhb.entity.Article;
-import com.nhb.entity.domain.ResponseResult;
+import com.nhb.domain.entity.Article;
+import com.nhb.domain.ResponseResult;
 
 
 /**

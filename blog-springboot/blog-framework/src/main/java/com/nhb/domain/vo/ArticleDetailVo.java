@@ -1,4 +1,4 @@
-package com.nhb.vo;
+package com.nhb.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,28 +8,30 @@ import java.util.Date;
 
 /**
  * @author 大只
- * @date 2022/10/1 00:13
+ * @date 2022/10/1 00:41
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ArticleListVo {
+@NoArgsConstructor
+public class ArticleDetailVo {
 
     private Long id;
+
     //标题
     private String title;
-    //文章摘要
-    private String summary;
-    //所属分类名
-    private String categoryName;
-    //缩略图
-    private String thumbnail;
+    //文章内容
+    private String content;
 
+    //所属分类id
+    private Long categoryId;
 
     //访问量
     private Long viewCount;
+    //是否允许评论 1是，0否
+    private String isComment;
 
     private Date createTime;
 
 
+    private String categoryName;
 }

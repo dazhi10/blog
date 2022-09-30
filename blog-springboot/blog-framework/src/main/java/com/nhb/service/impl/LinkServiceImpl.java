@@ -3,12 +3,12 @@ package com.nhb.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nhb.constant.SystemConstant;
-import com.nhb.entity.Link;
-import com.nhb.entity.domain.ResponseResult;
+import com.nhb.domain.entity.Link;
+import com.nhb.domain.ResponseResult;
 import com.nhb.mapper.LinkMapper;
 import com.nhb.service.LinkService;
 import com.nhb.utils.BeanCopyUtils;
-import com.nhb.vo.LinkVo;
+import com.nhb.domain.vo.LinkVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

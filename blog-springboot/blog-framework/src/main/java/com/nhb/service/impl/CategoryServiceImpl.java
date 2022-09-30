@@ -3,14 +3,14 @@ package com.nhb.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nhb.constant.SystemConstant;
-import com.nhb.entity.Article;
-import com.nhb.entity.Category;
-import com.nhb.entity.domain.ResponseResult;
+import com.nhb.domain.entity.Article;
+import com.nhb.domain.entity.Category;
+import com.nhb.domain.ResponseResult;
 import com.nhb.mapper.CategoryMapper;
 import com.nhb.service.ArticleService;
 import com.nhb.service.CategoryService;
 import com.nhb.utils.BeanCopyUtils;
-import com.nhb.vo.CategoryVo;
+import com.nhb.domain.vo.CategoryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

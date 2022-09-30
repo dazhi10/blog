@@ -1,7 +1,7 @@
 package com.nhb.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.nhb.entity.Link;
+import com.nhb.domain.entity.Link;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.nhb.entity.domain;
+package com.nhb.domain;
 
 /**
  * @author 大只

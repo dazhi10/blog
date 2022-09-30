@@ -1,6 +1,6 @@
 package com.nhb.controller;
 
-import com.nhb.entity.domain.ResponseResult;
+import com.nhb.domain.ResponseResult;
 import com.nhb.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

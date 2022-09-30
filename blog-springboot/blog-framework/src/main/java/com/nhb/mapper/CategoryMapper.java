@@ -1,7 +1,7 @@
 package com.nhb.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.nhb.entity.Category;
+import com.nhb.domain.entity.Category;
 
 
 /**
