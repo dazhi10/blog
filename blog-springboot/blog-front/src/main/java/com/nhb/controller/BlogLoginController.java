@@ -25,4 +25,10 @@ public class BlogLoginController {
     public ResponseResult login(@RequestBody User user){
         return blogLoginService.login(user);
     }
+
+    @ApiOperation("退出登录")
+    @PostMapping("/logout")
+    public ResponseResult logout(){
+        return blogLoginService.logout();
+    }
 }

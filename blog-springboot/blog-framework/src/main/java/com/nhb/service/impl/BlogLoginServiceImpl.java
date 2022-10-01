@@ -9,6 +9,7 @@ import com.nhb.service.BlogLoginService;
 import com.nhb.utils.BeanCopyUtils;
 import com.nhb.utils.JwtUtil;
 import com.nhb.utils.RedisCache;
+import com.nhb.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,5 +54,14 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(jwt, userInfoVo);
         return ResponseResult.okResult(blogUserLoginVo);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取token，解析获取userId
+        Long userId = SecurityUtils.getUserId();
+        //删除redis中的用户信息
+        redisCache.deleteObject("blogLogin:"+userId);
+        return ResponseResult.okResult();
     }
 }
