@@ -45,6 +45,8 @@ public class SwaggerConfig {
                 .version("1.0")
                 .build();
     }
+
+    //http://127.0.0.1:7777/doc.html#/home
 }
 
 
