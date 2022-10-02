@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/10/1 01:50
  */
 @RestController
-@Api(tags = "用户模块")
+@Api(tags = "用户认证模块")
 public class BlogLoginController {
     @Autowired
     private BlogLoginService blogLoginService;

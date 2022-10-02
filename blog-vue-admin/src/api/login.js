@@ -9,7 +9,7 @@ export function login(userName, password, code, uuid) {
     uuid,
   };
   return request({
-    url: "/user/adminlogin",
+    url: "/user/login",
     headers: {
       isToken: false,
     },
