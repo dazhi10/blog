@@ -54,5 +54,11 @@ public class TagController {
         return tagService.updateTag(tag);
     }
 
+    @ApiOperation("查看所有标签")
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        return tagService.listAllTag();
+    }
+
 }
 

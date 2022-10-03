@@ -61,4 +61,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         TagVo tagVo = BeanCopyUtils.copyBean(tag, TagVo.class);
         return ResponseResult.okResult(tagVo);
     }
+
+    @Override
+    public ResponseResult listAllTag() {
+        List<Tag> list = list(null);
+        List<TagVo> tagVos = BeanCopyUtils.copyBeanList(list, TagVo.class);
+        return ResponseResult.okResult(tagVos);
+    }
 }

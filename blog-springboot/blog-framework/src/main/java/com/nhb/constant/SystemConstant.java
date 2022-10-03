@@ -40,6 +40,11 @@ public class SystemConstant {
 
     public static final String BUTTON = "F";
 
+    /**
+     * 分类状态为正常
+     */
+    public static final String CATEGORY_STATE_NORMAL = "0";
+
 
 
 

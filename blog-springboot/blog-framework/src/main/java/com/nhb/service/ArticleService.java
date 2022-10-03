@@ -1,6 +1,7 @@
 package com.nhb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.nhb.domain.dto.AddArticleDto;
 import com.nhb.domain.entity.Article;
 import com.nhb.domain.ResponseResult;
 
@@ -41,4 +42,11 @@ public interface ArticleService extends IService<Article> {
      * @return ResponseResult
      */
     ResponseResult updateViewCount(Long id);
+
+    /**
+     * 新增文章
+     * @param articleDto 新增文章请求体
+     * @return ResponseResult
+     */
+    ResponseResult saveArticle(AddArticleDto articleDto);
 }

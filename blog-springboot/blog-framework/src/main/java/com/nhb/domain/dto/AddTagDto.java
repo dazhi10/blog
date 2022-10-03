@@ -1,4 +1,4 @@
-package com.nhb.domain.vo;
+package com.nhb.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,17 +6,14 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 大只
- * @date 2022/9/30 23:44
+ * @date 2022/10/3 19:55
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryVo {
-    private Long id;
-
-    //分类名
+public class AddTagDto {
+    //备注
+    private String remark;
+    //标签名
     private String name;
-
-    //描述
-    private String description;
 }

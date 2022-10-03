@@ -45,18 +45,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                // 对于登录接口 允许匿名访问
+                //登录接口 允许匿名访问
                 .antMatchers("/user/login").anonymous()
-                //注销接口需要认证才能访问
-                .antMatchers("/user/logout").authenticated()
-                //个人信息接口必须登录后才能访问
-                .antMatchers("/getInfo").authenticated()
-                //获取用户路由需要认证
-                .antMatchers("/getRouters").authenticated()
-                //标签需要认证
-                .antMatchers("/content/tag").authenticated()
-                // 除上面外的所有请求全部不需要认证即可访问
-                .anyRequest().permitAll();
+                //knife4j  允许匿名访问
+                .antMatchers("/doc.html","/webjars/**","/img.icons/**","/swagger-resources/**","/v2/api-docs").anonymous()
+                //除上面外的所有请求全部需要认证即可访问
+                .anyRequest().authenticated();
+
+
 
 
         //配置异常处理器

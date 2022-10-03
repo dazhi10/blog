@@ -52,4 +52,10 @@ public interface TagService extends IService<Tag> {
      * @return ResponseResult
      */
     ResponseResult getTag(Long id);
+
+    /**
+     * 查看所有标签
+     * @return
+     */
+    ResponseResult listAllTag();
 }

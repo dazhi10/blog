@@ -18,4 +18,10 @@ public interface CategoryService extends IService<Category> {
      * @return ResponseResult
      */
     ResponseResult getCategoryList();
+
+    /**
+     * 查看所有分类
+     * @return
+     */
+    ResponseResult listAllCategory();
 }
