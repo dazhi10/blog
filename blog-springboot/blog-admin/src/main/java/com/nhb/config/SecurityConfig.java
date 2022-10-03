@@ -53,6 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/getInfo").authenticated()
                 //获取用户路由需要认证
                 .antMatchers("/getRouters").authenticated()
+                //标签需要认证
+                .antMatchers("/content/tag").authenticated()
                 // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();
 
