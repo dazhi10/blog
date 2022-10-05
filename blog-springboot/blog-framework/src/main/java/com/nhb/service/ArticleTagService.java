@@ -12,4 +12,5 @@ import com.nhb.domain.entity.ArticleTag;
  */
 public interface ArticleTagService extends IService<ArticleTag> {
 
+
 }

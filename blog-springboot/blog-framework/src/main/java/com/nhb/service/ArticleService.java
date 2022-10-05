@@ -2,8 +2,11 @@ package com.nhb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.nhb.domain.dto.AddArticleDto;
+import com.nhb.domain.dto.ArticleDto;
 import com.nhb.domain.entity.Article;
 import com.nhb.domain.ResponseResult;
+
+import java.util.List;
 
 
 /**
@@ -29,6 +32,8 @@ public interface ArticleService extends IService<Article> {
      */
     ResponseResult articleList(Integer pageNum, Integer pageSize, Long categoryId);
 
+    ResponseResult articleList(Integer pageNum, Integer pageSize, ArticleDto articleDto);
+
     /**
      * 查看文章详情
      * @param id 文章id
@@ -49,4 +54,25 @@ public interface ArticleService extends IService<Article> {
      * @return ResponseResult
      */
     ResponseResult saveArticle(AddArticleDto articleDto);
+
+    /**
+     * 查看单个文章
+     * @param id 文章id
+     * @return
+     */
+    ResponseResult articleById(String id);
+
+    /**
+     * 更新文章
+     * @param articleDto 更新请求体
+     * @return
+     */
+    ResponseResult updateArticle(ArticleDto articleDto);
+
+    /**
+     * 删除文章
+     * @param ids 文章id集
+     * @return
+     */
+    ResponseResult deleteArticle(List<Long> ids);
 }

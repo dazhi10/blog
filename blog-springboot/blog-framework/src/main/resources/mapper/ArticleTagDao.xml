@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nhb.mapper.ArticleTagMapper">
 
-  
+
+    <select id="getArticleTagList" resultType="java.lang.Long">
+        SELECT
+            t.id
+        FROM
+            article_tag
+                at LEFT JOIN tag t ON at.tag_id = t.id
+        WHERE
+            at.article_id = #{id} AND t.del_flag = 0
+    </select>
 </mapper>
 

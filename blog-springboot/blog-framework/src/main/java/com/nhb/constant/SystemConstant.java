@@ -46,6 +46,5 @@ public class SystemConstant {
     public static final String CATEGORY_STATE_NORMAL = "0";
 
 
-
-
+    public static final String ADMIN = "0";
 }
