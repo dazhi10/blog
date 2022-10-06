@@ -24,4 +24,6 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     ResponseResult listAllCategory();
+
+    ResponseResult listCategory(Integer pageNum, Integer pageSize, String name, String status);
 }

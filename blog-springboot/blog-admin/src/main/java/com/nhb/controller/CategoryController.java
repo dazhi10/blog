@@ -12,9 +12,7 @@ import com.nhb.utils.WebUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -55,6 +53,41 @@ public class CategoryController {
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
             WebUtils.renderString(response, JSON.toJSONString(result));
         }
+    }
+
+
+    @ApiOperation("查看分类列表")
+    @GetMapping("/list")
+    public ResponseResult listCategory(Integer pageNum, Integer pageSize, @RequestParam(required = false) String name, @RequestParam(required = false) String status){
+        return categoryService.listCategory(pageNum,pageSize,name,status);
+    }
+
+
+    @ApiOperation("新增分类")
+    @PostMapping
+    public ResponseResult saveCategory(@RequestBody Category category){
+        categoryService.save(category);
+        return ResponseResult.okResult();
+    }
+
+    @ApiOperation("根据id查询分类")
+    @GetMapping("/{id}")
+    public ResponseResult categoryById(@PathVariable Long id){
+        return ResponseResult.okResult(categoryService.getById(id));
+    }
+
+    @ApiOperation("修改分类")
+    @PutMapping
+    public ResponseResult updateCategory(@RequestBody Category category){
+        categoryService.updateById(category);
+        return ResponseResult.okResult();
+    }
+
+    @ApiOperation("删除分类")
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteCategory(@PathVariable Long id){
+        categoryService.removeById(id);
+        return ResponseResult.okResult();
     }
 
 }

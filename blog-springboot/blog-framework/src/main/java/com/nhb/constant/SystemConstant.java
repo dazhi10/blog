@@ -47,4 +47,8 @@ public class SystemConstant {
 
 
     public static final String ADMIN = "0";
+
+    /** 正常状态 */
+    public static final String NORMAL = "0";
+    public static final String ADMAIN = "1";
 }

@@ -1,11 +1,13 @@
 package com.nhb.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nhb.constant.SystemConstant;
 import com.nhb.domain.entity.Article;
 import com.nhb.domain.entity.Category;
 import com.nhb.domain.ResponseResult;
+import com.nhb.domain.vo.PageVo;
 import com.nhb.mapper.CategoryMapper;
 import com.nhb.service.ArticleService;
 import com.nhb.service.CategoryService;
@@ -13,6 +15,7 @@ import com.nhb.utils.BeanCopyUtils;
 import com.nhb.domain.vo.CategoryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -58,5 +61,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<Category> list = list(queryWrapper);
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(list, CategoryVo.class);
         return ResponseResult.okResult(categoryVos);
+    }
+
+    @Override
+    public ResponseResult listCategory(Integer pageNum, Integer pageSize, String name, String status) {
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(name),Category::getName,name);
+        queryWrapper.eq(StringUtils.hasText(status),Category::getStatus,status);
+        Page<Category> categoryPage = new Page<>();
+        page(categoryPage,queryWrapper);
+        return ResponseResult.okResult(new PageVo(categoryPage.getRecords(),categoryPage.getTotal()));
     }
 }

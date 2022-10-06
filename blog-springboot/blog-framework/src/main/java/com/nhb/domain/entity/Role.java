@@ -1,11 +1,13 @@
 package com.nhb.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 /**
  * 角色信息表(Role)表实体类
  *
@@ -41,6 +43,9 @@ public class Role  {
     private Date updateTime;
     //备注
     private String remark;
+
+    @TableField(exist = false)
+    private Long[] MenuIds;
 
 
 

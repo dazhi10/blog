@@ -18,4 +18,6 @@ public interface LinkService extends IService<Link> {
      * @return ResponseResult
      */
     ResponseResult getAllLink();
+
+    ResponseResult listLink(Integer pageNum, Integer pageSize, String name, String status);
 }

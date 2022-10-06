@@ -1,6 +1,7 @@
 package com.nhb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.Menu;
 
 import java.util.List;
@@ -26,4 +27,18 @@ public interface MenuService extends IService<Menu> {
      * @return List<Menu>
      */
     List<Menu> selectRouterMenuTreeByUserId(Long userId);
+
+    /**
+     * 查看菜单列表
+     * @param menuName 菜单名
+     * @param status  菜单状态
+     * @return
+     */
+    ResponseResult menuList(String menuName, String status);
+
+    boolean hasChild(Long menuId);
+
+    List<Menu> selectMenuList(Menu menu);
+
+    List<Long> selectMenuListByRoleId(Long roleId);
 }
