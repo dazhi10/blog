@@ -10,21 +10,27 @@ import com.nhb.domain.entity.UserRole;
 import com.nhb.domain.vo.PageVo;
 import com.nhb.domain.vo.UserInfoVo;
 import com.nhb.domain.vo.UserVo;
-import com.nhb.enums.AppHttpCodeEnum;
-import com.nhb.exception.SystemException;
 import com.nhb.mapper.UserMapper;
 import com.nhb.service.UserRoleService;
 import com.nhb.service.UserService;
 import com.nhb.utils.BeanCopyUtils;
+import com.nhb.utils.RedisCache;
 import com.nhb.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.mail.internet.MimeMessage;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +44,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JavaMailSender mailSender;
+
+    @Autowired
+    RedisCache redisCache;
+
+    @Value("${spring.mail.username}")
+    private String mailKey;
 
     @Autowired
     private UserRoleService userRoleService;
@@ -59,27 +74,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return ResponseResult.okResult();
     }
 
+
+
     @Override
     public ResponseResult register(User user) {
-        //对数据进行非空判断
-        if(!StringUtils.hasText(user.getUserName())){
-            throw new SystemException(AppHttpCodeEnum.USERNAME_NOT_NULL);
+
+        //根据用户注册信息进行注册链接的的生成和发送
+        MimeMessage message = mailSender.createMimeMessage();
+        try{
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message);
+            String mailId = UUID.randomUUID().toString(); // 生成UUID
+            //key存入redis中
+            redisCache.setCacheObject(mailId,user);
+            //key五分钟过期
+            redisCache.expire(mailId,300, TimeUnit.SECONDS);
+            messageHelper.setFrom(mailKey); //发送方的邮箱地址，而不是接收方的邮箱地址
+            messageHelper.setTo(user.getUserName()); // 接收方的邮箱地址
+            messageHelper.setSubject("注册");  // 邮箱标题
+            String html = "<html>\n" +
+                    "<body>\n" +
+                    "<p>请点击下方链接注册</p>\n" +
+                    "<a href=\"http://localhost:7777/user/lookCode?mailId="+mailId + "\">http://localhost:7777/user/lookCode?mailId="+mailId+"</a>" +
+                    "</body>\n" +
+                    "</html>";
+            messageHelper.setText(html,true); // 邮箱内容
+            mailSender.send(message);  // 发送邮箱
+            return ResponseResult.okResult("邮箱发送成功,请前往邮箱确认");
+
+        }catch (Exception e){
+            return ResponseResult.okResult("邮箱发送失败");
         }
-        if(!StringUtils.hasText(user.getPassword())){
-            throw new SystemException(AppHttpCodeEnum.PASSWORD_NOT_NULL);
-        }
-        if(!StringUtils.hasText(user.getEmail())){
-            throw new SystemException(AppHttpCodeEnum.EMAIL_NOT_NULL);
-        }
-        if(!StringUtils.hasText(user.getNickName())){
-            throw new SystemException(AppHttpCodeEnum.NICKNAME_NOT_NULL);
+    }
+
+    @Override
+    public ResponseResult lookCode(String mailId) {
+        //从redis中取出邮箱和密码
+        User user = redisCache.getCacheObject(mailId);
+        if(Objects.isNull(user)){
+            return ResponseResult.okResult("认证时间过期");
         }
         //对密码进行加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
         //存入数据库
         save(user);
-        return ResponseResult.okResult();
+        return ResponseResult.okResult("注册成功");
+    }
+
+    @Override
+    public boolean checkUserNameUnique(String userName) {
+        return count(Wrappers.<User>lambdaQuery().eq(User::getUserName,userName)) == 0;
     }
 
     @Override
@@ -88,7 +132,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         queryWrapper.like(StringUtils.hasText(user.getUserName()),User::getUserName,user.getUserName());
         queryWrapper.eq(StringUtils.hasText(user.getStatus()),User::getStatus,user.getStatus());
-        queryWrapper.eq(StringUtils.hasText(user.getPhonenumber()),User::getPhonenumber,user.getPhonenumber());
 
         Page<User> page = new Page<>();
         page.setCurrent(pageNum);
@@ -106,20 +149,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return ResponseResult.okResult(pageVo);
     }
 
-    @Override
-    public boolean checkUserNameUnique(String userName) {
-        return count(Wrappers.<User>lambdaQuery().eq(User::getUserName,userName))==0;
-    }
-
-    @Override
-    public boolean checkPhoneUnique(User user) {
-        return count(Wrappers.<User>lambdaQuery().eq(User::getPhonenumber,user.getPhonenumber()))==0;
-    }
-
-    @Override
-    public boolean checkEmailUnique(User user) {
-        return count(Wrappers.<User>lambdaQuery().eq(User::getEmail,user.getEmail()))==0;
-    }
 
     @Override
     @Transactional
@@ -146,6 +175,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新用户信息
         updateById(user);
     }
+
+
 
     private void insertUserRole(User user) {
         List<UserRole> sysUserRoles = Arrays.stream(user.getRoleIds())

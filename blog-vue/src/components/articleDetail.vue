@@ -1,10 +1,6 @@
 <!-- 文章详情模块 -->
 <template>
         <div class="detailBox tcommonBox" >
-            <span class="s-round-date">
-                <span class="month" v-html="showInitDate(detailObj.createTime,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(detailObj.createTime,'date')"></span>
-            </span>
             <header>
                 <h1>
                     <a :href="'#/DetailShare?aid='+detailObj.id" target="_blank">
@@ -12,288 +8,224 @@
                     </a>
                 </h1>
                 <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span> •
-                    <i class="fa fa-fw fa-eye"></i>{{detailObj.viewCount}} 次围观 •
+                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span>
+                    <i class="fa fa-fw fa-eye"></i>{{detailObj.viewCount}} 次围观
                 </h2>
-                <div class="ui label">
-                    <a :href="'#/Share?classId='+detailObj.categoryId">{{detailObj.categoryName}}</a>
-                </div>
+              
             </header>
             <div class="article-content markdown-body" v-html="detailObj.content"></div>
-
-            <div class="donate">
-                <div class="donate-word">
-                    <span @click="pdonate=!pdonate">赞赏</span>
-                </div>
-                <el-row :class="pdonate?'donate-body':'donate-body donate-body-show'" :gutter="30">
-                    <el-col  :span="12"   class="donate-item">
-                        <div class="donate-tip">
-                            <img :src="detailObj.wechat_image?detailObj.wechat_image: 'static/img/wx_pay.png'" :onerror="$store.state.errorImg"/>
-                            <span>微信扫一扫，向我赞赏</span>
-                        </div>
-                    </el-col>
-                    <el-col :span="12"  class="donate-item">
-                        <div class="donate-tip">
-                            <img :src="detailObj.alipay_image?detailObj.alipay_image:'static/img/ali_pay.jpg'" :onerror="$store.state.errorImg"/>
-                            <span>支付宝扫一扫，向我赞赏</span>
-                        </div>
-                    </el-col>
-                </el-row>
-            </div>
         </div>
 </template>
 
 <script>
-import {initDate} from '../utils/server.js'
-import {getArticle,updateViewCount} from '../api/article.js'
-import { mavonEditor } from 'mavon-editor'
-    export default {
-        data() { //选项 / 数据
-            return {
-                aid:'',//文章ID
-                pdonate:true,//打开赞赏控制,
-                detailObj:{},//返回详情数据
-                haslogin:false,//是否已经登录
-                userId:'',//用户id
-            }
-        },
-        methods: { //事件处理器
-            showInitDate:function(date,full){//年月日的编辑
-                // console.log(detailObj.create_time,date,full);
-                return initDate(date,full);
-            },
-            getArticleDetail:function(){
-                getArticle(this.aid).then((response)=>{
-                    this.detailObj = response
-                     const markdownIt = mavonEditor.getMarkdownIt()
-                    // markdownIt.re
-                    this.detailObj.content = markdownIt.render(response.content);
-                })
-            },
-            routeChange:function(){
-                var that = this;
-                that.aid = that.$route.query.aid==undefined?1:parseInt(that.$route.query.aid);//获取传参的aid
-                //判断用户是否存在
-                if(localStorage.getItem('userInfo')){
-                    that.haslogin = true;
-                    that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-                    that.userId = that.userInfo.userId;
-                    // console.log(that.userInfo);
-                }else{
-                    that.haslogin = false;
-                }
-                //获取详情接口
-                this.getArticleDetail()
-                updateViewCount(that.aid)
-            }
-        },
-        watch: {
-           // 如果路由有变化，会再次执行该方法
-           '$route':'routeChange'
-         },
-        components: { //定义组件
-
-        },
-        created() { //生命周期函数
-            var that = this;
-
-            this.routeChange();
-        },
-
+import { initDate } from "../utils/server.js";
+import { getArticle, updateViewCount } from "../api/article.js";
+import { mavonEditor } from "mavon-editor";
+export default {
+  data() {
+    //选项 / 数据
+    return {
+      aid: "", //文章ID
+      detailObj: {}, //返回详情数据
+      haslogin: false, //是否已经登录
+      userId: "" //用户id
+    };
+  },
+  methods: {
+    //事件处理器
+    showInitDate: function(date, full) {
+      //年月日的编辑
+      // console.log(detailObj.create_time,date,full);
+      return initDate(date, full);
+    },
+    getArticleDetail: function() {
+      getArticle(this.aid).then(response => {
+        this.detailObj = response;
+        const markdownIt = mavonEditor.getMarkdownIt();
+        // markdownIt.re
+        this.detailObj.content = markdownIt.render(response.content);
+      });
+    },
+    routeChange: function() {
+      var that = this;
+      that.aid =
+        that.$route.query.aid == undefined
+          ? 1
+          : parseInt(that.$route.query.aid); //获取传参的aid
+      //判断用户是否存在
+      if (localStorage.getItem("userInfo")) {
+        that.haslogin = true;
+        that.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        that.userId = that.userInfo.userId;
+        // console.log(that.userInfo);
+      } else {
+        that.haslogin = false;
+      }
+      //获取详情接口
+      this.getArticleDetail();
+      updateViewCount(that.aid);
     }
+  },
+  watch: {
+    // 如果路由有变化，会再次执行该方法
+    $route: "routeChange"
+  },
+  components: {
+    //定义组件
+  },
+  created() {
+    //生命周期函数
+    var that = this;
+
+    this.routeChange();
+  }
+};
 </script>
 
 <style lang="less">
-
-.detailBox .article-content{
-    font-size: 15px;
-    white-space: normal;
-    word-wrap: break-word;
-    word-break: break-all;
-    overflow-x: hidden;
+.top_style {
+  top: -20px;
 }
-.detailBox .article-content p{
-    margin:10px 0;
-    line-height:24px;
-    word-wrap: break-word;
-    word-break: break-all;
-    overflow-x: hidden;
+.detailBox .article-content {
+  font-size: 15px;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-x: hidden;
 }
-.detailBox .article-content pre{
-    word-wrap: break-word;
-    word-break: break-all;
-    overflow-x: hidden;
+.detailBox .article-content p {
+  margin: 10px 0;
+  line-height: 24px;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-x: hidden;
 }
-.detailBox .article-content img{
-    max-width: 100%!important;
-    height: auto!important;
-    overflow-x: hidden;
+.detailBox .article-content pre {
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-x: hidden;
 }
-.detailBox .article-content a{
-    color:#df2050!important;
+.detailBox .article-content img {
+  max-width: 100% !important;
+  height: auto !important;
+  overflow-x: hidden;
 }
-.detailBox .article-content a:hover{
-    text-decoration: underline;
-    color: #f00!important;
+.detailBox .article-content a {
+  color: #df2050 !important;
 }
-.detailBox .article-content i{
-    font-style: italic;
+.detailBox .article-content a:hover {
+  text-decoration: underline;
+  color: #f00 !important;
 }
-.detailBox .article-content strong{
-    font-weight: bold;
+.detailBox .article-content i {
+  font-style: italic;
 }
-.detailBox .article-content ul{
-    list-style-type: disc!important;
-    list-style: disc!important;
-    padding-left: 40px!important;
-    li{
-        list-style-type: disc!important;
-        list-style: disc!important;
-    }
+.detailBox .article-content strong {
+  font-weight: bold;
 }
-.detailBox .article-content h1, .detailBox .article-content h2, .detailBox .article-content h3{
-    font-size: 200%;
-    font-weight: bold;
+.detailBox .article-content ul {
+  list-style-type: disc !important;
+  list-style: disc !important;
+  padding-left: 40px !important;
+  li {
+    list-style-type: disc !important;
+    list-style: disc !important;
+  }
 }
- .detailBox .article-content h4, .detailBox .article-content h5, .detailBox .article-content h6{
-    font-size: 150%;
-    font-weight: bold;
+.detailBox .article-content h1,
+.detailBox .article-content h2,
+.detailBox .article-content h3 {
+  font-size: 200%;
+  font-weight: bold;
 }
-.detailBox .viewdetail{
-    margin:10px 0 ;
-    line-height: 24px;
-    text-align: center;
+.detailBox .article-content h4,
+.detailBox .article-content h5,
+.detailBox .article-content h6 {
+  font-size: 150%;
+  font-weight: bold;
+}
+.detailBox .viewdetail {
+  margin: 10px 0;
+  line-height: 24px;
+  text-align: center;
 }
 /*分享图标*/
 .dshareBox {
-    margin-top:40px;
-    position: relative;
+  margin-top: 40px;
+  position: relative;
 }
-.dshareBox a{
-    position: relative;
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-    border-radius: 50%;
-    line-height: 32px;
-    text-align: center;
-    vertical-align: middle;
-    margin: 4px;
-    background: #fff;
-    transition: background 0.6s ease-out;
+.dshareBox a {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  border-radius: 50%;
+  line-height: 32px;
+  text-align: center;
+  vertical-align: middle;
+  margin: 4px;
+  background: #fff;
+  transition: background 0.6s ease-out;
 }
-.dshareBox .ds-weibo{
-    border: 1px solid #ff763b;
-    color: #ff763b;
+.dshareBox .ds-weibo {
+  border: 1px solid #ff763b;
+  color: #ff763b;
 }
-.dshareBox .ds-weibo:hover{
-    color: #fff;
-    background: #ff763b;
+.dshareBox .ds-weibo:hover {
+  color: #fff;
+  background: #ff763b;
 }
-.dshareBox .ds-qq{
-    color: #56b6e7;
-    border: 1px solid #56b6e7;
+.dshareBox .ds-qq {
+  color: #56b6e7;
+  border: 1px solid #56b6e7;
 }
-.dshareBox .ds-qq:hover{
-    color: #fff;
-    background: #56b6e7;
+.dshareBox .ds-qq:hover {
+  color: #fff;
+  background: #56b6e7;
 }
-.dshareBox .ds-wechat{
-    color: #7bc549;
-    border: 1px solid #7bc549;
+.dshareBox .ds-wechat {
+  color: #7bc549;
+  border: 1px solid #7bc549;
 }
-.dshareBox .ds-wechat:hover{
-    color: #fff;
-    background: #7bc549;
+.dshareBox .ds-wechat:hover {
+  color: #fff;
+  background: #7bc549;
 }
-.dshareBox .ds-wechat:hover .wechatShare{
-    opacity: 1;
-    visibility: visible;
+.dshareBox .ds-wechat:hover .wechatShare {
+  opacity: 1;
+  visibility: visible;
 }
-.detailBox .bdshare-button-style0-32 a{
-    float:none;
-    background-image: none;
-    text-indent: inherit;
+.detailBox .bdshare-button-style0-32 a {
+  float: none;
+  background-image: none;
+  text-indent: inherit;
 }
 /*点赞 收藏*/
-.dlikeColBox{
-    display: inline-block;
-    float:right;
+.dlikeColBox {
+  display: inline-block;
+  float: right;
 }
-.dlikeBox,.dcollectBox{
-    display: inline-block;
-    padding:0 10px;
-    height:35px;
-    color: #e26d6d;
-    line-height: 35px;
-    border-radius: 35px;
-    border: 1px solid #e26d6d;
-    cursor: pointer;
-}
-
-/*赞赏*/
-.donate-word{
-    margin:40px 0;
-    text-align: center;
-}
-.donate-word span{
-    display: inline-block;
-    width:80px;
-    height:34px;
-    line-height: 34px;
-    color:#fff;
-    background: #e26d6d;
-    margin:0 auto;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.donate-body{
-    display: none;
-}
-.donate-body-show{
-    display: block;
-}
-.donate-item{
-    text-align: right;
-}
-.donate-item:last-child{
-    text-align: left;
-}
-.donate-item img{
-    width:100%;
-    display: block;
-    height:auto;
-}
-.donate-item div{
-    display: inline-block;
-    width: 150px;
-    padding: 0 6px;
-    box-sizing: border-box;
-    text-align: center;
-}
-.donate-item div span{
-    display: inline-block;
-    width:100%;
-    margin: 10px 0;
-    text-align: center;
-}
-.donate-body .donate-item:first-of-type div{
-    color:#44b549;
-}
-.donate-body .donate-item:nth-of-type(2) div{
-    color:#00a0e9;
+.dlikeBox,
+.dcollectBox {
+  display: inline-block;
+  padding: 0 10px;
+  height: 35px;
+  color: #e26d6d;
+  line-height: 35px;
+  border-radius: 35px;
+  border: 1px solid #e26d6d;
+  cursor: pointer;
 }
 
-.bd_weixin_popup{
-    position: fixed!important;
+.bd_weixin_popup {
+  position: fixed !important;
 }
-
-
 
 @font-face {
   font-family: octicons-link;
-  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+  src: url(data:font/woff;charset=utf-8;base64,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)
+    format("woff");
 }
 
 .markdown-body {
@@ -301,7 +233,8 @@ import { mavonEditor } from 'mavon-editor'
   -webkit-text-size-adjust: 100%;
   line-height: 1.5;
   color: #24292e;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   line-height: 1.5;
   word-wrap: break-word;
@@ -621,14 +554,16 @@ import { mavonEditor } from 'mavon-editor'
 }
 
 .markdown-body code {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
   font-size: 12px;
 }
 
 .markdown-body pre {
   margin-top: 0;
   margin-bottom: 0;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
   font-size: 12px;
 }
 
@@ -675,11 +610,11 @@ import { mavonEditor } from 'mavon-editor'
   content: "";
 }
 
-.markdown-body>*:first-child {
+.markdown-body > *:first-child {
   margin-top: 0 !important;
 }
 
-.markdown-body>*:last-child {
+.markdown-body > *:last-child {
   margin-bottom: 0 !important;
 }
 
@@ -724,11 +659,11 @@ import { mavonEditor } from 'mavon-editor'
   border-left: 0.25em solid #dfe2e5;
 }
 
-.markdown-body blockquote>:first-child {
+.markdown-body blockquote > :first-child {
   margin-top: 0;
 }
 
-.markdown-body blockquote>:last-child {
+.markdown-body blockquote > :last-child {
   margin-bottom: 0;
 }
 
@@ -829,11 +764,11 @@ import { mavonEditor } from 'mavon-editor'
   margin-bottom: 0;
 }
 
-.markdown-body li>p {
+.markdown-body li > p {
   margin-top: 16px;
 }
 
-.markdown-body li+li {
+.markdown-body li + li {
   margin-top: 0.25em;
 }
 
@@ -885,11 +820,11 @@ import { mavonEditor } from 'mavon-editor'
   background-color: #fff;
 }
 
-.markdown-body img[align=right] {
+.markdown-body img[align="right"] {
   padding-left: 20px;
 }
 
-.markdown-body img[align=left] {
+.markdown-body img[align="left"] {
   padding-right: 20px;
 }
 
@@ -899,7 +834,7 @@ import { mavonEditor } from 'mavon-editor'
   padding-bottom: 0.2em;
   margin: 0;
   font-size: 85%;
-  background-color: rgba(27,31,35,0.05);
+  background-color: rgba(27, 31, 35, 0.05);
   border-radius: 3px;
 }
 
@@ -913,7 +848,7 @@ import { mavonEditor } from 'mavon-editor'
   word-wrap: normal;
 }
 
-.markdown-body pre>code {
+.markdown-body pre > code {
   padding: 0;
   margin: 0;
   font-size: 100%;
@@ -967,7 +902,8 @@ import { mavonEditor } from 'mavon-editor'
 .markdown-body kbd {
   display: inline-block;
   padding: 3px 5px;
-  font: 11px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font: 11px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
   line-height: 10px;
   color: #444d56;
   vertical-align: middle;
@@ -978,7 +914,7 @@ import { mavonEditor } from 'mavon-editor'
   box-shadow: inset 0 -1px 0 #c6cbd1;
 }
 
-.markdown-body :checked+.radio-label {
+.markdown-body :checked + .radio-label {
   position: relative;
   z-index: 1;
   border-color: #0366d6;
@@ -988,7 +924,7 @@ import { mavonEditor } from 'mavon-editor'
   list-style-type: none;
 }
 
-.markdown-body .task-list-item+.task-list-item {
+.markdown-body .task-list-item + .task-list-item {
   margin-top: 3px;
 }
 
@@ -1000,5 +936,4 @@ import { mavonEditor } from 'mavon-editor'
 .markdown-body hr {
   border-bottom-color: #eee;
 }
-
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <keep-alive :include="['Aboutme', 'Message', 'FriendsLink', 'Reward']">
+      <keep-alive :include="['Aboutme', 'Message', 'FriendsLink']">
           <router-view></router-view>
       </keep-alive>
   </div>
@@ -14,7 +14,7 @@ export default {
 
 <style lang="less">
 // 原博客主提色
-@tcolors:#97dffd;//按钮和标签颜色
+@tcolors:#00A896;//按钮和标签颜色
 @tcolorm:#64609E;//分类的选中的颜色
 @tcolord:#48456D;//按钮hover 的颜色
 
@@ -54,7 +54,7 @@ time, mark, audio, video {
 }
 body{
   font-family:Arial,"STHeiti", Helvetica, sans-serif;
-  background:#efefef;
+  background: linear-gradient(90deg,rgba(247,149,51,.1),rgba(243,112,85,.1) 15%,rgba(239,78,123,.1) 30%,rgba(161,102,171,.1) 44%,rgba(80,115,184,.1) 58%,rgba(16,152,173,.1) 72%,rgba(7,179,155,.1) 86%,rgba(109,186,130,.1));;
   font-size:14px;
   color:#444!important;
   min-height:100vh;
@@ -74,10 +74,6 @@ fieldset, img{
 legend{
   display:none
 }
-// address, caption, cite, code, dfn, em, strong, th, var{
-//   font-style:normal;
-//   font-weight:normal
-// }
 ol, ul{
   list-style:none
 }
@@ -123,29 +119,6 @@ a {
     max-width: 80%;
     margin:0 auto;
     padding:0 10px;
-    // overflow-x: hidden;
-    // -webkit-overflow-x: hidden;
-}
-//时间和标题
-.s-round-date{
-    position: absolute;
-    top:-20px;
-    left:-35px;
-    height:60px;
-    width:70px;
-    padding-top:10px;
-    border-radius: 100px;
-    color:#fff;
-    background: @tcolors;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-}
-.s-round-date span{
-    text-align: center;
-    display: block;
-}
-.s-round-date .day{
-    font-size: 30px;
-    font-weight: 700;
 }
 // 相同的标题副标题
 .tcommonBox{
@@ -158,6 +131,7 @@ a {
     border-radius: 5px;
     margin-bottom: 40px;
     font-size: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .tcommonBox header{
     white-space: normal;
@@ -200,13 +174,15 @@ a {
     line-height:24px;
 }
 .s-item .viewdetail{
-    margin:10px 0 ;
+    margin: 20px 0px 0px 0px ;
     line-height: 24px;
     text-align: center;
 }
 .s-item .viewdetail a{
+    display: inline-block;
     color:#fff;
-    font-size: 12px;
+    width: 100px;
+    font-size: 14px;
     padding:5px 10px;
     border-radius: 5px;
 }
@@ -216,8 +192,6 @@ a {
     width:100%;
 }
  .viewmore a{
-    /*background:  #97dffd;*/
-    /*padding:6px 0;*/
     border-radius: 5px;
     text-align: center;
     font-size: 14px;
@@ -292,9 +266,6 @@ a {
         max-width: 100%!important;
         margin:0 auto;
     }
-    .s-round-date{
-        width:0!important;
-    }
     .ui.label {
         left:-18px!important;
         padding-left:18px!important;
@@ -321,9 +292,6 @@ a {
 
 }
 @media screen and  (max-width:990px){
-    // .hidden{
-    //     display: none!important;
-    // }
     div.rightlistBox .rs2.fixed{
         position: relative;
         top:0;
@@ -398,10 +366,7 @@ a {
 .clearfix:after {
   clear: both
 }
-.smalltitle{
-    /*height:36px;*/
-    /*line-height: 36px;*/
-}
+
 
 .logoImg{
     width:160px;;
@@ -418,15 +383,14 @@ a {
 
 //公共标签
 .ui.label{
-    border-color:@tcolors;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-    background-color: #97dffd;
+    background-color: @tcolors;
     margin:5px 0 15px 2px;
-    font-size: 14px;
+    font-size: 16px;
     position: relative;
-    left:-32px;
+    left:-33px;
     border-radius: 0 4px 4px 0;
-    padding:7px 11.2px 7px 32px;
+    padding:7px 11.2px 7px 20px;
     display: inline-block;
     color:#fff;
 }

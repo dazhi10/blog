@@ -18,51 +18,23 @@
       <div class="r1-body">
         <p>三更</p>
         <div class="catch-me">
-          <div class="">
+          <div>
             <el-tooltip class="item" content="Github" placement="top">
-              <a :href="catchMeObj.git" target="_blank"
-                ><i class="fa fa-fw fa-github"></i
-              ></a>
+              <a href="#">
+                <i class="fa fa-fw fa-github"></i>
+              </a>
             </el-tooltip>
+
             <el-tooltip class="item" effect="dark" content="QQ" placement="top">
-              <a :href="catchMeObj.qq" target="_blank"
-                ><i class="fa fa-fw fa-qq"></i
-              ></a>
-            </el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="微博"
-              placement="top"
-            >
-              <a :href="catchMeObj.sina" target="_blank"
-                ><i class="fa fa-fw fa-weibo"></i
-              ></a>
-            </el-tooltip>
-          </div>
-          <div class="">
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="微信"
-              placement="top"
-            >
-              <a :href="catchMeObj.wechat" target="_blank"
-                ><i class="fa fa-fw fa-wechat"></i
-              ></a>
-            </el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="CSDN"
-              placement="top"
-            >
-              <a :href="catchMeObj.csdn" target="_blank"><i class="">C</i></a>
+              <a href="#">
+                <i class="fa fa-fw fa-qq"></i>
+              </a>
             </el-tooltip>
           </div>
         </div>
       </div>
     </section>
+
     <section class="rs4">
       <h2 class="ui label">热门文章</h2>
       <ul>
@@ -74,6 +46,7 @@
         </li>
       </ul>
     </section>
+    
     <!-- 右侧上滑小图片 -->
     <div
       v-if="this.$store.state.themeObj.user_start != 0"
@@ -121,22 +94,18 @@ export default {
       artCommentList: "", //最新评论
       catchMeObj: {
         //个人信息
-        git: "https://gitee.com",
-        qq: "/static/img/qq.png",
-        sina: "https://weibo.com",
-        wechat: "/static/img/qq.jpg",
-        csdn: "http://www.csdn.cn",
-        job: "https://www.baidu.com",
-      },
+        git: "",
+        qq: ""
+      }
     };
   },
   methods: {
     //事件处理器
-    toTopfun: function (e) {
+    toTopfun: function(e) {
       var that = this;
       this.gotoTop = false;
       this.going = true;
-      var timer = setInterval(function () {
+      var timer = setInterval(function() {
         //获取滚动条距离顶部高度
         var osTop =
           document.documentElement.scrollTop || document.body.scrollTop;
@@ -152,10 +121,10 @@ export default {
       }, 30);
     },
     getHotArticleList() {
-      hotArticleList().then((response) => {
+      hotArticleList().then(response => {
         this.browseList = response;
       });
-    },
+    }
   },
   components: {
     //定义组件
@@ -164,7 +133,7 @@ export default {
   created() {
     //生命周期函数
     var that = this;
-    window.onscroll = function () {
+    window.onscroll = function() {
       var t = document.documentElement.scrollTop || document.body.scrollTop;
       // console.log(t);
       if (!that.going) {
@@ -182,8 +151,7 @@ export default {
     };
     //查询浏览量最多的10篇文章数据
     this.getHotArticleList();
-
-  },
+  }
 };
 </script>
 
@@ -198,10 +166,7 @@ export default {
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
-}
-.rightlistBox section:hover {
-  transform: translate(0, -2px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .rightlistBox .r1-head {
   text-align: center;

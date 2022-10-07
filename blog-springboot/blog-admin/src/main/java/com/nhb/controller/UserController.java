@@ -26,8 +26,6 @@ import java.util.List;
 @ApiOperation("用户模块")
 public class UserController {
 
-
-
     @Autowired
     private UserService userService;
     @Autowired
@@ -46,15 +44,7 @@ public class UserController {
         if (!StringUtils.hasText(user.getUserName())) {
             throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
         }
-        if (!userService.checkUserNameUnique(user.getUserName())) {
-            throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
-        }
-        if (!userService.checkPhoneUnique(user)) {
-            throw new SystemException(AppHttpCodeEnum.PHONE_EXIST);
-        }
-        if (!userService.checkEmailUnique(user)) {
-            throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
-        }
+
         return userService.addUser(user);
     }
 
