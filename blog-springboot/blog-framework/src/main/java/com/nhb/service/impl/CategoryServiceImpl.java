@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,10 +40,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Article::getStatus, SystemConstant.ARTICLE_STATUS_NORMAL);
         List<Article> articleList = articleService.list(queryWrapper);
+
         //获取文章的分类id，并去重
         Set<Long> categoryIds = articleList.stream()
                 .map(Article::getCategoryId)
                 .collect(Collectors.toSet());
+        //没有文章返回空数组
+        if(categoryIds.size() == 0){
+            return ResponseResult.okResult(new ArrayList<>());
+        }
         //查询分类表
         List<Category> categories = listByIds(categoryIds);
         List<Category> collect = categories.stream()
