@@ -1,7 +1,7 @@
 package com.nhb.job;
 
 import com.nhb.domain.entity.Article;
-import com.nhb.service.ArticleService;
+import com.nhb.mapper.ArticleMapper;
 import com.nhb.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,11 +20,12 @@ public class UpdateViewCountJob {
     @Autowired
     private RedisCache redisCache;
 
-    @Autowired
-    private ArticleService articleService;
+   @Autowired
+   private ArticleMapper articleMapper;
 
-    @Scheduled(cron = "0 */5 * * * ?")
-    public void updateViewCount(){
+    //"0 */5 * * * ?"
+    @Scheduled(cron = "0/30 * * * * ?")
+    public void updateViewCount() {
         //定时任务每隔10分钟把Redis中的浏览量更新到数据库中
         //获取redis中的浏览量
         Map<String, Integer> viewCountMap = redisCache.getCacheMap("article:viewCount");
@@ -33,8 +34,9 @@ public class UpdateViewCountJob {
                 .stream()
                 .map(entry -> new Article(Long.valueOf(entry.getKey()), entry.getValue().longValue()))
                 .collect(Collectors.toList());
-        //更新到数据库中
-        articleService.updateBatchById(articles);
 
+        for (Article article : articles) {
+            articleMapper.updateArticleView(article.getId(),article.getViewCount());
+        }
     }
 }

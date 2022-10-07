@@ -31,7 +31,6 @@ public class ArticleController {
         return articleService.saveArticle(articleDto);
     }
 
-
     @ApiOperation("查看文章列表")
     @GetMapping("/list")
     public ResponseResult list(Integer pageNum, Integer pageSize, ArticleDto articleDto){

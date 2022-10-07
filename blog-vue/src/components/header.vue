@@ -128,11 +128,8 @@ export default {
               type: "success",
               message: "退出成功!"
             });
-            if (that.$route.path == "/UserInfo") {
-              that.$router.push({
-                path: "/"
-              });
-            }
+
+            this.$router.push({ path: "/Home" });
           });
         })
         .catch(() => {
@@ -578,7 +575,6 @@ export default {
 }
 .h-information h2 a {
   background: linear-gradient(to right, #df2050, #48456d);
-  -webkit-background-clip: text;
   color: transparent;
 }
 .headImgBox .scene {

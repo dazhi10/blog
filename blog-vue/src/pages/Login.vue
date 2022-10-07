@@ -1,67 +1,67 @@
 <!-- 登录注册 -->
 <template>
     <div>
-        <div class="container">
-            <h1 class="loginTitle">
-                
-            </h1>
-            <!-- 登录注册 -->
-            <div>
-                <div v-if="login==1" class="loginBox">
-                    <div class="lr-title">
-                        <h1>登录</h1>
-                        <p>
-                            新用户<a href="#/Login?login=0" class="tcolors">注册</a>
-                        </p>
-                    </div>
-                   
-                    <el-input
-                        type="text"
-                        placeholder="邮箱"
-                        v-model="username">
-                    </el-input>
+      <div class="container">
+          <h1 class="loginTitle">
+              
+          </h1>
+          <!-- 登录注册 -->
+          <div>
+              <div v-if="login==1" class="loginBox">
+                  <div class="lr-title">
+                      <h1>登录</h1>
+                      <p>
+                          新用户<a href="#/Login?login=0" class="tcolors">注册</a>
+                      </p>
+                  </div>
+                  
+                  <el-input
+                      type="text"
+                      placeholder="邮箱"
+                      v-model="username">
+                  </el-input>
 
-                    <el-input
-                            type="password"
-                          placeholder="密码"
-                           @keyup.enter.native="loginEnterFun"
-                          v-model="password">
-                    </el-input>
-
-                    <h3><a href="">忘记密码？</a></h3>
-                    <div class="lr-btn tcolors-bg" @click="gotoHome">登录</div>
-                </div>
-                <div v-else class="registerBox">
-                    <div class="lr-title">
-                        <h1>注册</h1>
-                        <p>
-                            已有账号<a href="#/Login?login=1" class="tcolors">登录</a>
-                        </p>
-                    </div>
-                    
-                    <el-input
-                        type="text"
-                        placeholder="邮箱"
-                        v-model="nusername">
-                    </el-input>
-
-                    <el-input
+                  <el-input
                           type="password"
-                          placeholder="密码:6-12位英文、数字、下划线"
-                          v-model="npassword">
-                    </el-input>
-                   
-                    <el-input
-                            type="password"
-                          placeholder="确认密码"
-                           @keyup.enter.native="registerEnterFun"
-                          v-model="npassword2">
-                    </el-input>
-                   
-                    <div class="lr-btn tcolors-bg" @click="newRegister"   element-loading-text="提交中">注册</div>
-                </div>
-            </div>
-        </div>
+                        placeholder="密码"
+                          @keyup.enter.native="loginEnterFun"
+                        v-model="password">
+                  </el-input>
+
+                  <h3><a href="">忘记密码？</a></h3>
+                  <div class="lr-btn tcolors-bg" @click="gotoHome">登录</div>
+              </div>
+              <div v-else class="registerBox">
+                  <div class="lr-title">
+                      <h1>注册</h1>
+                      <p>
+                          已有账号<a href="#/Login?login=1" class="tcolors">登录</a>
+                      </p>
+                  </div>
+                  
+                  <el-input
+                      type="text"
+                      placeholder="邮箱"
+                      v-model="nusername">
+                  </el-input>
+
+                  <el-input
+                        type="password"
+                        placeholder="密码:6-12位英文、数字、下划线"
+                        v-model="npassword">
+                  </el-input>
+                  
+                  <el-input
+                          type="password"
+                        placeholder="确认密码"
+                          @keyup.enter.native="registerEnterFun"
+                        v-model="npassword2">
+                  </el-input>
+                  
+                  <div class="lr-btn tcolors-bg" @click="newRegister">注册</div>
+              </div>
+          </div>
+      </div>
     </div>
 </template>
 
@@ -96,15 +96,15 @@ export default {
         that.$route.query.urlstate == undefined
           ? 0
           : that.$route.query.urlstate; //获取传参的usrlstate状态码
-      // console.log(that.login,that.urlstate);
     },
+
     loginEnterFun: function(e) {
       var keyCode = window.event ? e.keyCode : e.which;
-      // console.log('回车登录',keyCode,e);
       if (keyCode == 13) {
         this.gotoHome();
       }
     },
+
     gotoHome: function() {
       //用户登录
       userLogin(this.username, this.password).then(response => {
@@ -112,11 +112,12 @@ export default {
         setToken(response.token);
         // 存储用户信息
         localStorage.setItem("userInfo", JSON.stringify(response.userInfo));
-        if (localStorage.getItem("logUrl")) {
-          this.$router.push({ path: localStorage.getItem("logUrl") });
-        } else {
-          this.$router.push({ path: "/" });
-        }
+
+        this.$router.push("/Home");
+        //刷新页面
+        setTimeout(function() {
+          window.location.reload();
+        }, 100);
       });
     },
     registerEnterFun: function(e) {
@@ -153,9 +154,6 @@ export default {
       //去注册
       this.$router.push({ path: "/Login?login=0" });
     }
-  },
-  components: {
-    //定义组件
   },
   watch: {
     // 如果路由有变化，会再次执行该方法

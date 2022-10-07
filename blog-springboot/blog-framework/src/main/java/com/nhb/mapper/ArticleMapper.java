@@ -3,6 +3,7 @@ package com.nhb.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.nhb.domain.entity.Article;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 
 /**
@@ -14,6 +15,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
 
+    /**
+     * 修改文章浏览量
+     */
+    void updateArticleView(@Param("id") Long id, @Param("viewCount") Long viewCount);
 }
 
 

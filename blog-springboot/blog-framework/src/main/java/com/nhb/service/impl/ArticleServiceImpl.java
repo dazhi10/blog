@@ -22,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -60,6 +62,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //最多查询10条
         Page<Article> page = new Page(1, 10);
         page(page, queryWrapper);
+
+        for (Article article : page.getRecords()) {
+            //从redis中获取viewCount
+            Integer viewCount = redisCache.getCacheMapValue("article:viewCount", article.getId().toString());
+            if(!Objects.isNull(viewCount)){
+                article.setViewCount(viewCount.longValue());
+            }
+        }
         //封装vo
         List<HotArticleVo> hotArticleVos = BeanCopyUtils.copyBeanList(page.getRecords(), HotArticleVo.class);
         return ResponseResult.okResult(hotArticleVos);
@@ -80,17 +90,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         page(page, queryWrapper);
         List<Article> articleList = page.getRecords();
         //文章对应的查询分类名
-        List<Article> collect = articleList.stream()
-                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
-                .collect(Collectors.toList());
+        for (Article article : articleList) {
+            Category category = categoryService.getById(article.getCategoryId());
+            if(!Objects.isNull(category)){
+                article.setCategoryName(category.getName());
+            }
+        }
 
-        for (Article article : collect) {
+        for (Article article : articleList) {
             //从redis中获取viewCount
             Integer viewCount = redisCache.getCacheMapValue("article:viewCount", article.getId().toString());
-            article.setViewCount(viewCount.longValue());
+            if(!Objects.isNull(viewCount)){
+                article.setViewCount(viewCount.longValue());
+            }
         }
         //封装vo
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(collect, ArticleListVo.class);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
         return ResponseResult.okResult(new PageVo(articleListVos, page.getTotal()));
     }
 
@@ -134,12 +149,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //添加文章
         Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
         save(article);
+        //浏览量添加到redis中
+        Map<String, Integer> viewCountMap = new HashMap<>();
+        viewCountMap.put(article.getId().toString(),0);
+
+        //添加redis
+        redisCache.setCacheMap("article:viewCount",viewCountMap);
 
         List<ArticleTag> articleTags = articleDto.getTags().stream()
                 .map(tagId -> new ArticleTag(article.getId(), tagId))
                 .collect(Collectors.toList());
         //添加文章和标签的关联
         articleTagService.saveBatch(articleTags);
+
+
         return ResponseResult.okResult();
     }
 
