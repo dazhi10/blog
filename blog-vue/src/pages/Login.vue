@@ -13,22 +13,25 @@
                           新用户<a href="#/Login?login=0" class="tcolors">注册</a>
                       </p>
                   </div>
-                  
-                  <el-input
-                      type="text"
-                      placeholder="邮箱"
-                      v-model="username">
-                  </el-input>
-
-                  <el-input
-                          type="password"
+                <el-form  :rules="rules" :model="userFrom" ref="userFrom" >  
+                  <el-form-item  prop="username">
+                      <el-input
+                          type="text"
+                          placeholder="邮箱"
+                          v-model="userFrom.username">
+                      </el-input>
+                   </el-form-item> 
+                  <el-form-item  prop="password" label-width="20"	>
+                    <el-input
+                        type="password"
                         placeholder="密码"
-                          @keyup.enter.native="loginEnterFun"
-                        v-model="password">
-                  </el-input>
-
+                        @keyup.enter.native="loginEnterFun"
+                        v-model="userFrom.password">
+                    </el-input>
+                  </el-form-item>   
+                </el-form> 
                   <h3><a href="">忘记密码？</a></h3>
-                  <div class="lr-btn tcolors-bg" @click="gotoHome">登录</div>
+                  <div class="lr-btn tcolors-bg" @click="gotoHome('userFrom')">登录</div>
               </div>
               <div v-else class="registerBox">
                   <div class="lr-title">
@@ -36,28 +39,35 @@
                       <p>
                           已有账号<a href="#/Login?login=1" class="tcolors">登录</a>
                       </p>
-                  </div>
-                  
-                  <el-input
-                      type="text"
-                      placeholder="邮箱"
-                      v-model="nusername">
-                  </el-input>
+                </div>
 
-                  <el-input
-                        type="password"
-                        placeholder="密码:6-12位英文、数字、下划线"
-                        v-model="npassword">
-                  </el-input>
+                <el-form  :rules="rules" :model="userFrom" ref="userFrom" >  
+                  <el-form-item  prop="nusername">
+                      <el-input
+                        type="text"
+                        placeholder="邮箱"
+                        v-model="userFrom.nusername">
+                      </el-input>
+                   </el-form-item>   
+
+                  <el-form-item  prop="npassword">
+                    <el-input
+                      type="password"
+                      placeholder="密码:6-12位英文、数字、下划线"
+                      v-model="userFrom.npassword">
+                    </el-input>
+                  </el-form-item>
+                    
+                  <el-form-item  prop="npassword2">  
+                    <el-input
+                      type="password"
+                      placeholder="确认密码"
+                      v-model="userFrom.npassword2">
+                    </el-input>
+                  </el-form-item>  
+                </el-form>    
                   
-                  <el-input
-                          type="password"
-                        placeholder="确认密码"
-                          @keyup.enter.native="registerEnterFun"
-                        v-model="npassword2">
-                  </el-input>
-                  
-                  <div class="lr-btn tcolors-bg" @click="newRegister">注册</div>
+                <div class="lr-btn tcolors-bg" @click="newRegister('userFrom')">注册</div>
               </div>
           </div>
       </div>
@@ -72,18 +82,83 @@ export default {
   data() {
     //选项 / 数据
     return {
-      username: "", //用户名
-      password: "", //密码
-      nusername: "", //新用户注册名
-      npassword: "", //新用户注册密码
-      npassword2: "", //新用户注册重复密码
+      userFrom: {
+        username: "", //用户名
+        password: "", //密码
+        nusername: "", //新用户注册名
+        npassword: "", //新用户注册密码
+        npassword2: "" //新用户注册重复密码
+      },
+
       login: 0, //是否已经登录
       loginErr: false, //登录错误
       loginTitle: "用户名或密码错误",
-      urlstate: 0 //重新注册
+      urlstate: 0, //重新注册
+      rules: {
+        username: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
+          }
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+        ],
+        nusername: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
+          }
+        ],
+        npassword: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+        ],
+        npassword2: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
+    gotoHome(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //用户登录
+          userLogin(this.userFrom.username, this.userFrom.password).then(
+            response => {
+              // 登录成功记录token和用户信息，登录失败给对应提示
+              setToken(response.token);
+              // 存储用户信息
+              localStorage.setItem(
+                "userInfo",
+                JSON.stringify(response.userInfo)
+              );
+
+              this.userFrom = {};
+              this.resetForm(formName);
+              this.$message({
+                message: "登录成功",
+                type: "success"
+              });
+              this.$router.push("/Home");
+            }
+          );
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
     //事件处理器
     routeChange: function() {
       var that = this;
@@ -96,24 +171,6 @@ export default {
           ? 0
           : that.$route.query.urlstate; //获取传参的usrlstate状态码
     },
-
-    loginEnterFun: function(e) {
-      var keyCode = window.event ? e.keyCode : e.which;
-      if (keyCode == 13) {
-        this.gotoHome();
-      }
-    },
-
-    gotoHome: function() {
-      //用户登录
-      userLogin(this.username, this.password).then(response => {
-        // 登录成功记录token和用户信息，登录失败给对应提示
-        setToken(response.token);
-        // 存储用户信息
-        localStorage.setItem("userInfo", JSON.stringify(response.userInfo));
-        this.$router.push("/Home");
-      });
-    },
     registerEnterFun: function(e) {
       var keyCode = window.event ? e.keyCode : e.which;
       if (keyCode == 13) {
@@ -121,24 +178,35 @@ export default {
         userRegister();
       }
     },
-    newRegister: function() {
-      if (this.npassword === this.npassword2) {
-        userRegister(this.nusername, this.npassword).then(response => {
-          this.$message({
-            message: response,
-            type: "success"
-          });
+    newRegister(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.userFrom.npassword === this.userFrom.npassword2) {
+            userRegister(this.userFrom.nusername, this.userFrom.npassword).then(
+              response => {
+                this.$message({
+                  message: response,
+                  type: "success"
+                });
 
-          //去登录
-          this.$router.push({ path: "/Login?login=1" });
-        });
-      } else {
-        this.$message({
-          message: "两次密码不相同!",
-          type: "error"
-        });
-        return;
-      }
+                this.userFrom = {};
+                this.resetForm(formName);
+                //去登录
+                this.$router.push({ path: "/Login?login=1" });
+              }
+            );
+          } else {
+            this.$message({
+              message: "两次密码不相同!",
+              type: "error"
+            });
+            return;
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     goLogin: function() {
       //去登录
@@ -162,6 +230,9 @@ export default {
 </script>
 
 <style>
+.el-form-item__content {
+  height: 45px !important;
+}
 /*登录注册标题*/
 .loginTitle {
   text-align: center;

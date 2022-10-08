@@ -10,6 +10,7 @@ import com.nhb.domain.entity.UserRole;
 import com.nhb.domain.vo.PageVo;
 import com.nhb.domain.vo.UserInfoVo;
 import com.nhb.domain.vo.UserVo;
+import com.nhb.enums.AppHttpCodeEnum;
 import com.nhb.mapper.UserMapper;
 import com.nhb.service.UserRoleService;
 import com.nhb.service.UserService;
@@ -102,7 +103,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return ResponseResult.okResult("邮箱发送成功,请前往邮箱确认");
 
         }catch (Exception e){
-            return ResponseResult.okResult("邮箱发送失败");
+            return ResponseResult.errorResult(AppHttpCodeEnum.EMAIL_ERROR);
         }
     }
 

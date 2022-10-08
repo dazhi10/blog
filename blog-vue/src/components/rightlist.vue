@@ -117,12 +117,6 @@ export default {
       });
     }
   },
-  watch: {
-    browseList() {
-      console.log(111);
-    }
-  },
-
   created() {
     //生命周期函数
     var that = this;
