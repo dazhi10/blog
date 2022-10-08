@@ -440,7 +440,10 @@ a {
   object-fit: cover;
 }
 .maxW {
-  max-width: 100%;
+ 
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
 }
 .fwb {
   font-weight: bold;

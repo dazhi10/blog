@@ -1,20 +1,49 @@
 <!-- 文章详情模块 -->
 <template>
-        <div class="detailBox tcommonBox" >
-            <header>
-                <h1>
-                    <a :href="'#/DetailShare?aid='+detailObj.id" target="_blank">
-                        {{detailObj.title}}
-                    </a>
-                </h1>
-                <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span>
-                    <i class="fa fa-fw fa-eye"></i>{{detailObj.viewCount}} 次围观
-                </h2>
-              
-            </header>
-            <div class="article-content markdown-body" v-html="detailObj.content"></div>
+  <div class="detailBox tcommonBox" >
+    <el-skeleton :rows="20" animated :loading="loading">
+      <template slot="template">
+        <div style="padding: 14px;">
+          <el-skeleton-item variant="h1" style="width: 30%;margin: 0 33% 10px" />
+          <el-skeleton-item variant="text" style="width: 45%;margin: 0 25% 100px" />
+          <el-skeleton-item variant="h2" style="width: 30%;" />
+          <div
+            style="display: flex; align-items: center; justify-items: space-between; margin-top: 30px; height: 16px;"
+          >
+            <el-skeleton-item variant="text" style="margin-right: 16px;" />
+            <el-skeleton-item variant="text" style="width: 30%;" />
+          </div>
+          <el-skeleton-item variant="text" style="margin: 30px 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
         </div>
+      </template>
+      <template>
+        <header>
+          <h1>
+              <a :href="'#/DetailShare?aid='+detailObj.id" target="_blank">
+                  {{detailObj.title}}
+              </a>
+          </h1>
+          <h2>
+              <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span>
+              <i class="fa fa-fw fa-eye"></i>{{detailObj.viewCount}} 次围观
+          </h2>
+      </header>
+
+      <div class="article-content markdown-body" v-highlight v-html="detailObj.content"></div>
+      </template>
+
+    </el-skeleton>  
+      
+  </div>
 </template>
 
 <script>
@@ -28,7 +57,8 @@ export default {
       aid: "", //文章ID
       detailObj: {}, //返回详情数据
       haslogin: false, //是否已经登录
-      userId: "" //用户id
+      userId: "", //用户id
+      loading: true
     };
   },
   methods: {
@@ -57,13 +87,15 @@ export default {
         that.haslogin = true;
         that.userInfo = JSON.parse(localStorage.getItem("userInfo"));
         that.userId = that.userInfo.userId;
-        // console.log(that.userInfo);
       } else {
         that.haslogin = false;
       }
       //获取详情接口
       this.getArticleDetail();
       updateViewCount(that.aid);
+      this.timeout = setTimeout(() => {
+        this.loading = false;
+      }, 700);
     }
   },
   watch: {
@@ -201,11 +233,7 @@ export default {
   background-image: none;
   text-indent: inherit;
 }
-/*点赞 收藏*/
-.dlikeColBox {
-  display: inline-block;
-  float: right;
-}
+
 .dlikeBox,
 .dcollectBox {
   display: inline-block;
@@ -873,8 +901,10 @@ export default {
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  background-color: #f6f8fa;
-  border-radius: 3px;
+  background-color: #1e1e1e;
+  border-radius: 3px; 
+  font-size: 14px;
+  overflow-x: scroll !important;
 }
 
 .markdown-body pre code {

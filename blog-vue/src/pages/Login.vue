@@ -295,6 +295,6 @@ export default {
   cursor: pointer;
 }
 .registerSuc .sucContent .el-icon-close {
-  fong-size: 13px;
+  font-size: 13px;
 }
 </style>

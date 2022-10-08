@@ -1,12 +1,7 @@
 <!-- 头部公用 -->
 <template>
   <div class="">
-    <el-skeleton :rows="1" animated :loading="loading">
-      <template slot="template">
-        <el-skeleton-item variant="text" style="width: 100%; height: 35px" />
-      </template>
-
-      <div class="headBack" v-show="!loading">
+    <div class="headBack" >
         <el-row class="container">
           <el-col :span="24">
             <!-- pc端导航 -->
@@ -63,13 +58,13 @@
           </el-col>
         </el-row>
       </div>
-    </el-skeleton>
 
     <el-skeleton :rows="1" animated :loading="loading">
       <template slot="template" >
-        <el-skeleton-item variant="image" style="width: 100%; height: 500px;margin-bottom: 100px;" />
+        <el-skeleton-item variant="image" style="width: 100%; height: 650px;margin-bottom: 100px;" />
         
       </template>
+
       <div
         class="headImgBox"
         v-show="!loading"
@@ -83,6 +78,7 @@
           <div><span id="luke"></span></div>
         </div>
       </div>
+      
     </el-skeleton>
   </div>
 </template>
@@ -267,8 +263,8 @@ export default {
 
 .headBack {
   width: 100%;
-  height: 38px;
-  background: rgba(40, 42, 44, 0.6);
+  background: rgb(93 93 93 / 44%);
+  backdrop-filter: saturate(50%) blur(8px);
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
   position: fixed;
   left: 0;
@@ -532,9 +528,9 @@ export default {
 /*头部背景图*/
 
 .headImgBox {
+  height: 650px;
   position: relative;
   width: 100%;
-  height: 600px;
   background-size: cover;
   background-position: center 50%;
   background-repeat: no-repeat;
@@ -621,12 +617,16 @@ export default {
 }
 .headImgBox .scene {
   width: 100%;
-  z-index: 999;
+
   text-align: center;
   font-size: 100px;
   font-weight: 200;
   color: #fff;
   position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   left: 0;
   top: 160px;
   font-family: "Sigmar One", Arial;

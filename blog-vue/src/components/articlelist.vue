@@ -1,42 +1,64 @@
 <!-- 文章列表 -->
 <template>
     <el-row class="sharelistBox">
-      <el-col :span="24" class="s-item tcommonBox" v-for="(item,index) in articleList" :key="'article'+index">
-            <header>
-                <h1>
-                    <a :href="'#/DetailArticle?aid='+item.id" target="_blank">
-                        {{item.title}}
-                    </a>
-                </h1>
-                <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于
-                    <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
-                    <i class="fa fa-fw fa-eye"></i>{{item.viewCount}} 次围观
-
-                </h2>
-                <div class="ui label" style="top: -80px;">
-                    {{item.categoryName}}
-                </div>
-            </header>
-            <div class="article-content">
-                <p style="text-indent:2em;">
-                    {{item.summary}}
-                </p>
-                <p  style="max-height:300px;overflow:hidden;text-align:center;">
-                    <img :src="item.thumbnail" alt="" class="maxW">
-                </p>
+      <el-col  :span="24" class="s-item tcommonBox" v-for="(item,index) in articleList" :key="'article'+index">
+        <el-skeleton :rows="6" animated :loading="loading" >
+          <template slot="template" style="position: relative;">
+            <el-skeleton-item variant="text" style="  position: absolute; top:30px; left:-10px;width: 70px; height: 35px; " />
+            <el-skeleton-item variant="text" style="  position: absolute; top:110px; width: 250px; height: 16px; " />
+            <div style="display: flex; flex-direction:column; align-items: center; justify-content: center;">
+                <el-skeleton-item variant="text" style="margin-bottom: 15px; width: 140px; height: 30px;" />
+                <el-skeleton-item variant="text" style="margin-bottom: 65px; width: 280px; height: 16px;" />
             </div>
-            <div class="viewdetail">
-                <a class="tcolors-bg" :href="'#/DetailArticle?aid='+item.id" target="_blank">
-                    阅读全文
-                </a>
+            <el-skeleton-item variant="image" style="width: 100%; height: 300px;" />
+            <div style="margin-top: 18px;">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <el-skeleton-item variant="text" style=" width: 120px; height: 34px;" />
+              </div>
             </div>
+          </template>
+        
+          <header style="height: 75px;">
+              <h1>
+                  <a :href="'#/DetailArticle?aid='+item.id" target="_blank">
+                      {{item.title}}
+                  </a>
+              </h1>
+              <h2>
+                  <i class="fa fa-fw fa-user"></i>发表于
+                  <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
+                  <i class="fa fa-fw fa-eye"></i>{{item.viewCount}} 次围观
 
-        </el-col>
-         <el-col class="viewmore">
+              </h2>
+              <div class="ui label" style="top: -80px;">
+                  {{item.categoryName}}
+              </div>
+          </header>
+          <div class="article-content">
+              <p style="text-indent:2em;">
+                  {{item.summary}}
+              </p>
+              <p style=" display: flex; justify-content: center;">
+                  <img :src="item.thumbnail" alt="" class="maxW">
+              </p>
+          </div>
+          <div class="viewdetail">
+              <a class="tcolors-bg" :href="'#/DetailArticle?aid='+item.id" target="_blank">
+                  阅读全文
+              </a>
+          </div>
+        </el-skeleton>
+      </el-col>
+
+      <el-skeleton :rows="1" animated :loading="loading">
+          <template slot="template" >
+              <el-skeleton-item variant="text" style="width: 100%; height: 35px; " />              
+            </template>
+         <el-col class="viewmore" v-show="!loading">
             <a v-show="hasMore" class="tcolors-bg" href="javascript:void(0);" @click="addMoreFun">点击加载更多</a>
             <a v-show="!hasMore" class="tcolors-bg" href="javascript:void(0);">暂无更多数据</a>
-        </el-col>
+          </el-col>
+      </el-skeleton>
     </el-row>
 </template>
 
@@ -54,6 +76,7 @@ export default {
         pageSize: 10,
         categoryId: 0
       },
+      loading: true,
       articleList: [],
       hasMore: true
     };
@@ -67,12 +90,16 @@ export default {
     getList() {
       articleList(this.queryParams).then(response => {
         this.articleList = this.articleList.concat(response.rows);
+
         if (response.total <= this.articleList.length) {
           this.hasMore = false;
         } else {
           this.hasMore = true;
           this.queryParams.pageNum++;
         }
+        this.timeout = setTimeout(() => {
+          this.loading = false;
+        }, 700);
       });
     },
     showSearchShowList: function(initData) {
@@ -104,8 +131,6 @@ export default {
     "$store.state.keywords": "routeChange"
   },
   created() {
-    //生命周期函数
-    // console.log(this.$route);
     var that = this;
     that.routeChange();
   }

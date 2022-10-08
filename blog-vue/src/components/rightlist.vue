@@ -1,51 +1,38 @@
 ﻿<!-- 右侧固定导航栏 -->
 <template>
   <div class="rightlistBox">
-    <section>
-      <div class="r1-head">
-        <img
-          :src="
-            this.$store.state.themeObj.center_smailimg
-              ? this.$store.state.themeObj.center_smailimg
-              : 'static/img/img01.jpg'
-          "
-          alt=""
-        />
-        <h1 v-if="this.$store.state.themeObj.user_start != 0">
-          <span>请别再呼唤我为孤独之人</span>
-        </h1>
-      </div>
-      <div class="r1-body">
-        <p>三更</p>
-        <div class="catch-me">
-          <div>
-            <el-tooltip class="item" content="Github" placement="top">
-              <a href="#">
-                <i class="fa fa-fw fa-github"></i>
-              </a>
-            </el-tooltip>
+      <el-skeleton :rows="3" animated :loading="loading">
+        <section v-show="!loading">
+            <div class="r1-body" >
+              <p>大只</p>
 
-            <el-tooltip class="item" effect="dark" content="QQ" placement="top">
-              <a href="#">
-                <i class="fa fa-fw fa-qq"></i>
-              </a>
-            </el-tooltip>
-          </div>
-        </div>
-      </div>
-    </section>
+              <div class="catch-me">
+                <div>
+                   <a href="#">
+                      <i class="fa fa-fw fa-github"></i>
+                    </a>
 
-    <section class="rs4">
-      <h2 class="ui label">热门文章</h2>
-      <ul>
-        <li v-for="(item, index) in browseList" :key="'browseList' + index">
-          <a :href="'#/DetailArticle?aid=' + item.id" target="_blank">{{
-            item.title
-          }}</a>
-          —— {{ item.viewCount }} 次围观
-        </li>
-      </ul>
+                   <a href="#">
+                      <i class="fa fa-fw fa-qq"></i>
+                    </a>
+                </div>
+              </div>  
+            </div>
+        </section>
+      </el-skeleton>  
+  <el-skeleton :rows="browseList.length" animated :loading="loading">  
+    <section class="rs4" v-show="!loading">
+        <h2 class="ui label">热门文章</h2>
+        <ul>
+          <li v-for="(item, index) in browseList" :key="'browseList' + index">
+            <a :href="'#/DetailArticle?aid=' + item.id" target="_blank">{{
+              item.title
+            }}</a>
+            —— {{ item.viewCount }} 次围观
+          </li>
+        </ul>
     </section>
+  </el-skeleton>  
     
     <!-- 右侧上滑小图片 -->
     <div
@@ -92,6 +79,7 @@ export default {
       going: false, //是否正在执行上滑动作
       browseList: "", //热门文章 浏览量最多
       artCommentList: "", //最新评论
+      loading: true, //是否显示骨架屏
       catchMeObj: {
         //个人信息
         git: "",
@@ -123,11 +111,16 @@ export default {
     getHotArticleList() {
       hotArticleList().then(response => {
         this.browseList = response;
+        this.timeout = setTimeout(() => {
+          this.loading = false;
+        }, 700);
       });
     }
   },
-  components: {
-    //定义组件
+  watch: {
+    browseList() {
+      console.log(111);
+    }
   },
 
   created() {
