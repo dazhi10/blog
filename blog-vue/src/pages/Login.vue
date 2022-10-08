@@ -3,10 +3,9 @@
     <div>
       <div class="container">
           <h1 class="loginTitle">
-              
           </h1>
           <!-- 登录注册 -->
-          <div>
+          <div style="height: 500px;">
               <div v-if="login==1" class="loginBox">
                   <div class="lr-title">
                       <h1>登录</h1>
@@ -112,12 +111,7 @@ export default {
         setToken(response.token);
         // 存储用户信息
         localStorage.setItem("userInfo", JSON.stringify(response.userInfo));
-
         this.$router.push("/Home");
-        //刷新页面
-        setTimeout(function() {
-          window.location.reload();
-        }, 100);
       });
     },
     registerEnterFun: function(e) {
@@ -168,9 +162,6 @@ export default {
 </script>
 
 <style>
-.container {
-  height: 700px;
-}
 /*登录注册标题*/
 .loginTitle {
   text-align: center;

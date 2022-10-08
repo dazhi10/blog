@@ -16,30 +16,29 @@
 </template>
 
 <script>
-import header from '../components/header.vue'
-import articlelist from '../components/articlelist.vue'
-import rightlist from '../components/rightlist.vue'
-    export default {
-        name:'Home',
-        data() { //选项 / 数据
-            return {
-
-            }
-        },
-        methods: { //事件处理器
-
-        },
-        components: { //定义组件
-            'sg-navbar':header,
-            'sg-articlelist':articlelist,
-            'sg-rightlist':rightlist,
-        },
-        created() { //生命周期函数
-
-        }
-    }
+import header from "../components/header.vue";
+import articlelist from "../components/articlelist.vue";
+import rightlist from "../components/rightlist.vue";
+export default {
+  name: "Home",
+  data() {
+    //选项 / 数据
+    return {
+      log: true
+    };
+  },
+  methods: {
+    //事件处理器
+  },
+  components: {
+    //定义组件
+    "sg-navbar": header,
+    "sg-articlelist": articlelist,
+    "sg-rightlist": rightlist
+  },
+  created() {}
+};
 </script>
 
 <style>
-
 </style>

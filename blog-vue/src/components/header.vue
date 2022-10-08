@@ -1,47 +1,90 @@
 <!-- 头部公用 -->
 <template>
-<div class="">
-	<div class="headBack">
-		<el-row class="container">
-			<el-col :span="24">
-				<!-- pc端导航 -->
-				<div class="headBox">
-					<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true">
-						<el-menu-item index="/Home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
-						<el-submenu index="/Share">
-							<template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
-							<el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index" :index="'/Share?classId='+item.id">{{item.name}}</el-menu-item>
-						</el-submenu>
-						<el-menu-item index="/Friendslink"><i class="fa fa-wa fa-users"></i>友链</el-menu-item>
+  <div class="">
+    <el-skeleton :rows="1" animated :loading="loading">
+      <template slot="template">
+        <el-skeleton-item variant="text" style="width: 100%; height: 35px" />
+      </template>
 
-						<div class="userInfo">
-							<div v-show="!haslogin" class="nologin">
-								<a href="javascript:void(0);" @click="logoinFun(1)">登录&nbsp;</a>|<a href="javascript:void(0);" @click="logoinFun(0)">&nbsp;注册</a>
-							</div>
-							<div v-show="haslogin" class="haslogin">
-								<i class="fa fa-fw fa-user-circle userImg"></i>
-								<ul class="haslogin-info">
-									<li>
-										<a href="#/UserInfo">个人中心</a>
-									</li>
-									<li>
-										<a href="javascript:void(0);" @click="userlogout">退出登录</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</el-menu>
-				</div>
-			</el-col>
-		</el-row>
-	</div>
-	<div class="headImgBox" :style="{backgroundImage:this.$store.state.themeObj.top_image?'url('+this.$store.state.themeObj.top_image+')':'url(static/img/headbg05.jpg)'}">
-		<div class="scene">
-			<div><span id="luke"></span></div>
-		</div>
-		
-	</div>
-</div>
+      <div class="headBack" v-show="!loading">
+        <el-row class="container">
+          <el-col :span="24">
+            <!-- pc端导航 -->
+            <div class="headBox">
+              <el-menu
+                :default-active="activeIndex"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+                :router="true"
+              >
+                <el-menu-item index="/Home"
+                  ><i class="fa fa-wa fa-home"></i> 首页</el-menu-item
+                >
+                <el-submenu index="/Share">
+                  <template slot="title"
+                    ><i class="fa fa-wa fa-archive"></i> 分类</template
+                  >
+                  <el-menu-item 
+                    v-for="(item, index) in classListObj"
+                    :key="'class1' + index"
+                    :index="'/Share?classId=' + item.id"
+                    >{{ item.name }}</el-menu-item
+                  >
+                </el-submenu>
+                <el-menu-item index="/Friendslink"
+                  ><i class="fa fa-wa fa-users"></i>友链</el-menu-item
+                >
+
+                <div class="userInfo">
+                  <div v-show="!haslogin" class="nologin">
+                    <a href="javascript:void(0);" @click="logoinFun(1)"
+                      >登录&nbsp;</a
+                    >|<a href="javascript:void(0);" @click="logoinFun(0)"
+                      >&nbsp;注册</a
+                    >
+                  </div>
+                  <div v-show="haslogin" class="haslogin">
+                    <i class="fa fa-fw fa-user-circle userImg"></i>
+                    <ul class="haslogin-info">
+                      <li>
+                        <a href="#/UserInfo">个人中心</a>
+                      </li>
+                      <li>
+                        <a href="javascript:void(0);" @click="userlogout"
+                          >退出登录</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </el-menu>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </el-skeleton>
+
+    <el-skeleton :rows="1" animated :loading="loading">
+      <template slot="template" >
+        <el-skeleton-item variant="image" style="width: 100%; height: 500px;margin-bottom: 100px;" />
+        
+      </template>
+      <div
+        class="headImgBox"
+        v-show="!loading"
+        :style="{
+          backgroundImage: this.$store.state.themeObj.top_image
+            ? 'url(' + this.$store.state.themeObj.top_image + ')'
+            : 'url(static/img/headbg05.jpg)',
+        }"
+      >
+        <div class="scene">
+          <div><span id="luke"></span></div>
+        </div>
+      </div>
+    </el-skeleton>
+  </div>
 </template>
 <script>
 import { logout } from "../api/user";
@@ -62,7 +105,8 @@ export default {
       input: "", //input输入内容
       headBg: "url(static/img/headbg05.jpg)", //头部背景图
       headTou: "", //头像
-      projectList: "" //项目列表
+      projectList: "", //项目列表
+      loading: true
     };
   },
   watch: {},
@@ -88,6 +132,10 @@ export default {
       getCategoryList().then(response => {
         this.classListObj = response;
       });
+
+      this.timeout = setTimeout(() => {
+        this.loading = false;
+      }, 700);
     },
     handleSelect(key, keyPath) {
       //pc菜单选择
@@ -207,7 +255,7 @@ export default {
     var timer = setTimeout(function() {
       Typeit(that.$store.state.themeObj.user_start, "#luke"); //打字机效果
       clearTimeout(timer);
-    }, 500);
+    }, 1000);
   }
 };
 </script>
@@ -221,18 +269,12 @@ export default {
   width: 100%;
   height: 38px;
   background: rgba(40, 42, 44, 0.6);
-  /*margin-bottom:30px;*/
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
   position: fixed;
   left: 0;
   top: 0;
   right: 0;
   z-index: 100;
-}
-
-.headBox li.is-active {
-  /*background: #48456C;*/
-  background: rgba(73, 69, 107, 0.7);
 }
 
 .el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
@@ -274,7 +316,7 @@ export default {
   padding: 0;
 }
 
-.headBox > ul li.el-menu-item:hover,
+/* .headBox > ul li.el-menu-item:hover,
 .headBox > ul li.el-submenu:hover .el-submenu__title {
   background: #48456c;
   border-bottom: none;
@@ -283,15 +325,15 @@ export default {
 .headBox > ul .el-submenu .el-menu,
 .headBox > ul .el-submenu .el-menu .el-menu-item {
   background: #48456c;
-}
+} */
 
 .headBox > ul .el-submenu .el-menu .el-menu-item {
   min-width: 0;
 }
 
-.headBox > ul .el-submenu .el-menu .el-menu-item:hover {
+/* .headBox > ul .el-submenu .el-menu .el-menu-item:hover {
   background: #64609e;
-}
+} */
 
 /*pc搜索框*/
 
@@ -397,9 +439,9 @@ export default {
   transition: all 0.3s ease-out;
 }
 
-.headBox .haslogin ul li {
+/* .headBox .haslogin ul li {
   border-bottom: 1px solid #48456c;
-}
+} */
 
 .headBox .haslogin ul li:last-child {
   border-bottom: 1px solid transparent;
@@ -482,17 +524,17 @@ export default {
   color: #fff;
 }
 
-.hideMenu > ul li.el-menu-item:hover,
+/* .hideMenu > ul li.el-menu-item:hover,
 .hideMenu > ul li.el-menu-item.is-active {
   background: #48576a;
-}
+} */
 
 /*头部背景图*/
 
 .headImgBox {
-  height: 650px;
   position: relative;
   width: 100%;
+  height: 600px;
   background-size: cover;
   background-position: center 50%;
   background-repeat: no-repeat;
@@ -579,7 +621,7 @@ export default {
 }
 .headImgBox .scene {
   width: 100%;
-  /*height:300px;*/
+  z-index: 999;
   text-align: center;
   font-size: 100px;
   font-weight: 200;
