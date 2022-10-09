@@ -1,48 +1,66 @@
 <!-- 文章详情模块 -->
 <template>
-  <div class="detailBox tcommonBox" >
+  <div class="detailBox tcommonBox">
     <el-skeleton :rows="20" animated :loading="loading">
       <template slot="template">
-        <div style="padding: 14px;">
-          <el-skeleton-item variant="h1" style="width: 30%;margin: 0 33% 10px" />
-          <el-skeleton-item variant="text" style="width: 45%;margin: 0 25% 100px" />
-          <el-skeleton-item variant="h2" style="width: 30%;" />
+        <div style="padding: 14px">
+          <el-skeleton-item
+            variant="h1"
+            style="width: 30%; margin: 0 33% 10px"
+          />
+          <el-skeleton-item
+            variant="text"
+            style="width: 45%; margin: 0 25% 100px"
+          />
+          <el-skeleton-item variant="h2" style="width: 30%" />
           <div
-            style="display: flex; align-items: center; justify-items: space-between; margin-top: 30px; height: 16px;"
+            style="
+              display: flex;
+              align-items: center;
+              justify-items: space-between;
+              margin-top: 30px;
+              height: 16px;
+            "
           >
-            <el-skeleton-item variant="text" style="margin-right: 16px;" />
-            <el-skeleton-item variant="text" style="width: 30%;" />
+            <el-skeleton-item variant="text" style="margin-right: 16px" />
+            <el-skeleton-item variant="text" style="width: 30%" />
           </div>
-          <el-skeleton-item variant="text" style="margin: 30px 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
-          <el-skeleton-item variant="text" style="margin: 0 0 30px"/>
+          <el-skeleton-item variant="text" style="margin: 30px 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
+          <el-skeleton-item variant="text" style="margin: 0 0 30px" />
         </div>
       </template>
       <template>
         <header>
           <h1>
-              <a :href="'#/DetailShare?aid='+detailObj.id" target="_blank">
-                  {{detailObj.title}}
-              </a>
+            <a :href="'#/DetailShare?aid=' + detailObj.id" target="_blank">
+              {{ detailObj.title }}
+            </a>
           </h1>
           <h2>
-              <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span>
-              <i class="fa fa-fw fa-eye"></i>{{detailObj.viewCount}} 次围观
+            <i class="fa fa-fw fa-user"></i>发表于
+            <span>{{ detailObj.createTime }}</span>
+            <i class="fa fa-fw fa-eye"></i>{{ detailObj.viewCount }} 次围观
           </h2>
-      </header>
+        </header>
 
-      <div class="article-content markdown-body" v-highlight v-html="detailObj.content"></div>
+        <div
+          class="article-content markdown-body"
+          v-highlight
+          v-html="detailObj.content"
+        ></div>
+        
+          
       </template>
 
-    </el-skeleton>  
-      
+    </el-skeleton>
   </div>
 </template>
 
@@ -58,9 +76,11 @@ export default {
       detailObj: {}, //返回详情数据
       haslogin: false, //是否已经登录
       userId: "", //用户id
-      loading: true
+      loading: true,
+      menuList: []
     };
   },
+
   methods: {
     //事件处理器
     showInitDate: function(date, full) {
@@ -117,6 +137,26 @@ export default {
 <style lang="less">
 .top_style {
   top: -20px;
+}
+
+.right-container {
+  padding: 20px 24px;
+  font-size: 14px;
+}
+
+.right-title {
+  display: flex;
+  align-items: center;
+  line-height: 2;
+  font-size: 16.8px;
+  margin-bottom: 6px;
+}
+.right-title i {
+  font-weight: bold;
+}
+
+.detailBox {
+  position: relative;
 }
 .detailBox .article-content {
   font-size: 15px;

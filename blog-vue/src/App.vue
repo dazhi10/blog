@@ -195,7 +195,6 @@ input[type="search"] {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-
   overflow-x: hidden;
   -webkit-overflow-x: hidden;
   color: #444;
@@ -440,7 +439,6 @@ a {
   object-fit: cover;
 }
 .maxW {
- 
   width: 80%;
   height: 80%;
   object-fit: cover;
