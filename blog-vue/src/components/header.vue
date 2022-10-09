@@ -40,7 +40,7 @@
                     >
                   </div>
                   <div v-show="haslogin" class="haslogin">
-                    <i class="fa fa-fw fa-user-circle userImg"></i>
+                    <el-avatar :size="38" :src="headTou"></el-avatar>
                     <ul class="haslogin-info">
                       <li>
                         <a href="#/UserInfo">个人中心</a>
@@ -62,16 +62,12 @@
     <el-skeleton :rows="1" animated :loading="loading">
       <template slot="template" >
         <el-skeleton-item variant="image" style="width: 100%; height: 650px;margin-bottom: 100px;" />
-        
       </template>
 
       <div
         class="headImgBox"
-        v-show="!loading"
         :style="{
-          backgroundImage: this.$store.state.themeObj.top_image
-            ? 'url(' + this.$store.state.themeObj.top_image + ')'
-            : 'url(static/img/headbg05.jpg)',
+          backgroundImage: headBg
         }"
       >
         <div class="scene">
@@ -87,6 +83,7 @@ import { logout } from "../api/user";
 import { removeToken } from "../utils/auth";
 import { getCategoryList } from "../api/category";
 import { Typeit } from "../utils/plug.js";
+import { getUserInfo } from "../api/user.js";
 export default {
   data() {
     //选项 / 数据
@@ -99,7 +96,7 @@ export default {
       pMenu: true, //手机端菜单打开
       // path:'',//当前打开页面的路径
       input: "", //input输入内容
-      headBg: "url(static/img/headbg05.jpg)", //头部背景图
+      headBg: "url(http://rialetu26.hn-bkt.clouddn.com/headbg05.jpg)", //头部背景图
       headTou: "", //头像
       projectList: "", //项目列表
       loading: true
@@ -107,6 +104,19 @@ export default {
   },
   watch: {},
   methods: {
+    getUserAvatar() {
+      var that = this;
+      if (localStorage.getItem("userInfo")) {
+        that.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        that.userId = that.userInfo.id;
+        getUserInfo(that.userId).then(response => {
+          that.headTou = response.avatar;
+        });
+      }
+      this.timeout = setTimeout(() => {
+        this.loading = false;
+      }, 500);
+    },
     //事件处理器
     handleOpen(key, keyPath) {
       //分组菜单打开
@@ -128,10 +138,6 @@ export default {
       getCategoryList().then(response => {
         this.classListObj = response;
       });
-
-      this.timeout = setTimeout(() => {
-        this.loading = false;
-      }, 700);
     },
     handleSelect(key, keyPath) {
       //pc菜单选择
@@ -216,6 +222,7 @@ export default {
   created() {
     //生命周期函数
     //判断当前页面是否被隐藏
+    this.getUserAvatar();
     var that = this;
     var hiddenProperty =
       "hidden" in document
@@ -406,7 +413,7 @@ export default {
 }
 
 .headBox .userInfo a:hover {
-  color: #48456c;
+  color: #4ba596;
 }
 
 .headBox .nologin {
@@ -426,10 +433,10 @@ export default {
 }
 
 .headBox .haslogin ul {
+  top: 40px;
   background: rgba(40, 42, 44, 0.6);
   padding: 5px 10px;
   position: absolute;
-  right: 0;
   visibility: hidden;
   opacity: 0;
   transition: all 0.3s ease-out;

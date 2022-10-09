@@ -99,7 +99,7 @@ export default {
         }
         this.timeout = setTimeout(() => {
           this.loading = false;
-        }, 700);
+        }, 500);
       });
     },
     showSearchShowList: function(initData) {

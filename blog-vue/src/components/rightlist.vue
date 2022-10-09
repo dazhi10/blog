@@ -1,28 +1,26 @@
 ﻿<!-- 右侧固定导航栏 -->
 <template>
   <div class="rightlistBox">
+    <section>
       <el-skeleton :rows="3" animated :loading="loading">
-        <section v-show="!loading">
-            <div class="r1-body" >
-              <p>大只</p>
+        <div class="r1-body" >
+          <p style="font-size:24px;margin-bottom: 20px;">大只</p>
+          <p style="margin-bottom: 20px; color:#4ba596">找到对象一定要找一个喜欢你的</p>
 
-              <div class="catch-me">
-                <div>
-                   <a href="#">
-                      <i class="fa fa-fw fa-github"></i>
-                    </a>
-
-                   <a href="#">
-                      <i class="fa fa-fw fa-qq"></i>
-                    </a>
-                </div>
-              </div>  
+          <div class="catch-me">
+            <div>
+              <a href="https://github.com/dazhi10">
+                <i class="fa fa-fw fa-github"></i>
+              </a>
             </div>
-        </section>
+          </div>  
+        </div>
       </el-skeleton>  
-  <el-skeleton :rows="browseList.length" animated :loading="loading">  
-    <section class="rs4" v-show="!loading">
-        <h2 class="ui label">热门文章</h2>
+    </section>
+
+    <section class="rs4" >
+      <h2 class="ui label">热门文章</h2>
+      <el-skeleton :rows="browseList.length" animated :loading="loading">  
         <ul>
           <li v-for="(item, index) in browseList" :key="'browseList' + index">
             <a :href="'#/DetailArticle?aid=' + item.id" target="_blank">{{
@@ -31,8 +29,9 @@
             —— {{ item.viewCount }} 次围观
           </li>
         </ul>
+        </el-skeleton>  
     </section>
-  </el-skeleton>  
+  
     
     <!-- 右侧上滑小图片 -->
     <div

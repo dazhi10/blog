@@ -95,7 +95,7 @@ export default {
       updateViewCount(that.aid);
       this.timeout = setTimeout(() => {
         this.loading = false;
-      }, 700);
+      }, 500);
     }
   },
   watch: {
@@ -902,7 +902,7 @@ export default {
   font-size: 85%;
   line-height: 1.45;
   background-color: #1e1e1e;
-  border-radius: 3px; 
+  border-radius: 3px;
   font-size: 14px;
   overflow-x: scroll !important;
 }

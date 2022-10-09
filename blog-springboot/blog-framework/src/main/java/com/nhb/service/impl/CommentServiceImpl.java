@@ -87,6 +87,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentVo> collect = commentVos.stream()
                 //通过createBy查询用户的昵称并赋值
                 .map(commentVo -> commentVo.setUsername(userService.getById(commentVo.getCreateBy()).getNickName()))
+                .map(commentVo -> commentVo.setAvatar(userService.getById(commentVo.getCreateBy()).getAvatar()))
                 .collect(Collectors.toList());
 
         //这条评论的回复者

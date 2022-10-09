@@ -53,7 +53,7 @@
                   <el-form-item  prop="npassword">
                     <el-input
                       type="password"
-                      placeholder="密码:6-12位英文、数字、下划线"
+                      placeholder="密码: 6-12位英文、数字、下划线"
                       v-model="userFrom.npassword">
                     </el-input>
                   </el-form-item>
@@ -220,6 +220,7 @@ export default {
   watch: {
     // 如果路由有变化，会再次执行该方法
     $route: "routeChange"
+    
   },
   created() {
     //生命周期函数

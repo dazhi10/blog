@@ -3,6 +3,8 @@ package com.nhb.domain.vo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * @author 大只
  * @date 2022/10/1 02:21
@@ -25,9 +27,11 @@ public class UserInfoVo {
      */
     private String avatar;
 
+    private Date createTime;
+
     private String sex;
 
-    private String email;
+    private String UserName;
 
 
 }

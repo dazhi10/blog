@@ -75,7 +75,6 @@ const router = new Router({
 
 //路由前置守卫
 router.beforeEach((to, from, next) => {
-  console.log(to);
   if (to.path == "/UserInfo") {
     if (localStorage.getItem("userInfo")) {
       next();
