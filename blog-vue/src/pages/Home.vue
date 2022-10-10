@@ -1,18 +1,24 @@
 <!-- 首页 -->
 <template>
-    <div>
-        <sg-navbar></sg-navbar>
-        <div class="container">
-            <el-row  :gutter="30">
-                <el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
-                    <sg-articlelist></sg-articlelist>
-                </el-col>
-                <el-col :sm="24"  :md="8" >
-                    <sg-rightlist></sg-rightlist>
-                </el-col>
-            </el-row>
-        </div>
+  <div>
+    <sg-navbar></sg-navbar>
+    <div class="container">
+      <el-row :gutter="30">
+        <el-col
+          :sm="24"
+          :md="16"
+          style="transition: all 0.5s ease-out; margin-bottom: 30px"
+        >
+          <sg-articlelist></sg-articlelist>
+        </el-col>
+        <el-col :sm="24" :md="8">
+          <sg-rightlist></sg-rightlist>
+        </el-col>
+      </el-row>
     </div>
+
+    
+  </div>
 </template>
 
 <script>
@@ -24,7 +30,7 @@ export default {
   data() {
     //选项 / 数据
     return {
-      log: true
+      log: true,
     };
   },
   methods: {
@@ -34,11 +40,10 @@ export default {
     //定义组件
     "sg-navbar": header,
     "sg-articlelist": articlelist,
-    "sg-rightlist": rightlist
+    "sg-rightlist": rightlist,
   },
-  created() {}
+  created() {},
 };
 </script>
 
-<style>
-</style>
+<style></style>
