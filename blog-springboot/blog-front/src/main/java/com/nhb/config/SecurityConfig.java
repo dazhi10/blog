@@ -45,8 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                //注销接口需要认证才能访问
-                .antMatchers("/logout").authenticated()
                 //发表评论需要认证
                 .antMatchers("/comment").authenticated()
                 //个人信息接口必须登录后才能访问

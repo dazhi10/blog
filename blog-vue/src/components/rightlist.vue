@@ -3,24 +3,30 @@
   <div class="rightlistBox">
     <section>
       <el-skeleton :rows="3" animated :loading="loading">
-        <div class="r1-body" >
-          <p style="font-size:24px;margin-bottom: 20px;">大只</p>
-          <p style="margin-bottom: 20px; color:#4ba596">找到对象一定要找一个喜欢你的</p>
+        <div class="r1-body">
+          <p style="font-size: 24px; margin-bottom: 20px">大只</p>
+          <p style="margin-bottom: 20px; color: #4ba596">
+            找到对象一定要找一个喜欢你的
+          </p>
 
           <div class="catch-me">
             <div>
-              <a href="https://github.com/dazhi10">
-                <i class="fa fa-fw fa-github"></i>
+              <a href="https://github.com/dazhi10" target="_blank">
+                <img
+                  class="github_img"
+                  src="../assets/img/system/GitHub.png"
+                  alt=""
+                />
               </a>
             </div>
-          </div>  
+          </div>
         </div>
-      </el-skeleton>  
+      </el-skeleton>
     </section>
 
-    <section class="rs4" >
+    <section class="rs4">
       <h2 class="ui label">热门文章</h2>
-      <el-skeleton :rows="browseList.length" animated :loading="loading">  
+      <el-skeleton :rows="browseList.length" animated :loading="loading">
         <ul>
           <li v-for="(item, index) in browseList" :key="'browseList' + index">
             <a :href="'#/DetailArticle?aid=' + item.id" target="_blank">{{
@@ -29,42 +35,18 @@
             —— {{ item.viewCount }} 次围观
           </li>
         </ul>
-        </el-skeleton>  
+      </el-skeleton>
     </section>
-  
-    
+
     <!-- 右侧上滑小图片 -->
     <div
-      v-if="this.$store.state.themeObj.user_start != 0"
       :class="gotoTop ? 'toTop hidden' : 'toTop goTop hidden'"
       @click="toTopfun"
     >
-      <img
-        :src="
-          this.$store.state.themeObj.right_img
-            ? this.$store.state.themeObj.right_img
-            : 'static/img/scroll.png'
-        "
-        alt=""
-      />
-    </div>
-    <div
-      v-else
-      :class="gotoTop ? 'toTophui hidden' : 'toTophui goTophui hidden'"
-      @click="toTopfun"
-    >
-      <img
-        :src="
-          this.$store.state.themeObj.right_img
-            ? this.$store.state.themeObj.right_img
-            : 'static/img/scroll.png'
-        "
-        alt=""
-      />
+      <img src="../assets/img/system/scroll.png" alt="" />
     </div>
   </div>
 </template>
-
 
 <script>
 import { hotArticleList } from "../api/article";
@@ -79,49 +61,44 @@ export default {
       browseList: "", //热门文章 浏览量最多
       artCommentList: "", //最新评论
       loading: true, //是否显示骨架屏
-      catchMeObj: {
-        //个人信息
-        git: "",
-        qq: ""
-      }
     };
   },
   methods: {
     //事件处理器
-    toTopfun: function(e) {
+    toTopfun: function (e) {
       var that = this;
       this.gotoTop = false;
       this.going = true;
-      var timer = setInterval(function() {
+      var timer = setInterval(function () {
         //获取滚动条距离顶部高度
         var osTop =
           document.documentElement.scrollTop || document.body.scrollTop;
         var ispeed = Math.floor(-osTop / 7);
         document.documentElement.scrollTop = document.body.scrollTop =
           osTop + ispeed;
+
         //到达顶部，清除定时器
         if (osTop == 0) {
           that.going = false;
           clearInterval(timer);
           timer = null;
         }
-      }, 30);
+      }, 10);
     },
     getHotArticleList() {
-      hotArticleList().then(response => {
+      hotArticleList().then((response) => {
         this.browseList = response;
         this.timeout = setTimeout(() => {
           this.loading = false;
         }, 700);
       });
-    }
+    },
   },
   created() {
     //生命周期函数
     var that = this;
-    window.onscroll = function() {
+    window.onscroll = function () {
       var t = document.documentElement.scrollTop || document.body.scrollTop;
-      // console.log(t);
       if (!that.going) {
         if (t > 600) {
           that.gotoTop = true;
@@ -137,11 +114,15 @@ export default {
     };
     //查询浏览量最多的10篇文章数据
     this.getHotArticleList();
-  }
+  },
 };
 </script>
 
 <style lang="less">
+.github_img {
+  width: 38px;
+  height: 38px;
+}
 .rightlistBox {
   position: relative;
 }
@@ -213,106 +194,106 @@ export default {
   margin: 0 3.2px;
 }
 
-/*************do you like me*******************/
-.rightlistBox .rs2 {
-  /*padding:10px 0 4px 0;*/
-  min-height: 100px;
-}
-.rightlistBox .rs2.fixed {
-  position: fixed;
-  top: 40px;
-  width: 22%;
-}
-.rightlistBox .rs2 p {
-  color: #df2050;
-  cursor: pointer;
-  font-size: 20px;
-  margin-bottom: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  margin-top: 10px;
-  font-weight: 500;
-}
-.rightlistBox .rs2 div {
-  color: #df2050;
-  cursor: pointer;
-  text-align: center;
-  font-size: 40px;
-  position: absolute;
-  width: 100%;
-  height: 100px;
-  line-height: 100px;
-  left: 0;
-  top: 30px;
-}
-.rightlistBox .rs2 div i.heart {
-  display: inline-block;
-  text-align: center;
-  width: 100px;
-  height: 100px;
-  margin-left: -20px;
-  margin-top: -5px;
-  background: url(../../static/img/heart.png) no-repeat;
-  background-position: 0 0;
-  cursor: pointer;
-  -webkit-transition: background-position 1s steps(28);
-  transition: background-position 1s steps(28);
-  -webkit-transition-duration: 0s;
-  transition-duration: 0s;
-  vertical-align: middle;
-}
-.rightlistBox .rs2 div i.heart:hover {
-  transform: scale(1.15);
-  -webkit-transform: scale(1.15);
-}
-.rightlistBox .rs2 div i.heart.active {
-  -webkit-transition-duration: 1s;
-  transition-duration: 1s;
-  background-position: -2800px 0;
-}
-.rightlistBox .rs2 div span {
-  margin-left: -30px;
-}
+// /*************do you like me*******************/
+// .rightlistBox .rs2 {
+//   /*padding:10px 0 4px 0;*/
+//   min-height: 100px;
+// }
+// .rightlistBox .rs2.fixed {
+//   position: fixed;
+//   top: 40px;
+//   width: 22%;
+// }
+// .rightlistBox .rs2 p {
+//   color: #df2050;
+//   cursor: pointer;
+//   font-size: 20px;
+//   margin-bottom: 10px;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   text-align: center;
+//   margin-top: 10px;
+//   font-weight: 500;
+// }
+// .rightlistBox .rs2 div {
+//   color: #df2050;
+//   cursor: pointer;
+//   text-align: center;
+//   font-size: 40px;
+//   position: absolute;
+//   width: 100%;
+//   height: 100px;
+//   line-height: 100px;
+//   left: 0;
+//   top: 30px;
+// }
+// .rightlistBox .rs2 div i.heart {
+//   display: inline-block;
+//   text-align: center;
+//   width: 100px;
+//   height: 100px;
+//   margin-left: -20px;
+//   margin-top: -5px;
+//   background: url(../assets/img/heart.png) no-repeat;
+//   background-position: 0 0;
+//   cursor: pointer;
+//   -webkit-transition: background-position 1s steps(28);
+//   transition: background-position 1s steps(28);
+//   -webkit-transition-duration: 0s;
+//   transition-duration: 0s;
+//   vertical-align: middle;
+// }
+// .rightlistBox .rs2 div i.heart:hover {
+//   transform: scale(1.15);
+//   -webkit-transform: scale(1.15);
+// }
+// .rightlistBox .rs2 div i.heart.active {
+//   -webkit-transition-duration: 1s;
+//   transition-duration: 1s;
+//   background-position: -2800px 0;
+// }
+// .rightlistBox .rs2 div span {
+//   margin-left: -30px;
+// }
 /**********排队来说*************/
-.rightlistBox .rs3 .rs3-item {
-  font-size: 13px;
-  line-height: 20px;
-}
-.rightlistBox .rs3 .rs3-item a {
-  display: block;
-  padding: 5px;
-  transition: all 0.3s ease-out;
-  border-bottom: 1px solid #ddd;
-  margin: 5px 0;
-}
-.rightlistBox .rs3 .rs3-item a:hover {
-  background: rgba(230, 244, 250, 0.5);
-  border-radius: 5px;
-}
-.rightlistBox .rs3 .rs3-photo {
-  float: left;
-}
-.rightlistBox .rs3 .rs3-photo img {
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
-}
-.rightlistBox .rs3 .rs3-inner {
-  margin-left: 40px;
-}
-.rightlistBox .rs3 .rs3-inner .rs3-author {
-  font-weight: 700;
-}
-.rightlistBox .rs3 .rs3-inner .rs3-text {
-  font-size: 12px;
-  text-align: justify;
-}
-.rightlistBox .rs3 .rs3-item:last-child a {
-  border-bottom: none;
-}
+// .rightlistBox .rs3 .rs3-item {
+//   font-size: 13px;
+//   line-height: 20px;
+// }
+// .rightlistBox .rs3 .rs3-item a {
+//   display: block;
+//   padding: 5px;
+//   transition: all 0.3s ease-out;
+//   border-bottom: 1px solid #ddd;
+//   margin: 5px 0;
+// }
+// .rightlistBox .rs3 .rs3-item a:hover {
+//   background: rgba(230, 244, 250, 0.5);
+//   border-radius: 5px;
+// }
+// .rightlistBox .rs3 .rs3-photo {
+//   float: left;
+// }
+// .rightlistBox .rs3 .rs3-photo img {
+//   border-radius: 50%;
+//   width: 32px;
+//   height: 32px;
+//   object-fit: cover;
+// }
+// .rightlistBox .rs3 .rs3-inner {
+//   margin-left: 40px;
+// }
+// .rightlistBox .rs3 .rs3-inner .rs3-author {
+//   font-weight: 700;
+// }
+// .rightlistBox .rs3 .rs3-inner .rs3-text {
+//   font-size: 12px;
+//   text-align: justify;
+// }
+// .rightlistBox .rs3 .rs3-item:last-child a {
+//   border-bottom: none;
+// }
 /************排队看这些***************/
 .rightlistBox .rs4 li {
   padding: 8px 0;

@@ -12,18 +12,15 @@ import "highlight.js/styles/vs2015.css"; //样式
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(MavonEditor);
-Vue.directive("highlight", function(el) {
+Vue.directive("highlight", function (el) {
   let blocks = el.querySelectorAll("pre code");
-  blocks.forEach(block => {
+  blocks.forEach((block) => {
     hljs.highlightBlock(block);
   });
 });
 
-/* eslint-disable no-new */
 new Vue({
-  el: "#app",
   router,
-  components: { App },
-  template: "<App/>",
-  store
-});
+  store,
+  render: (h) => h(App),
+}).$mount("#app");

@@ -1,101 +1,138 @@
 <!-- 留言评论模块 -->
 <template>
-    <div class="tmsgBox"  ref="tmsgBox">
-        <div class="tmsg-respond"  ref="respondBox">
-            <h3>发表评论 <small v-show="isRespond" class="tcolorm" @click="removeRespond">取消回复</small></h3>
-            <form class=""  >
-                <el-input
-                  type="textarea"
-                  :rows="2"
-                  placeholder="说点什么呢``"
-                  v-model="textarea">
-                </el-input>
-                <div :class="pBody?'OwO':'OwO OwO-open'">
-                    <div class="OwO-logo" @click="pBody=!pBody">
-                        <span>OwO表情</span>
-                    </div>
-                    <div class="OwO-body">
-                        <ul class="OwO-items OwO-items-show">
-                            <li class="OwO-item" v-for="(oitem,index) in OwOlist" :key="'oitem'+index" @click="choseEmoji(oitem.title)">
-                                <img :src="'static/img/emot/image/'+oitem.url" alt="">
-                            </li>
-                        </ul>
-                        <div class="OwO-bar">
-                            <ul class="OwO-packages">
-                                <li class="OwO-package-active">Emoji</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <el-row class="tmsg-r-info">
-                    <el-col :span="24" class="info-submit">
-                        <p class="tcolors-bg" @click="sendMsg">{{sendTip}}</p>
-                    </el-col>
-                </el-row>
-            </form>
-        </div>
-        <div class="tmsg-comments"  ref="listDom">
-            <a href="#" class="tmsg-comments-tip">活捉 {{commentList?commentList.length:0}} 条</a>
-            <div class="tmsg-commentshow">
-                <ul class="tmsg-commentlist">
-                    <li class="tmsg-c-item" v-for="(item,index) in commentList" :key="'common'+index">
-                        <article class="">
-                            <header>
-                                <img  :src="item.avatar">
-                                <div class="i-name">
-                                    {{item.username}}
-                                </div>
-                                <!-- <div class="i-class">
-                                    {{item.label}}
-                                </div> -->
-                                <div class="i-time">
-                                    <time>{{item.createTime}}</time>
-                                </div>
-                            </header>
-                            <section>
-                                <p v-html="analyzeEmoji(item.content)">{{analyzeEmoji(item.content)}}</p>
-                                <div v-if="haslogin" class="tmsg-replay" @click="respondMsg(item.id,item.id,item.createBy)">
-                                    回复
-                                </div>
-                            </section>
-                        </article>
-                        <ul v-show="item.children" class="tmsg-commentlist" style="padding-left:60px;">
-                            <li class="tmsg-c-item" v-for="(citem,cindex) in item.children" :key="'citem'+cindex">
-                                <article class="">
-                                    <header>
-                                            <img :src="citem.avatar">
-                                            <div class="i-name">
-                                                {{citem.username}} <span class="el-icon-caret-right"></span> {{citem.toCommentUserName}}
-                                            </div>
-                                            <div class="i-time">
-                                                <time>{{citem.createTime}}</time>
-                                            </div>
-                                    </header>
-                                    <section>
-                                        <p v-html="analyzeEmoji(citem.content)">{{citem.content}}</p>
-                                        <div v-show="haslogin" class="tmsg-replay" @click="respondMsg(item.id,citem.id,citem.createBy)">
-                                            回复
-                                        </div>
-                                    </section>
-                                </article>
-                            </li>
-                        </ul>
-                    </li>
+  <div class="tmsgBox" ref="tmsgBox">
+    <div class="tmsg-respond" ref="respondBox">
+      <h3>
+        发表评论
+        <small v-show="isRespond" class="tcolorm" @click="removeRespond"
+          >取消回复</small
+        >
+      </h3>
+      <form class="">
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="说点什么呢``"
+          v-model="textarea"
+        >
+        </el-input>
+        <div :class="pBody ? 'OwO' : 'OwO OwO-open'">
+          <div class="OwO-logo" @click="pBody = !pBody">
+            <span>OwO表情</span>
+          </div>
 
-                </ul>
-                <h1 v-show='hasMore' class="tcolors-bg" @click="addMoreFun" >查看更多</h1>
-                <h1 v-show='!hasMore' class="tcolors-bg" >没有更多</h1>
-            </div>
+          <div class="OwO-body">
+            <ul class="OwO-items OwO-items-show">
+              <li
+                class="OwO-item"
+                v-for="(oitem, index) in OwOlist"
+                :key="index"
+                @click="chooseEmoji(oitem.title)"
+              >
+                <img :src="require('../assets/img/owo/' + oitem.url)" alt />
+              </li>
+            </ul>
+          </div>
         </div>
+
+        <el-row class="tmsg-r-info">
+          <el-col :span="24" class="info-submit">
+            <p class="tcolors-bg" @click="sendMsg">{{ sendTip }}</p>
+          </el-col>
+        </el-row>
+      </form>
     </div>
+
+    <div class="tmsg-comments" ref="listDom">
+      <a href="#" class="tmsg-comments-tip"
+        >活捉 {{ commentList ? commentList.length : 0 }} 条</a
+      >
+      <div class="tmsg-commentshow">
+        <ul class="tmsg-commentlist">
+          <li
+            class="tmsg-c-item"
+            v-for="(item, index) in commentList"
+            :key="'common' + index"
+          >
+            <article class="">
+              <header>
+                <img :src="item.avatar" />
+                <div class="i-name">
+                  {{ item.username }}
+                </div>
+
+                <div class="i-time">
+                  <time>{{ item.createTime }}</time>
+                </div>
+              </header>
+              <section>
+                <p v-html="analyzeEmoji(item.content)">
+                  {{ analyzeEmoji(item.content) }}
+                </p>
+                <div
+                  v-if="haslogin"
+                  class="tmsg-replay"
+                  @click="respondMsg(item.id, item.id, item.createBy)"
+                >
+                  回复
+                </div>
+              </section>
+            </article>
+            <ul
+              v-show="item.children"
+              class="tmsg-commentlist"
+              style="padding-left: 60px"
+            >
+              <li
+                class="tmsg-c-item"
+                v-for="(citem, cindex) in item.children"
+                :key="'citem' + cindex"
+              >
+                <article class="">
+                  <header>
+                    <img :src="citem.avatar" />
+                    <div class="i-name">
+                      {{ citem.username }}
+                      <span class="el-icon-caret-right"></span>
+                      {{ citem.toCommentUserName }}
+                    </div>
+                    <div class="i-time">
+                      <time>{{ citem.createTime }}</time>
+                    </div>
+                  </header>
+                  <section>
+                    <p v-html="analyzeEmoji(citem.content)">
+                      {{ citem.content }}
+                    </p>
+                    <div
+                      v-show="haslogin"
+                      class="tmsg-replay"
+                      @click="respondMsg(item.id, citem.id, citem.createBy)"
+                    >
+                      回复
+                    </div>
+                  </section>
+                </article>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h1 v-show="hasMore" class="tcolors-bg" @click="addMoreFun">
+          查看更多
+        </h1>
+        <h1 v-show="!hasMore" class="tcolors-bg">没有更多</h1>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import {
   sendComment,
   getArticleComment,
-  getLinkComment
+  getLinkComment,
 } from "../api/comment.js";
+
 import { getToken } from "../utils/auth.js";
 export default {
   data() {
@@ -108,8 +145,10 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        articleId: 0
+        articleId: 0,
       },
+      inputValue: "",
+      content: "",
       isRespond: false,
       textarea: "", //文本框输入内容
       pBody: true, //表情打开控制
@@ -198,29 +237,17 @@ export default {
         { title: "话筒", url: "huatong.gif" },
         { title: "蜡烛", url: "lazhu.gif" },
         { title: "蛋糕", url: "dangao.gif" },
-        { title: "发红包", url: "fahongbao.gif" }
-      ]
+        { title: "发红包", url: "fahongbao.gif" },
+      ],
     };
   },
   methods: {
-    //事件处理器
-    setData(initData, result) {
-      var msg = result.rows;
-      if (initData) {
-        //刷新列表
-        this.commentList = msg;
-      } else {
-        //加载更多
-        this.commentList = this.commentList.concat(msg);
-      }
-
-      this.hasMore = result.total > this.commentList.length;
-    },
     //选择表情包
-    choseEmoji: function(inner) {
-      this.textarea += "[" + inner + "]";
+    chooseEmoji(value) {
+      this.textarea += "[" + value + "]";
     },
-    analyzeEmoji: function(cont) {
+
+    analyzeEmoji: function (cont) {
       //编译表情替换成图片展示出来
       var pattern1 = /\[[\u4e00-\u9fa5]+\]/g;
       var pattern2 = /\[[\u4e00-\u9fa5]+\]/;
@@ -234,17 +261,34 @@ export default {
               break;
             }
           }
-          str = str.replace(
-            pattern2,
-            '<img src="static/img/emot/image/' + src + '"/>'
-          );
+
+          if (typeof src !== "undefined") {
+            var s = require("../assets/img/owo/" + src);
+            var imoj = "<img src='" + s + "'/>";
+
+            str = str.replace(pattern2, imoj);
+          }
         }
-        // console.log(str);
       }
       return str;
     },
+
+    //事件处理器
+    setData(initData, result) {
+      var msg = result.rows;
+      if (initData) {
+        //刷新列表
+        this.commentList = msg;
+      } else {
+        //加载更多
+        this.commentList = this.commentList.concat(msg);
+      }
+
+      this.hasMore = result.total > this.commentList.length;
+    },
+
     //发送留言
-    sendMsg: function() {
+    sendMsg: function () {
       //留言
       var that = this;
       if (that.textarea) {
@@ -256,7 +300,7 @@ export default {
           that.toCommentId,
           that.toCommentUserId,
           that.textarea
-        ).then(response => {
+        ).then((response) => {
           that.textarea = "";
           that.rootId = -1;
           that.toCommentId = -1;
@@ -264,20 +308,20 @@ export default {
 
           that.routeChange();
           that.removeRespond();
-          var timer02 = setTimeout(function() {
+          var timer02 = setTimeout(function () {
             that.sendTip = "发送~";
             clearTimeout(timer02);
           }, 1000);
         });
       } else {
         that.sendTip = "内容不能为空~";
-        var timer = setTimeout(function() {
+        var timer = setTimeout(function () {
           that.sendTip = "发送~";
           clearTimeout(timer);
         }, 3000);
       }
     },
-    respondMsg: function(rootId, toCommentId, toCommentUserId) {
+    respondMsg: function (rootId, toCommentId, toCommentUserId) {
       //回复留言
       // console.log(leavePid,pid);
       var that = this;
@@ -295,7 +339,7 @@ export default {
           .$confirm("登录后即可点赞和收藏，是否前往登录页面?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning"
+            type: "warning",
           })
           .then(() => {
             //确定，跳转至登录页面
@@ -306,7 +350,7 @@ export default {
           .catch(() => {});
       }
     },
-    removeRespond: function() {
+    removeRespond: function () {
       //取消回复留言
       this.isRespond = false;
       this.rootId = -1;
@@ -317,7 +361,7 @@ export default {
         this.$refs.listDom
       );
     },
-    showCommentList: function(initData) {
+    showCommentList: function (initData) {
       //评论列表
       var that = this;
       that.aid =
@@ -338,47 +382,36 @@ export default {
       if (that.$route.name == "DetailArticle") {
         //文章列表的评论
         that.type = 0;
-        getArticleComment(that.queryParams).then(response => {
+        getArticleComment(that.queryParams).then((response) => {
           that.setData(initData, response);
         });
       } else {
         //其他评论
         if (that.$route.name == "FriendsLink") {
           that.type = 1;
-          getLinkComment(that.queryParams).then(response => {
+          getLinkComment(that.queryParams).then((response) => {
             that.setData(initData, response);
           });
         }
       }
     },
-    addMoreFun: function() {
+    addMoreFun: function () {
       //查看更多
       this.queryParams.pageNum++;
       this.showCommentList(false);
     },
-    routeChange: function() {
+    routeChange: function () {
       //重新加载
       var that = this;
       this.queryParams.pageNum = 1;
       this.showCommentList(true);
-    }
-  },
-  components: {
-    //定义组件
-  },
-  watch: {
-    // 如果路由有变化，会再次执行该方法
-    // '$route':'routeChange'
+    },
   },
   created() {
     //生命周期函数
-    // console.log(this.$route);
     var that = this;
     that.routeChange();
   },
-  mounted() {
-    //页面加载完成后
-  }
 };
 </script>
 

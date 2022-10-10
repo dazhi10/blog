@@ -1,80 +1,82 @@
 <!-- 头部公用 -->
 <template>
   <div class="">
-    <div class="headBack" >
-        <el-row class="container">
-          <el-col :span="24">
-            <!-- pc端导航 -->
-            <div class="headBox">
-              <el-menu
-                :default-active="activeIndex"
-                class="el-menu-demo"
-                mode="horizontal"
-                @select="handleSelect"
-                :router="true"
+    <div class="headBack">
+      <el-row class="container">
+        <el-col :span="24">
+          <!-- pc端导航 -->
+          <div class="headBox">
+            <el-menu
+              :default-active="activeIndex"
+              class="el-menu-demo"
+              mode="horizontal"
+              @select="handleSelect"
+              :router="true"
+            >
+              <el-menu-item index="/Home"
+                ><i class="fa fa-wa fa-home"></i> 首页</el-menu-item
               >
-                <el-menu-item index="/Home"
-                  ><i class="fa fa-wa fa-home"></i> 首页</el-menu-item
+              <el-submenu index="/Share">
+                <template slot="title"
+                  ><i class="fa fa-wa fa-archive"></i> 分类</template
                 >
-                <el-submenu index="/Share">
-                  <template slot="title"
-                    ><i class="fa fa-wa fa-archive"></i> 分类</template
-                  >
-                  <el-menu-item 
-                    v-for="(item, index) in classListObj"
-                    :key="'class1' + index"
-                    :index="'/Share?classId=' + item.id"
-                    >{{ item.name }}</el-menu-item
-                  >
-                </el-submenu>
-                <el-menu-item index="/Friendslink"
-                  ><i class="fa fa-wa fa-users"></i>友链</el-menu-item
+                <el-menu-item
+                  v-for="(item, index) in classListObj"
+                  :key="'class1' + index"
+                  :index="'/Share?classId=' + item.id"
+                  >{{ item.name }}</el-menu-item
                 >
+              </el-submenu>
+              <el-menu-item index="/Friendslink"
+                ><i class="fa fa-wa fa-users"></i>友链</el-menu-item
+              >
 
-                <div class="userInfo">
-                  <div v-show="!haslogin" class="nologin">
-                    <a href="javascript:void(0);" @click="logoinFun(1)"
-                      >登录&nbsp;</a
-                    >|<a href="javascript:void(0);" @click="logoinFun(0)"
-                      >&nbsp;注册</a
-                    >
-                  </div>
-                  <div v-show="haslogin" class="haslogin">
-                    <el-avatar :size="38" :src="headTou"></el-avatar>
-                    <ul class="haslogin-info">
-                      <li>
-                        <a href="#/UserInfo">个人中心</a>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);" @click="userlogout"
-                          >退出登录</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
+              <div class="userInfo">
+                <div v-show="!haslogin" class="nologin">
+                  <a href="javascript:void(0);" @click="logoinFun(1)"
+                    >登录&nbsp;</a
+                  >|<a href="javascript:void(0);" @click="logoinFun(0)"
+                    >&nbsp;注册</a
+                  >
                 </div>
-              </el-menu>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
+                <div v-show="haslogin" class="haslogin">
+                  <el-avatar :size="38" :src="headTou"></el-avatar>
+                  <ul class="haslogin-info">
+                    <li>
+                      <a href="#/UserInfo">个人中心</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);" @click="userlogout"
+                        >退出登录</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </el-menu>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
 
     <el-skeleton :rows="1" animated :loading="loading">
-      <template slot="template" >
-        <el-skeleton-item variant="image" style="width: 100%; height: 650px;margin-bottom: 100px;" />
+      <template slot="template">
+        <el-skeleton-item
+          variant="image"
+          style="width: 100%; height: 650px; margin-bottom: 100px"
+        />
       </template>
 
       <div
         class="headImgBox"
         :style="{
-          backgroundImage: headBg
+          backgroundImage: headBg,
         }"
       >
         <div class="scene">
           <div><span id="luke"></span></div>
         </div>
       </div>
-      
     </el-skeleton>
   </div>
 </template>
@@ -99,7 +101,7 @@ export default {
       headBg: "url(http://rialetu26.hn-bkt.clouddn.com/headbg05.jpg)", //头部背景图
       headTou: "", //头像
       projectList: "", //项目列表
-      loading: true
+      loading: true,
     };
   },
   watch: {},
@@ -109,7 +111,7 @@ export default {
       if (localStorage.getItem("userInfo")) {
         that.userInfo = JSON.parse(localStorage.getItem("userInfo"));
         that.userId = that.userInfo.id;
-        getUserInfo(that.userId).then(response => {
+        getUserInfo(that.userId).then((response) => {
           that.headTou = response.avatar;
         });
       }
@@ -135,7 +137,7 @@ export default {
       }
     },
     getCategoryList() {
-      getCategoryList().then(response => {
+      getCategoryList().then((response) => {
         this.classListObj = response;
       });
     },
@@ -143,40 +145,40 @@ export default {
       //pc菜单选择
       //    console.log(key, keyPath);
     },
-    logoinFun: function(msg) {
+    logoinFun: function (msg) {
       //用户登录和注册跳转
       // console.log(msg);
       localStorage.setItem("logUrl", this.$route.fullPath);
-      // console.log(666,this.$router.currentRoute.fullPath);
+
       if (msg == 0) {
         this.$router.push({
-          path: "/Login?login=0"
+          path: "/Login?login=0",
         });
       } else {
         this.$router.push({
-          path: "/Login?login=1"
+          path: "/Login?login=1",
         });
       }
     },
     // 用户退出登录
-    userlogout: function() {
+    userlogout: function () {
       var that = this;
       this.$confirm("是否确认退出?", "退出提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           // console.log(that.$route.path);
 
-          logout().then(response => {
+          logout().then((response) => {
             removeToken();
             localStorage.removeItem("userInfo");
             that.haslogin = false;
             window.location.reload();
             that.$message({
               type: "success",
-              message: "退出成功!"
+              message: "退出成功!",
             });
 
             this.$router.push({ path: "/Home" });
@@ -186,7 +188,7 @@ export default {
           //
         });
     },
-    routeChange: function() {
+    routeChange: function () {
       var that = this;
       that.pMenu = true;
       this.activeIndex = this.$route.path == "/" ? "/Home" : this.$route.path;
@@ -210,14 +212,14 @@ export default {
         this.input = "";
         this.$store.state.keywords = "";
       }
-    }
+    },
   },
   components: {
     //定义组件
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    $route: "routeChange"
+    $route: "routeChange",
   },
   created() {
     //生命周期函数
@@ -228,15 +230,15 @@ export default {
       "hidden" in document
         ? "hidden"
         : "webkitHidden" in document
-          ? "webkitHidden"
-          : "mozHidden" in document
-            ? "mozHidden"
-            : null;
+        ? "webkitHidden"
+        : "mozHidden" in document
+        ? "mozHidden"
+        : null;
     var visibilityChangeEvent = hiddenProperty.replace(
       /hidden/i,
       "visibilitychange"
     );
-    var onVisibilityChange = function() {
+    var onVisibilityChange = function () {
       if (!document[hiddenProperty]) {
         //被隐藏
         if (that.$route.path != "/DetailShare") {
@@ -255,11 +257,11 @@ export default {
   mounted() {
     //页面元素加载完成
     var that = this;
-    var timer = setTimeout(function() {
+    var timer = setTimeout(function () {
       Typeit(that.$store.state.themeObj.user_start, "#luke"); //打字机效果
       clearTimeout(timer);
     }, 1000);
-  }
+  },
 };
 </script>
 
