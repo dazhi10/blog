@@ -128,7 +128,6 @@ export default {
     $route: {
       handler: function(route) {
         this.aId = route.query && route.query.id
-        console.log(this.aId)
       },
       immediate: true
     }

@@ -43,13 +43,11 @@ downloadService.interceptors.request.use(config => {
   }
   return config
 }, error => {
-  console.log(error)
   Promise.reject(error)
 })
 
 // 响应拦截器
 downloadService.interceptors.response.use(res => {
-  console.log(res)
   if (!res.data) {
     return
   }
@@ -70,7 +68,6 @@ downloadService.interceptors.response.use(res => {
   window.URL.revokeObjectURL(url) // 释放掉blob对象
 },
 error => {
-  console.log('err' + error)
   let { message } = error
   if (message === 'Network Error') {
     message = '后端接口连接异常'
