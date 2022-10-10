@@ -15,6 +15,7 @@ import com.nhb.mapper.UserMapper;
 import com.nhb.service.UserRoleService;
 import com.nhb.service.UserService;
 import com.nhb.utils.BeanCopyUtils;
+import com.nhb.utils.RandomNum;
 import com.nhb.utils.RedisCache;
 import com.nhb.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +115,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(Objects.isNull(user)){
             return ResponseResult.okResult("认证时间过期");
         }
+        //用户随机昵称
+        StringBuffer randomNum = RandomNum.getRandomNum(6);
+        user.setNickName("用户"+ randomNum);
         //对密码进行加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
