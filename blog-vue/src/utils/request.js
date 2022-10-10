@@ -2,9 +2,9 @@ import axios from "axios";
 import { Notification, MessageBox, Message } from "element-ui";
 import router from "@/router";
 import store from "../store";
-import { getToken, removeToken } from "@/utils/auth";
+import { getToken } from "@/utils/auth";
 import errorCode from "@/utils/errorCode";
-import { logout } from "../api/user";
+
 import Cookies from "js-cookie";
 
 axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";

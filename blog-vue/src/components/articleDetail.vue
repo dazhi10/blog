@@ -56,10 +56,7 @@
           v-highlight
           v-html="detailObj.content"
         ></div>
-        
-          
       </template>
-
     </el-skeleton>
   </div>
 </template>
@@ -77,26 +74,25 @@ export default {
       haslogin: false, //是否已经登录
       userId: "", //用户id
       loading: true,
-      menuList: []
+      menuList: [],
     };
   },
 
   methods: {
     //事件处理器
-    showInitDate: function(date, full) {
+    showInitDate: function (date, full) {
       //年月日的编辑
-      // console.log(detailObj.create_time,date,full);
       return initDate(date, full);
     },
-    getArticleDetail: function() {
-      getArticle(this.aid).then(response => {
+    getArticleDetail: function () {
+      getArticle(this.aid).then((response) => {
         this.detailObj = response;
         const markdownIt = mavonEditor.getMarkdownIt();
         // markdownIt.re
         this.detailObj.content = markdownIt.render(response.content);
       });
     },
-    routeChange: function() {
+    routeChange: function () {
       var that = this;
       that.aid =
         that.$route.query.aid == undefined
@@ -116,11 +112,11 @@ export default {
       this.timeout = setTimeout(() => {
         this.loading = false;
       }, 500);
-    }
+    },
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    $route: "routeChange"
+    $route: "routeChange",
   },
   components: {
     //定义组件
@@ -130,7 +126,7 @@ export default {
     var that = this;
 
     this.routeChange();
-  }
+  },
 };
 </script>
 

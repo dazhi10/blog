@@ -1,8 +1,8 @@
-import Vue from "vue";
-import Router from "vue-router";
-Vue.use(Router);
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 
-const router = new Router({
+const router = new VueRouter({
   scrollBehavior(to, from, savePosition) {
     // 在点击浏览器的“前进/后退”，或者切换导航的时候触发。
     if (savePosition) {
@@ -16,7 +16,7 @@ const router = new Router({
       }
       return {
         x: 0,
-        y: top
+        y: top,
       };
     }
   },
@@ -24,53 +24,53 @@ const router = new Router({
     { path: "/", redirect: "/Home" },
     {
       path: "/Home",
-      component: resolve => require(["../pages/Home.vue"], resolve),
+      component: (resolve) => require(["../pages/Home.vue"], resolve),
       meta: {
-        auth: true
+        auth: true,
       },
-      name: "Home"
+      name: "Home",
     }, //首页
     {
       path: "/Share",
-      component: resolve => require(["../pages/Share.vue"], resolve),
+      component: (resolve) => require(["../pages/Share.vue"], resolve),
       meta: {
-        auth: true
+        auth: true,
       },
-      name: "Share"
+      name: "Share",
     }, //分类
     {
       path: "/DetailArticle",
-      component: resolve => require(["../pages/DetailArticle.vue"], resolve),
+      component: (resolve) => require(["../pages/DetailArticle.vue"], resolve),
       meta: {
-        auth: true
+        auth: true,
       },
-      name: "DetailArticle"
+      name: "DetailArticle",
     }, //分享详情
     {
       path: "/FriendsLink",
-      component: resolve => require(["../pages/FriendsLink.vue"], resolve),
+      component: (resolve) => require(["../pages/FriendsLink.vue"], resolve),
       meta: {
-        auth: true
+        auth: true,
       },
-      name: "FriendsLink"
+      name: "FriendsLink",
     }, //友链
     {
       path: "/Login",
-      component: resolve => require(["../pages/Login.vue"], resolve),
+      component: (resolve) => require(["../pages/Login.vue"], resolve),
       meta: {
-        auth: false
+        auth: false,
       },
-      name: "Login"
+      name: "Login",
     }, //注册登录
     {
       path: "/UserInfo",
-      component: resolve => require(["../pages/UserInfo.vue"], resolve),
+      component: (resolve) => require(["../pages/UserInfo.vue"], resolve),
       meta: {
-        auth: true
+        auth: true,
       },
-      name: "UserInfo"
-    } //用户个人中心
-  ]
+      name: "UserInfo",
+    }, //用户个人中心
+  ],
 });
 
 //路由前置守卫
