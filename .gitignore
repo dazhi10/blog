@@ -28,6 +28,8 @@ target/
 build/
 
 ### VS Code ###
+.vscode/
+
 .DS_Store
 node_modules
 /dist
@@ -44,12 +46,12 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea
 .vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
 
 
