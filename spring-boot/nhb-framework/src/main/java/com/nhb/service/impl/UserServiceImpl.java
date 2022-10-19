@@ -56,6 +56,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Value("${spring.mail.username}")
     private String mailKey;
 
+    @Value("${spring.mail.url}")
+    private String url;
+
+    @Value("${server.port}")
+    private String port;
+
     @Autowired
     private UserRoleService userRoleService;
 
@@ -77,7 +83,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
 
-
     @Override
     public ResponseResult register(User user) {
 
@@ -96,7 +101,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             String html = "<html>\n" +
                     "<body>\n" +
                     "<p>请点击下方链接注册</p>\n" +
-                    "<a href=\"http://localhost:7777/user/lookCode?mailId="+mailId + "\">http://localhost:7777/user/lookCode?mailId="+mailId+"</a>" +
+                    "<a href="+url+":"+port+"/user/lookCode?mailId="+mailId + "\">"+url+":"+port+"/user/lookCode?mailId="+mailId+"</a>" +
                     "</body>\n" +
                     "</html>";
             messageHelper.setText(html,true); // 邮箱内容

@@ -9,7 +9,9 @@ spring:
   mail:
     host: smtp.qq.com    # 邮箱协议
     username: 1919302385@qq.com          # 发送的邮箱地址
-    password: lqfsaayemmyicbib      # 邮箱的授权码
+    password: lqfsaayemmyicbib    # 邮箱的授权码
+    url: http://localhost #邮箱域名
+
   datasource:
     url: jdbc:mysql://localhost:3306/sg_blog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root

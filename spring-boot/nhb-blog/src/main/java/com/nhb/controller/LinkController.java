@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 友链(Link)控制层
+ *
  * @author 大只
  * @since 2022-10-01 00:52:06
  */
@@ -25,7 +26,7 @@ public class LinkController {
     @SystemLog(businessName = "查看友链列表")
     @ApiOperation("查看友链列表")
     @GetMapping("/getAllLink")
-    public ResponseResult getAllLink(){
+    public ResponseResult getAllLink() {
         return linkService.getAllLink();
     }
 }

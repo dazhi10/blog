@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户表(SysUser)控制层
+ *
  * @author 大只
  * @since 2022-10-01 01:47:48
  */
@@ -25,28 +26,28 @@ public class UserController {
 
     @ApiOperation("查看用户信息")
     @GetMapping("/userInfo")
-    public ResponseResult userInfo(){
+    public ResponseResult userInfo() {
         return userService.userInfo();
     }
 
     @ApiOperation("更新个人信息接口")
     @PutMapping("/userInfo")
-    public ResponseResult updateUserInfo(@RequestBody User user){
+    public ResponseResult updateUserInfo(@RequestBody User user) {
         return userService.updateUserInfo(user);
     }
 
     @ApiOperation("注册用户")
     @PostMapping("/register")
-    public ResponseResult register(@RequestBody User user){
+    public ResponseResult register(@RequestBody User user) {
         //对数据进行非空判断
-        if(!StringUtils.hasText(user.getUserName())){
+        if (!StringUtils.hasText(user.getUserName())) {
             throw new SystemException(AppHttpCodeEnum.USERNAME_NOT_NULL);
         }
-        if(!StringUtils.hasText(user.getPassword())){
+        if (!StringUtils.hasText(user.getPassword())) {
             throw new SystemException(AppHttpCodeEnum.PASSWORD_NOT_NULL);
         }
         //查询用户名是否存在
-        if (!userService.checkUserNameUnique(user.getUserName())){
+        if (!userService.checkUserNameUnique(user.getUserName())) {
             throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
         }
 
@@ -55,7 +56,7 @@ public class UserController {
 
     @ApiOperation("确定邮箱注册")
     @GetMapping("/lookCode")
-    public ResponseResult lookCode(@RequestParam String mailId){
+    public ResponseResult lookCode(@RequestParam String mailId) {
         return userService.lookCode(mailId);
     }
 }

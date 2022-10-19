@@ -23,7 +23,7 @@ public class UploadController {
 
     @ApiOperation("上传用户头像")
     @PostMapping("/upload")
-    public ResponseResult uploadImg(@RequestPart(value = "img") MultipartFile img){
+    public ResponseResult uploadImg(@RequestPart(value = "img") MultipartFile img) {
         return uploadService.uploadImg(img);
     }
 }

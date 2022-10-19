@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 分类表(Category)控制层
+ *
  * @author 大只
  * @since 2022-09-30 23:22:50
  */
@@ -23,9 +24,9 @@ public class CategoryController {
 
     @ApiOperation("查看分类列表")
     @GetMapping("/getCategoryList")
-    private ResponseResult getCategoryList(){
+    private ResponseResult getCategoryList() {
         return categoryService.getCategoryList();
     }
-    
+
 }
 
