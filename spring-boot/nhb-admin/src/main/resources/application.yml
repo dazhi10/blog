@@ -5,7 +5,12 @@ spring:
     database: 0
     host: localhost         # Redis服务器地址
     port: 6379              # Redis服务器连接端口
-    password:               # Redis服务器连接密码（默认为空）
+    password:            # Redis服务器连接密码（默认为空）
+  mail:
+    host: smtp.qq.com    # 邮箱协议
+    username: 1919302385@qq.com          # 发送的邮箱地址
+    password: lqfsaayemmyicbib    # 邮箱的授权码
+    url: http://localhost #邮箱域名
   datasource:
     url: jdbc:mysql://localhost:3306/sg_blog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
@@ -26,3 +31,11 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+oss:
+  # 秘钥
+  accessKey: UGuKxzJvfuVoMHM23hYFkmsfoS5OlWToJbRAq7L_
+  secretKey: nnfITwleH2pAvHEOB5wkQtMiSFzWQDbJevpnsCgQ
+  # 存储空间名
+  bucket: nhb-blog
+  # oss存储回调的域名
+  ossUrl: http://rjvy8zm3g.hn-bkt.clouddn.com/

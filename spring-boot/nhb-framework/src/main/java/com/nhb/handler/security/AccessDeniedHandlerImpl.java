@@ -21,9 +21,6 @@ import java.io.IOException;
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        e.printStackTrace();
-        ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NO_OPERATOR_AUTH);
-        //响应给前端
-        WebUtils.renderString(httpServletResponse, JSON.toJSONString(result));
+        throw e;
     }
 }

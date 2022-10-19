@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @TableName("sys_role_menu")
 public class RoleMenu  {
     //角色ID
-    @TableId
+    //@TableId
     private Long roleId;
-    //菜单ID@TableId
+    //菜单ID
     private Long menuId;
 
 

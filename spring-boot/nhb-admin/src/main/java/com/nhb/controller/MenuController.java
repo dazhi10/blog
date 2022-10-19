@@ -9,6 +9,7 @@ import com.nhb.utils.SystemConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +28,14 @@ public class MenuController {
     private MenuService menuService;
 
     @ApiOperation("查看菜单列表")
+    @PreAuthorize("@ps.hasPermission('sys:menu:query')")
     @GetMapping("/list")
     public ResponseResult menuList(@RequestParam(required = false) String menuName,@RequestParam(required = false) String status){
         return  menuService.menuList(menuName,status);
     }
 
     @ApiOperation("新增菜单")
+    @PreAuthorize("@ps.hasPermission('sys:menu:add')")
     @PostMapping
     public ResponseResult add(@RequestBody Menu menu) {
         menuService.save(menu);
@@ -40,12 +43,14 @@ public class MenuController {
     }
 
     @ApiOperation("根据id获取菜单")
+    @PreAuthorize("@ps.hasPermission('sys:menu:query')")
     @GetMapping(value = "/{menuId}")
     public ResponseResult getInfo(@PathVariable Long menuId) {
         return ResponseResult.okResult(menuService.getById(menuId));
     }
 
     @ApiOperation("修改菜单")
+    @PreAuthorize("@ps.hasPermission('sys:menu:put')")
     @PutMapping
     public ResponseResult updateMenu(@RequestBody Menu menu) {
         if (menu.getId().equals(menu.getParentId())) {
@@ -56,6 +61,7 @@ public class MenuController {
     }
 
     @ApiOperation("删除菜单")
+    @PreAuthorize("@ps.hasPermission('sys:menu:delete')")
     @DeleteMapping("/{menuId}")
     public ResponseResult remove(@PathVariable("menuId") Long menuId) {
         if (menuService.hasChild(menuId)) {
@@ -66,6 +72,7 @@ public class MenuController {
     }
 
     @ApiOperation("获取菜单下拉树列表")
+    @PreAuthorize("@ps.hasPermission('sys:menu:query')")
     @GetMapping("/tree")
     public ResponseResult tree() {
         List<Menu> menus = menuService.selectMenuList(new Menu());
@@ -74,6 +81,7 @@ public class MenuController {
     }
 
     @ApiOperation("加载对应角色菜单列表树")
+    @PreAuthorize("@ps.hasPermission('sys:menu:query')")
     @GetMapping(value = "/roleMenuTree/{roleId}")
     public ResponseResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
         List<Menu> menus = menuService.selectMenuList(new Menu());

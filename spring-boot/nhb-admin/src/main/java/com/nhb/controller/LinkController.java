@@ -6,6 +6,7 @@ import com.nhb.service.LinkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -21,12 +22,14 @@ public class LinkController {
     private LinkService linkService;
 
     @ApiOperation("查看友联列表")
+    @PreAuthorize("@ps.hasPermission('link:query')")
     @GetMapping("/list")
     public ResponseResult listLink(Integer pageNum, Integer pageSize, @RequestParam(required = false) String name, @RequestParam(required = false) String status){
         return linkService.listLink(pageNum,pageSize,name,status);
     }
 
     @ApiOperation("新增友联")
+    @PreAuthorize("@ps.hasPermission('link:add')")
     @PostMapping
     public ResponseResult saveLink(@RequestBody Link link){
         linkService.save(link);
@@ -34,12 +37,14 @@ public class LinkController {
     }
 
     @ApiOperation("根据id查询友联")
+    @PreAuthorize("@ps.hasPermission('link:query')")
     @GetMapping("/{id}")
     public ResponseResult linkById(@PathVariable Long id){
         return ResponseResult.okResult(linkService.getById(id));
     }
 
     @ApiOperation("修改友联")
+    @PreAuthorize("@ps.hasPermission('link:put')")
     @PutMapping
     public ResponseResult updateLink(@RequestBody Link link){
         linkService.updateById(link);
@@ -47,6 +52,7 @@ public class LinkController {
     }
 
     @ApiOperation("删除友联")
+    @PreAuthorize("@ps.hasPermission('link:delete')")
     @DeleteMapping("/{id}")
     public ResponseResult deleteLink(@PathVariable Long id){
         linkService.removeById(id);

@@ -63,9 +63,7 @@ public interface ArticleService extends IService<Article> {
     ResponseResult articleById(String id);
 
     /**
-     * 更新文章
-     * @param articleDto 更新请求体
-     * @return
+     * 修改文章
      */
     ResponseResult updateArticle(ArticleDto articleDto);
 

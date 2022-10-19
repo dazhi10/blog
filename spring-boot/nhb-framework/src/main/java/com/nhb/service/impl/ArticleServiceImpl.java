@@ -176,7 +176,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult updateArticle(ArticleDto articleDto) {
         Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
-        //更新文章
+        //修改文章
         updateById(article);
 
         //先删除文章关联标签

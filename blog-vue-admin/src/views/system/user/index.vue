@@ -3,131 +3,130 @@
     <el-row :gutter="20">
       <el-col :span="24" :xs="24">
         <el-form
-          v-show="showSearch"
-          ref="queryForm"
-          :model="queryParams"
-          :inline="true"
-          label-width="68px"
+            v-show="showSearch"
+            ref="queryForm"
+            :model="queryParams"
+            :inline="true"
+            label-width="68px"
         >
           <el-form-item label="用户名称" prop="userName">
             <el-input
-              v-model="queryParams.userName"
-              placeholder="请输入用户名称"
-              clearable
-              size="small"
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
+                v-model="queryParams.userName"
+                placeholder="请输入用户名称"
+                clearable
+                size="small"
+                style="width: 240px"
+                @keyup.enter.native="handleQuery"
             />
           </el-form-item>
           <el-form-item label="手机号码" prop="phonenumber">
             <el-input
-              v-model="queryParams.phonenumber"
-              placeholder="请输入手机号码"
-              clearable
-              size="small"
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
+                v-model="queryParams.phonenumber"
+                placeholder="请输入手机号码"
+                clearable
+                size="small"
+                style="width: 240px"
+                @keyup.enter.native="handleQuery"
             />
           </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-select
-              v-model="queryParams.status"
-              placeholder="用户状态"
-              clearable
-              size="small"
-              style="width: 240px"
+                v-model="queryParams.status"
+                placeholder="用户状态"
+                clearable
+                size="small"
+                style="width: 240px"
             >
-              <el-option :key="0" label="正常" :value="0" />
-              <el-option :key="1" label="停用" :value="1" />
+              <el-option :key="0" label="正常" :value="0"/>
+              <el-option :key="1" label="停用" :value="1"/>
             </el-select>
           </el-form-item>
           <el-form-item>
             <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="mini"
-              @click="handleQuery"
-            >搜索</el-button>
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                @click="handleQuery"
+            >搜索
+            </el-button>
           </el-form-item>
         </el-form>
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-            >新增</el-button>
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+            >新增
+            </el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
-              type="danger"
-              plain
-              icon="el-icon-delete"
-              size="mini"
-              @click="handleDelete"
-            >删除</el-button>
+                type="danger"
+                plain
+                icon="el-icon-delete"
+                size="mini"
+                @click="handleDelete"
+            >删除
+            </el-button>
           </el-col>
-
-          <!-- <right-toolbar
-            :show-search.sync="showSearch"
-            :columns="columns"
-            @queryTable="getList"
-          /> -->
         </el-row>
 
         <el-table :data="userList" style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" />
-          <el-table-column prop="id" label="用户编号" align="center" />
-          <el-table-column prop="userName" label="用户名称" align="center" />
-          <el-table-column prop="nickName" label="用户昵称" align="center" />
-          <el-table-column prop="phonenumber" label="手机号码" align="center" />
+          <el-table-column type="selection" width="55"/>
+          <el-table-column prop="id" label="用户编号" align="center"/>
+          <el-table-column prop="userName" label="账号" align="center"/>
+          <el-table-column prop="nickName" label="用户昵称" align="center"/>
+          <el-table-column prop="phonenumber" label="手机号码" align="center"/>
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
               <el-switch
-                v-model="scope.row.status"
-                active-value="0"
-                inactive-value="1"
-                @change="handleStatusChange(scope.row)"
+                  v-model="scope.row.status"
+                  active-value="0"
+                  inactive-value="1"
+                  @change="handleStatusChange(scope.row)"
               />
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" align="center" />
+          <el-table-column prop="createTime" label="创建时间" align="center"/>
 
           <el-table-column
-            label="操作"
-            align="center"
-            width="160"
-            class-name="small-padding fixed-width"
+              label="操作"
+              align="center"
+              width="160"
+              class-name="small-padding fixed-width"
           >
             <template v-if="scope.row.id !== 1" slot-scope="scope">
               <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-              >修改</el-button>
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  @click="handleUpdate(scope.row)"
+              >修改
+              </el-button>
               <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
-              >删除</el-button>
+                  size="mini"
+                  type="text"
+                  icon="el-icon-delete"
+                  @click="handleDelete(scope.row)"
+              >删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
     <el-pagination
-      :page-size.sync="queryParams.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      :page-sizes="[10, 20, 30, 40]"
-      :current-page.sync="queryParams.pageNum"
-      @current-change="getList"
-      @size-change="getList"
+        :page-size.sync="queryParams.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        :page-sizes="[10, 20, 30, 40]"
+        :current-page.sync="queryParams.pageNum"
+        @current-change="getList"
+        @size-change="getList"
     />
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
@@ -136,9 +135,9 @@
           <el-col :span="24">
             <el-form-item label="用户昵称" prop="nickName">
               <el-input
-                v-model="form.nickName"
-                placeholder="请输入用户昵称"
-                maxlength="30"
+                  v-model="form.nickName"
+                  placeholder="请输入用户昵称"
+                  maxlength="30"
               />
             </el-form-item>
           </el-col>
@@ -147,18 +146,9 @@
           <el-col :span="12">
             <el-form-item label="手机号码" prop="phonenumber">
               <el-input
-                v-model="form.phonenumber"
-                placeholder="请输入手机号码"
-                maxlength="11"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input
-                v-model="form.email"
-                placeholder="请输入邮箱"
-                maxlength="50"
+                  v-model="form.phonenumber"
+                  placeholder="请输入手机号码"
+                  maxlength="11"
               />
             </el-form-item>
           </el-col>
@@ -166,29 +156,29 @@
         <el-row>
           <el-col :span="12">
             <el-form-item
-              v-if="form.id == undefined"
-              label="用户名称"
-              prop="userName"
+                v-if="form.id == undefined"
+                label="账号"
+                prop="userName"
             >
               <el-input
-                v-model="form.userName"
-                placeholder="请输入用户名称"
-                maxlength="30"
+                  v-model="form.userName"
+                  placeholder="请输入账号"
+                  maxlength="30"
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item
-              v-if="form.id == undefined"
-              label="用户密码"
-              prop="password"
+                v-if="form.id == undefined"
+                label="密码"
+                prop="password"
             >
               <el-input
-                v-model="form.password"
-                placeholder="请输入用户密码"
-                type="password"
-                maxlength="20"
-                show-password
+                  v-model="form.password"
+                  placeholder="请输入密码"
+                  type="password"
+                  maxlength="20"
+                  show-password
               />
             </el-form-item>
           </el-col>
@@ -197,9 +187,9 @@
           <el-col :span="12">
             <el-form-item label="用户性别">
               <el-select v-model="form.sex" placeholder="请选择">
-                <el-option :key="'0'" label="男" :value="'0'" />
-                <el-option :key="'1'" label="女" :value="'1'" />
-                <el-option :key="'2'" label="未知" :value="'2'" />
+                <el-option :key="'0'" label="男" :value="'0'"/>
+                <el-option :key="'1'" label="女" :value="'1'"/>
+                <el-option :key="'2'" label="未知" :value="'2'"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -217,15 +207,16 @@
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
                 <el-option
-                  v-for="item in roleOptions"
-                  :key="item.id"
-                  :label="item.roleName"
-                  :value="item.id"
-                  :disabled="item.status == 1"
+                    v-for="item in roleOptions"
+                    :key="item.id"
+                    :label="item.roleName"
+                    :value="item.id"
+                    :disabled="item.status == 1"
                 />
               </el-select>
             </el-form-item>
-          </el-col></el-row>
+          </el-col>
+        </el-row>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -246,11 +237,12 @@ import {
   updateUser,
   changeUserStatus
 }
-from '@/api/system/user'
+  from '@/api/system/user'
 import {
   listAllRole
 }
-from '@/api/system/role'
+  from '@/api/system/role'
+
 export default {
   name: 'User',
   data() {
@@ -269,31 +261,23 @@ export default {
       // 表单校验
       rules: {
         userName: [
-          { required: true, message: '用户名称不能为空', trigger: 'blur' },
+          {required: true, message: '账号不能为空', trigger: 'blur'},
           {
-            min: 2,
-            max: 20,
-            message: '用户名称长度必须介于 2 和 20 之间',
-            trigger: 'blur'
+            type: 'email',
+            message: "'账号为邮箱格式",
+            trigger: ['blur', 'change']
           }
         ],
         nickName: [
-          { required: true, message: '用户昵称不能为空', trigger: 'blur' }
+          {required: true, message: '用户昵称不能为空', trigger: 'blur'}
         ],
         password: [
-          { required: true, message: '用户密码不能为空', trigger: 'blur' },
+          {required: true, message: '密码不能为空', trigger: 'blur'},
           {
             min: 5,
             max: 20,
             message: '用户密码长度必须介于 5 和 20 之间',
             trigger: 'blur'
-          }
-        ],
-        email: [
-          {
-            type: 'email',
-            message: "'请输入正确的邮箱地址",
-            trigger: ['blur', 'change']
           }
         ],
         phonenumber: [
@@ -354,16 +338,16 @@ export default {
     handleStatusChange(row) {
       const text = row.status === '0' ? '启用' : '停用'
       this.$modal
-        .confirm('确认要"' + text + '""' + row.userName + '"用户吗？')
-        .then(function() {
-          return changeUserStatus(row.id, row.status)
-        })
-        .then(() => {
-          this.$modal.msgSuccess(text + '成功')
-        })
-        .catch(function() {
-          row.status = row.status === '0' ? '1' : '0'
-        })
+          .confirm('确认要"' + text + '""' + row.userName + '"用户吗？')
+          .then(function () {
+            return changeUserStatus(row.id, row.status)
+          })
+          .then(() => {
+            this.$modal.msgSuccess(text + '成功')
+          })
+          .catch(function () {
+            row.status = row.status === '0' ? '1' : '0'
+          })
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -407,18 +391,19 @@ export default {
     handleDelete(row) {
       const ids = row.id || this.ids
       this.$modal
-        .confirm('是否确认删除用户编号为"' + ids + '"的数据项？')
-        .then(function() {
-          return delUser(ids)
-        })
-        .then(() => {
-          this.getList()
-          this.$modal.msgSuccess('删除成功')
-        })
-        .catch(() => {})
+          .confirm('是否确认删除用户编号为"' + ids + '"的数据项？')
+          .then(function () {
+            return delUser(ids)
+          })
+          .then(() => {
+            this.getList()
+            this.$modal.msgSuccess('删除成功')
+          })
+          .catch(() => {
+          })
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm: function () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.id !== undefined) {

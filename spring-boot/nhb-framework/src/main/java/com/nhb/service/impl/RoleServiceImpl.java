@@ -38,7 +38,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         //判断是否是管理员 如果是返回集合中只需要有admin
         if(id == 1L){
             List<String> roleKeys = new ArrayList<>();
-            roleKeys.add("admin");
+            roleKeys.add("root");
             return roleKeys;
         }
         //否则查询用户所具有的角色信息

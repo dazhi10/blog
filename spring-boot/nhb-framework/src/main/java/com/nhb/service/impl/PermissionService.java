@@ -14,7 +14,6 @@ public class PermissionService {
     /**
      * 判断当前用户是否具有permission
      * @param permission 要判断的权限
-     * @return
      */
     public boolean hasPermission(String permission){
         //如果是超级管理员  直接返回true

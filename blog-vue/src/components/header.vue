@@ -98,13 +98,12 @@ export default {
       pMenu: true, //手机端菜单打开
       // path:'',//当前打开页面的路径
       input: "", //input输入内容
-      headBg: "url(http://rialetu26.hn-bkt.clouddn.com/headbg05.jpg)", //头部背景图
+      headBg: "url(http://rjvy8zm3g.hn-bkt.clouddn.com/headbg05.jpg)", //头部背景图
       headTou: "", //头像
       projectList: "", //项目列表
       loading: true,
     };
   },
-  watch: {},
   methods: {
     getUserAvatar() {
       var that = this;

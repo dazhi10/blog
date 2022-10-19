@@ -13,6 +13,7 @@ import com.nhb.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +34,14 @@ public class UserController {
     private RoleService roleService;
 
     @ApiOperation("查看用户列表")
+    @PreAuthorize("@ps.hasPermission('sys:user:query')")
     @GetMapping("/list")
     public ResponseResult list(User user, Integer pageNum, Integer pageSize) {
         return userService.selectUserPage(user, pageNum, pageSize);
     }
 
     @ApiOperation(" 新增用户")
+    @PreAuthorize("@ps.hasPermission('sys:user:add')")
     @PostMapping
     public ResponseResult add(@RequestBody User user) {
         if (!StringUtils.hasText(user.getUserName())) {
@@ -49,6 +52,7 @@ public class UserController {
     }
 
     @ApiOperation("删除用户")
+    @PreAuthorize("@ps.hasPermission('sys:user:delete')")
     @DeleteMapping("/{userIds}")
     public ResponseResult remove(@PathVariable List<Long> userIds) {
         if (userIds.contains(SecurityUtils.getUserId())) {
@@ -59,6 +63,7 @@ public class UserController {
     }
 
     @ApiOperation("根据id获取用户")
+    @PreAuthorize("@ps.hasPermission('sys:user:query')")
     @GetMapping(value = {"/{userId}"})
     public ResponseResult getUserInfoAndRoleIds(@PathVariable(value = "userId") Long userId) {
         List<Role> roles = roleService.selectRoleAll();
@@ -71,6 +76,7 @@ public class UserController {
     }
 
     @ApiOperation("修改用户")
+    @PreAuthorize("@ps.hasPermission('sys:user:put')")
     @PutMapping
     public ResponseResult edit(@RequestBody User user) {
         userService.updateUser(user);
@@ -78,6 +84,7 @@ public class UserController {
     }
 
     @ApiOperation("修改用户状态")
+    @PreAuthorize("@ps.hasPermission('sys:user:put')")
     @PutMapping("/changeStatus")
     public ResponseResult changeStatus(@RequestBody ChangeUserStatusDto changeUserStatusDto) {
         if (SecurityUtils.getUserId().equals(changeUserStatusDto.getUserId())) {

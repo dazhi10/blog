@@ -12,6 +12,7 @@ import com.nhb.utils.WebUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import java.util.List;
 
 /**
  * 分类表(Category)控制层
+ *
  * @author 大只
  * @since 2022-10-03 17:18:15
  */
@@ -30,17 +32,19 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @ApiOperation("查看所有分类列表")
+    @PreAuthorize("@ps.hasPermission('category:query')")
     @GetMapping("/listAllCategory")
-    public ResponseResult listAllCategory(){
+    public ResponseResult listAllCategory() {
         return categoryService.listAllCategory();
     }
 
     @ApiOperation("导出分类表格")
+    @PreAuthorize("@ps.hasPermission('category:query')")
     @GetMapping("/export")
-    public void export(HttpServletResponse response){
+    public void export(HttpServletResponse response) {
         try {
             //设置下载文件的请求头
-            WebUtils.setDownLoadHeader("分类.xlsx",response);
+            WebUtils.setDownLoadHeader("分类.xlsx", response);
             //获取需要导出的数据
             List<Category> categoryVos = categoryService.list();
             List<ExcelCategoryVo> excelCategoryVos = BeanCopyUtils.copyBeanList(categoryVos, ExcelCategoryVo.class);
@@ -55,37 +59,40 @@ public class CategoryController {
         }
     }
 
-
-    @ApiOperation("查看分类列表")
+    @ApiOperation("分页查看分类列表")
+    @PreAuthorize("@ps.hasPermission('category:query')")
     @GetMapping("/list")
-    public ResponseResult listCategory(Integer pageNum, Integer pageSize, @RequestParam(required = false) String name, @RequestParam(required = false) String status){
-        return categoryService.listCategory(pageNum,pageSize,name,status);
+    public ResponseResult listCategory(Integer pageNum, Integer pageSize, @RequestParam(required = false) String name, @RequestParam(required = false) String status) {
+        return categoryService.listCategory(pageNum, pageSize, name, status);
     }
 
-
     @ApiOperation("新增分类")
+    @PreAuthorize("@ps.hasPermission('category:add')")
     @PostMapping
-    public ResponseResult saveCategory(@RequestBody Category category){
+    public ResponseResult saveCategory(@RequestBody Category category) {
         categoryService.save(category);
         return ResponseResult.okResult();
     }
 
     @ApiOperation("根据id查询分类")
+    @PreAuthorize("@ps.hasPermission('category:query')")
     @GetMapping("/{id}")
-    public ResponseResult categoryById(@PathVariable Long id){
+    public ResponseResult categoryById(@PathVariable Long id) {
         return ResponseResult.okResult(categoryService.getById(id));
     }
 
     @ApiOperation("修改分类")
+    @PreAuthorize("@ps.hasPermission('category:put')")
     @PutMapping
-    public ResponseResult updateCategory(@RequestBody Category category){
+    public ResponseResult updateCategory(@RequestBody Category category) {
         categoryService.updateById(category);
         return ResponseResult.okResult();
     }
 
     @ApiOperation("删除分类")
+    @PreAuthorize("@ps.hasPermission('category:delete')")
     @DeleteMapping("/{id}")
-    public ResponseResult deleteCategory(@PathVariable Long id){
+    public ResponseResult deleteCategory(@PathVariable Long id) {
         categoryService.removeById(id);
         return ResponseResult.okResult();
     }

@@ -7,6 +7,7 @@ import com.nhb.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +26,14 @@ public class RoleController {
     private RoleService roleService;
 
     @ApiOperation("查看角色列表")
+    @PreAuthorize("@ps.hasPermission('sys:role:query')")
     @GetMapping("/list")
     public ResponseResult listRole(Integer pageNum, Integer pageSize, @RequestParam(required = false) String roleName, @RequestParam(required = false) String status) {
         return roleService.listRole(pageNum, pageSize, roleName, status);
     }
 
     @ApiOperation("根据id获取角色")
+    @PreAuthorize("@ps.hasPermission('sys:role:query')")
     @GetMapping(value = "/{roleId}")
     public ResponseResult getInfo(@PathVariable Long roleId) {
         Role role = roleService.getById(roleId);
@@ -38,6 +41,7 @@ public class RoleController {
     }
 
     @ApiOperation("改变角色状态")
+    @PreAuthorize("@ps.hasPermission('sys:role:put')")
     @PutMapping("/changeStatus")
     public ResponseResult changeStatus(@RequestBody ChangeRoleStatusDto roleStatusDto) {
         Role role = new Role();
@@ -47,6 +51,7 @@ public class RoleController {
     }
 
     @ApiOperation("新增角色")
+    @PreAuthorize("@ps.hasPermission('sys:role:add')")
     @PostMapping
     public ResponseResult add(@RequestBody Role role) {
         roleService.insertRole(role);
@@ -54,6 +59,7 @@ public class RoleController {
     }
 
     @ApiOperation("修改角色")
+    @PreAuthorize("@ps.hasPermission('sys:role:put')")
     @PutMapping
     public ResponseResult updateRole(@RequestBody Role role) {
         roleService.updateRole(role);
@@ -61,17 +67,19 @@ public class RoleController {
     }
 
     @ApiOperation("删除角色")
+    @PreAuthorize("@ps.hasPermission('sys:role:delete')")
     @DeleteMapping("/{id}")
     public ResponseResult remove(@PathVariable(name = "id") Long id) {
         roleService.removeById(id);
         return ResponseResult.okResult();
     }
+
     @GetMapping("/listAllRole")
-    public ResponseResult listAllRole(){
+    @PreAuthorize("@ps.hasPermission('sys:role:query')")
+    public ResponseResult listAllRole() {
         List<Role> roles = roleService.selectRoleAll();
         return ResponseResult.okResult(roles);
     }
-
 
 
 }
