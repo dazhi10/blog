@@ -82,8 +82,8 @@ export default {
     };
     return {
       loginForm: {
-        userName: "",
-        password: "",
+        userName: "test@qq.com",
+        password: "123456",
       },
       loginRules: {
         userName: [

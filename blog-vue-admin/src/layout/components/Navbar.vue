@@ -1,22 +1,24 @@
 <template>
   <div class="navbar">
     <hamburger
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
+        :is-active="sidebar.opened"
+        class="hamburger-container"
+        @toggleClick="toggleSideBar"
     />
 
-    <breadcrumb class="breadcrumb-container" />
+    <breadcrumb class="breadcrumb-container"/>
 
     <div class="right-menu">
+      <div style="position: absolute;right: 100px;top: 0;font-size: 14px">{{$store.state.user.name}}</div>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F3bf9c263bc0f2ac5c3a7feb9e218d07475573ec8.gif&refer=http%3A%2F%2Fi0.hdslb.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644931768&t=34d229fa385975d48f41947b896e0242" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <img :src="$store.state.user.avatar"
+               class="user-avatar">
+          <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
-            <el-dropdown-item> 首页 </el-dropdown-item>
+            <el-dropdown-item> 首页</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display: block">退出登录</span>
@@ -28,7 +30,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
@@ -39,6 +41,8 @@ export default {
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar'])
+
+
   },
   methods: {
     toggleSideBar() {
@@ -50,12 +54,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {
-          this.$store.dispatch('LogOut').then(() => {
-            location.href = '/index'
+          .then(() => {
+            this.$store.dispatch('LogOut').then(() => {
+              location.href = '/index'
+            })
           })
-        })
-        .catch(() => {})
+          .catch(() => {
+          })
     }
   }
 }
