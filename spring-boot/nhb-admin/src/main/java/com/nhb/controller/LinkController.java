@@ -3,6 +3,7 @@ package com.nhb.controller;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.Link;
 import com.nhb.service.LinkService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/content/link")
+@Api(tags = "友联模块")
 public class LinkController {
 
     @Autowired
@@ -23,7 +25,6 @@ public class LinkController {
     public ResponseResult listLink(Integer pageNum, Integer pageSize, @RequestParam(required = false) String name, @RequestParam(required = false) String status){
         return linkService.listLink(pageNum,pageSize,name,status);
     }
-
 
     @ApiOperation("新增友联")
     @PostMapping

@@ -35,7 +35,7 @@ public class OssUploadService implements UploadService {
         //获取原始文件名
         String originalFilename = img.getOriginalFilename();
         //对原始文件名进行判断
-        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg")) {
+        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".jpeg")) {
             throw new SystemException(AppHttpCodeEnum.FILE_TYPE_ERROR);
         }
 
@@ -49,6 +49,8 @@ public class OssUploadService implements UploadService {
     private String accessKey;
     private String secretKey;
     private String bucket;
+
+    private String ossUrl;
 
 
     private String uploadOss(MultipartFile imgFile, String filePath) {
@@ -67,7 +69,7 @@ public class OssUploadService implements UploadService {
                 DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                 System.out.println(putRet.key);
                 System.out.println(putRet.hash);
-                return "http://rjvy8zm3g.hn-bkt.clouddn.com/" + filePath;
+                return ossUrl + filePath;
             } catch (QiniuException ex) {
                 Response r = ex.response;
                 System.err.println(r.toString());

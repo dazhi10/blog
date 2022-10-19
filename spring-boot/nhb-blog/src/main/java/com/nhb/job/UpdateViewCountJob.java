@@ -24,7 +24,8 @@ public class UpdateViewCountJob {
    private ArticleMapper articleMapper;
 
     //"0 */5 * * * ?"
-    @Scheduled(cron = "0/30 * * * * ?")
+    //"0/30 * * * * ?"
+    @Scheduled(cron = "0 */5 * * * ?")
     public void updateViewCount() {
         //定时任务每隔10分钟把Redis中的浏览量更新到数据库中
         //获取redis中的浏览量

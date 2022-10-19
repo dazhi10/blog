@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("system/role")
-@Api("角色模块")
+@Api(tags = "角色模块")
 public class RoleController {
     @Autowired
     private RoleService roleService;

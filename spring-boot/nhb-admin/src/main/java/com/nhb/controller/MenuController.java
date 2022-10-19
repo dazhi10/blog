@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/menu")
-@Api("菜单模块")
+@Api(tags = "菜单模块")
 public class MenuController {
 
     @Autowired

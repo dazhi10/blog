@@ -31,6 +31,10 @@ mybatis-plus:
       logic-not-delete-value: 0
       id-type: auto
 oss:
+  # 秘钥
   accessKey: UGuKxzJvfuVoMHM23hYFkmsfoS5OlWToJbRAq7L_
   secretKey: nnfITwleH2pAvHEOB5wkQtMiSFzWQDbJevpnsCgQ
+  # 存储空间名
   bucket: nhb-blog
+  # oss存储回调的域名
+  ossUrl: http://rjvy8zm3g.hn-bkt.clouddn.com/

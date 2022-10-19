@@ -10,6 +10,7 @@ import com.nhb.exception.SystemException;
 import com.nhb.service.RoleService;
 import com.nhb.service.UserService;
 import com.nhb.utils.SecurityUtils;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/user")
-@ApiOperation("用户模块")
+@Api(tags = "用户模块")
 public class UserController {
 
     @Autowired
@@ -36,7 +37,6 @@ public class UserController {
     public ResponseResult list(User user, Integer pageNum, Integer pageSize) {
         return userService.selectUserPage(user, pageNum, pageSize);
     }
-
 
     @ApiOperation(" 新增用户")
     @PostMapping
