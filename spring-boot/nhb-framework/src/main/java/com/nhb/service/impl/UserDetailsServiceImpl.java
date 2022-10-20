@@ -38,6 +38,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(Objects.isNull(user)){
             throw new RuntimeException("用户不存在!");
         }
+
+        //判断用户的状态
+        if(user.getStatus().equals(SystemConstant.USER_STATUS_BAN)){
+            throw new RuntimeException("账号停用!");
+        }
+
         //返回用户信息
         //查询封装用户权限信息
         //如果是后台用户才需要查询权限封装

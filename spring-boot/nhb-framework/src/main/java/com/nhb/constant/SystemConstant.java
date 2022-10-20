@@ -50,5 +50,8 @@ public class SystemConstant {
 
     /** 正常状态 */
     public static final String NORMAL = "0";
-    public static final String ADMAIN = "1";
+
+    /** 用户账号停用状态 */
+    public static final String USER_STATUS_BAN = "1";
+
 }
