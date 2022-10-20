@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.Link;
 import com.nhb.service.LinkService;
@@ -21,14 +22,15 @@ public class LinkController {
     @Autowired
     private LinkService linkService;
 
-    @ApiOperation("查看友联列表")
+    @ApiOperation("查看友链列表")
     @PreAuthorize("@ps.hasPermission('link:query')")
     @GetMapping("/list")
     public ResponseResult listLink(Integer pageNum, Integer pageSize, @RequestParam(required = false) String name, @RequestParam(required = false) String status){
         return linkService.listLink(pageNum,pageSize,name,status);
     }
 
-    @ApiOperation("新增友联")
+    @ApiOperation("新增友链")
+    @SystemLog(businessName = "新增友链")
     @PreAuthorize("@ps.hasPermission('link:add')")
     @PostMapping
     public ResponseResult saveLink(@RequestBody Link link){
@@ -36,14 +38,15 @@ public class LinkController {
         return ResponseResult.okResult();
     }
 
-    @ApiOperation("根据id查询友联")
+    @ApiOperation("根据id查询友链")
     @PreAuthorize("@ps.hasPermission('link:query')")
     @GetMapping("/{id}")
     public ResponseResult linkById(@PathVariable Long id){
         return ResponseResult.okResult(linkService.getById(id));
     }
 
-    @ApiOperation("修改友联")
+    @ApiOperation("修改友链")
+    @SystemLog(businessName = "修改友链")
     @PreAuthorize("@ps.hasPermission('link:put')")
     @PutMapping
     public ResponseResult updateLink(@RequestBody Link link){
@@ -51,7 +54,8 @@ public class LinkController {
         return ResponseResult.okResult();
     }
 
-    @ApiOperation("删除友联")
+    @ApiOperation("删除友链")
+    @SystemLog(businessName = "删除友链")
     @PreAuthorize("@ps.hasPermission('link:delete')")
     @DeleteMapping("/{id}")
     public ResponseResult deleteLink(@PathVariable Long id){

@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.dto.ChangeRoleStatusDto;
 import com.nhb.domain.entity.Role;
@@ -41,6 +42,7 @@ public class RoleController {
     }
 
     @ApiOperation("改变角色状态")
+    @SystemLog(businessName = "修改角色")
     @PreAuthorize("@ps.hasPermission('sys:role:put')")
     @PutMapping("/changeStatus")
     public ResponseResult changeStatus(@RequestBody ChangeRoleStatusDto roleStatusDto) {
@@ -51,6 +53,7 @@ public class RoleController {
     }
 
     @ApiOperation("新增角色")
+    @SystemLog(businessName = "新增角色")
     @PreAuthorize("@ps.hasPermission('sys:role:add')")
     @PostMapping
     public ResponseResult add(@RequestBody Role role) {
@@ -59,6 +62,7 @@ public class RoleController {
     }
 
     @ApiOperation("修改角色")
+    @SystemLog(businessName = "修改角色")
     @PreAuthorize("@ps.hasPermission('sys:role:put')")
     @PutMapping
     public ResponseResult updateRole(@RequestBody Role role) {
@@ -67,6 +71,7 @@ public class RoleController {
     }
 
     @ApiOperation("删除角色")
+    @SystemLog(businessName = "删除角色")
     @PreAuthorize("@ps.hasPermission('sys:role:delete')")
     @DeleteMapping("/{id}")
     public ResponseResult remove(@PathVariable(name = "id") Long id) {

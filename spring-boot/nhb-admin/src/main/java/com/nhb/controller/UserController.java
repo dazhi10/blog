@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.dto.ChangeUserStatusDto;
 import com.nhb.domain.entity.Role;
@@ -41,6 +42,7 @@ public class UserController {
     }
 
     @ApiOperation(" 新增用户")
+    @SystemLog(businessName = "新增用户")
     @PreAuthorize("@ps.hasPermission('sys:user:add')")
     @PostMapping
     public ResponseResult add(@RequestBody User user) {
@@ -52,6 +54,7 @@ public class UserController {
     }
 
     @ApiOperation("删除用户")
+    @SystemLog(businessName = "删除用户")
     @PreAuthorize("@ps.hasPermission('sys:user:delete')")
     @DeleteMapping("/{userIds}")
     public ResponseResult remove(@PathVariable List<Long> userIds) {
@@ -76,6 +79,7 @@ public class UserController {
     }
 
     @ApiOperation("修改用户")
+    @SystemLog(businessName = "修改用户")
     @PreAuthorize("@ps.hasPermission('sys:user:put')")
     @PutMapping
     public ResponseResult edit(@RequestBody User user) {
@@ -84,6 +88,7 @@ public class UserController {
     }
 
     @ApiOperation("修改用户状态")
+    @SystemLog(businessName = "修改用户")
     @PreAuthorize("@ps.hasPermission('sys:user:put')")
     @PutMapping("/changeStatus")
     public ResponseResult changeStatus(@RequestBody ChangeUserStatusDto changeUserStatusDto) {

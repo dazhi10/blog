@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.Menu;
 import com.nhb.domain.vo.MenuTreeVo;
@@ -35,6 +36,7 @@ public class MenuController {
     }
 
     @ApiOperation("新增菜单")
+    @SystemLog(businessName = "新增菜单")
     @PreAuthorize("@ps.hasPermission('sys:menu:add')")
     @PostMapping
     public ResponseResult add(@RequestBody Menu menu) {
@@ -50,6 +52,7 @@ public class MenuController {
     }
 
     @ApiOperation("修改菜单")
+    @SystemLog(businessName = "修改菜单")
     @PreAuthorize("@ps.hasPermission('sys:menu:put')")
     @PutMapping
     public ResponseResult updateMenu(@RequestBody Menu menu) {
@@ -61,6 +64,7 @@ public class MenuController {
     }
 
     @ApiOperation("删除菜单")
+    @SystemLog(businessName = "删除菜单")
     @PreAuthorize("@ps.hasPermission('sys:menu:delete')")
     @DeleteMapping("/{menuId}")
     public ResponseResult remove(@PathVariable("menuId") Long menuId) {

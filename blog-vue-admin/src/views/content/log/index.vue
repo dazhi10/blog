@@ -7,10 +7,10 @@
         :inline="true"
         label-width="68px"
     >
-      <el-form-item label="评论内容" prop="status">
+      <el-form-item label="操作描述" prop="status">
         <el-input
-            v-model="queryParams.content"
-            placeholder="请输入评论内容"
+            v-model="queryParams.operateDescribe"
+            placeholder="请输入操作描述"
             clearable
             size="small"
             @keyup.enter.native="handleQuery"
@@ -43,18 +43,38 @@
 
     <el-table
         v-loading="loading"
-        :data="commentList"
+        :data="logList"
         @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="发布者id" align="center" prop="createBy"/>
-      <el-table-column label="内容" align="center" prop="content"/>
+      <el-table-column label="操作描述" align="center" prop="operateDescribe"/>
+      <el-table-column label="请求方式" align="center" prop="requestMethod">
+        <template slot-scope="scope">
+          <el-tag :type="tagType(scope.row.requestMethod)">
+            {{ scope.row.requestMethod }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="请求ip" align="center" prop="ip"/>
+      <el-table-column label="操作账号" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.operateBy ? scope.row.operateBy : '-' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作时间" align="center" prop="createTime"/>
       <el-table-column
           label="操作"
           align="center"
           class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
+          <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-view"
+              @click="queryDelete(scope.row)"
+          >查看
+          </el-button>
           <el-button
               size="mini"
               type="text"
@@ -75,11 +95,45 @@
         @current-change="getList"
         @size-change="getList"
     />
+
+    <!-- 查看模态框 -->
+    <el-dialog :visible.sync="isCheck" width="40%">
+      <div class="dialog-title-container" slot="title">
+        <i class="el-icon-more"/>详细信息
+      </div>
+
+      <el-form :model="optLog" label-width="100px" size="mini">
+        <el-form-item label="操作描述：">
+          {{ optLog.operateDescribe }}
+        </el-form-item>
+        <el-form-item label="请求地址：">
+          {{ optLog.url }}
+        </el-form-item>
+        <el-form-item label="请求方式：">
+          <el-tag :type="tagType(optLog.requestMethod)">
+            {{ optLog.requestMethod }}
+          </el-tag>
+        </el-form-item>
+        <el-form-item label="操作方法：">
+          {{ optLog.operateMethod }}
+        </el-form-item>
+        <el-form-item label="请求参数：">
+          {{ optLog.requestParam }}
+        </el-form-item>
+        <el-form-item label="返回数据：">
+          {{ optLog.responseData }}
+        </el-form-item>
+        <el-form-item label="操作账号：">
+          {{ optLog.operateBy ? optLog.operateBy : '-' }}
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import {delComment, listComment} from "@/api/content/comment";
+import {delLog, listLog} from "@/api/content/log";
 
 export default {
   name: "index",
@@ -91,12 +145,14 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        content: null,
+        operateDescribe: null,
       },
+      isCheck: false,
+      optLog: {},
       // 遮罩层
       loading: true,
       // 评论表格数据
-      commentList: null,
+      logList: null,
       // 选中数组
       ids: [],
       // 非多个禁用
@@ -114,8 +170,8 @@ export default {
     /** 查询友链列表 */
     async getList() {
       this.loading = true
-      const res = await listComment(this.queryParams);
-      this.commentList = res.rows
+      const res = await listLog(this.queryParams);
+      this.logList = res.rows
       this.total = res.total
       this.loading = false
     },
@@ -126,6 +182,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      console.log(1111)
       this.queryParams.pageNum = 1
       this.getList()
     },
@@ -134,13 +191,18 @@ export default {
       this.ids = selection.map((item) => item.id)
       this.multiple = !selection.length
     },
+    /** 查看详细按钮操作 */
+    queryDelete(log) {
+      this.optLog = log
+      this.isCheck = true
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
       this.$modal
-          .confirm('是否确认删除评论编号为"' + ids + '"的数据项？')
+          .confirm('是否确认删除日志编号为"' + ids + '"的数据项？')
           .then(function () {
-            return delComment(ids)
+            return delLog(ids)
           })
           .then(() => {
             this.getList()
@@ -149,6 +211,27 @@ export default {
           .catch(() => {
           })
     }
+  },
+  computed: {
+    tagType() {
+      return function (type) {
+        switch (type) {
+          case "GET":
+            return "";
+          case "POST":
+            return "success";
+          case "PUT":
+            return "warning";
+          case "DELETE":
+            return "danger";
+        }
+      };
+    }
   }
 }
 </script>
+
+
+<style scoped lang="less">
+
+</style>

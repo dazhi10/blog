@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.LoginUser;
 import com.nhb.domain.entity.Menu;
@@ -42,6 +43,7 @@ public class LoginController {
     private MenuService menuService;
 
     @ApiOperation("用户登录")
+    @SystemLog(businessName = "用户登录")
     @PostMapping("/user/login")
     public ResponseResult login(@RequestBody User user){
         if(!StringUtils.hasText(user.getUserName())){
@@ -79,6 +81,7 @@ public class LoginController {
     }
 
     @ApiOperation("退出登录")
+    @SystemLog(businessName = "退出登录")
     @PostMapping("/user/logout")
     public ResponseResult logout(){
         return loginService.logout();

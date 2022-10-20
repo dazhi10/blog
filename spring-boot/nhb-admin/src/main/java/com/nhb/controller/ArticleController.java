@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.dto.AddArticleDto;
 import com.nhb.domain.dto.ArticleDto;
@@ -27,6 +28,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @ApiOperation("新增文章")
+    @SystemLog(businessName = "新增文章")
     @PreAuthorize("@ps.hasPermission('article:add')")
     @PostMapping
     public ResponseResult saveArticle(@RequestBody AddArticleDto articleDto) {
@@ -48,6 +50,7 @@ public class ArticleController {
     }
 
     @ApiOperation("修改文章")
+    @SystemLog(businessName = "修改文章")
     @PreAuthorize("@ps.hasPermission('article:put')")
     @PutMapping
     public ResponseResult updateArticle(@RequestBody ArticleDto articleDto) {
@@ -55,6 +58,7 @@ public class ArticleController {
     }
 
     @ApiOperation("删除文章")
+    @SystemLog(businessName = "删除文章")
     @PreAuthorize("@ps.hasPermission('article:delete')")
     @DeleteMapping("/{ids}")
     public ResponseResult deleteArticle(@PathVariable List<Long> ids) {

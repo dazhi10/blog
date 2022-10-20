@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.dto.TagListDto;
 import com.nhb.domain.entity.Tag;
@@ -33,6 +34,7 @@ public class TagController {
     }
 
     @ApiOperation("新增标签")
+    @SystemLog(businessName = "新增标签")
     @PreAuthorize("@ps.hasPermission('tag:add')")
     @PostMapping
     public ResponseResult saveTag(@RequestBody Tag tag){
@@ -40,6 +42,7 @@ public class TagController {
     }
 
     @ApiOperation("删除标签")
+    @SystemLog(businessName = "删除标签")
     @PreAuthorize("@ps.hasPermission('tag:delete')")
     @DeleteMapping("/{ids}")
     public ResponseResult deleteTag(@PathVariable List<Long> ids){
@@ -54,6 +57,7 @@ public class TagController {
     }
 
     @ApiOperation("修改标签")
+    @SystemLog(businessName = "修改标签")
     @PreAuthorize("@ps.hasPermission('tag:put')")
     @PutMapping
     public ResponseResult updateTag(@RequestBody Tag tag){

@@ -23,7 +23,7 @@ public class LinkController {
     @Autowired
     private LinkService linkService;
 
-    @SystemLog(businessName = "查看友链列表")
+
     @ApiOperation("查看友链列表")
     @GetMapping("/getAllLink")
     public ResponseResult getAllLink() {

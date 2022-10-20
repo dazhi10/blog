@@ -1,5 +1,6 @@
 package com.nhb.controller;
 
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.vo.PageVo;
 import com.nhb.service.CommentService;
@@ -31,6 +32,7 @@ public class CommentController {
     }
 
     @ApiOperation("删除评论")
+    @SystemLog(businessName = "删除评论")
     @PreAuthorize("@ps.hasPermission('comment:delete')")
     @DeleteMapping("/{ids}")
     public ResponseResult deleteComment(@PathVariable List<Long> ids){

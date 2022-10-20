@@ -2,6 +2,7 @@ package com.nhb.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import com.nhb.annotation.SystemLog;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.Category;
 import com.nhb.domain.vo.ExcelCategoryVo;
@@ -67,6 +68,7 @@ public class CategoryController {
     }
 
     @ApiOperation("新增分类")
+    @SystemLog(businessName = "新增分类")
     @PreAuthorize("@ps.hasPermission('category:add')")
     @PostMapping
     public ResponseResult saveCategory(@RequestBody Category category) {
@@ -82,6 +84,7 @@ public class CategoryController {
     }
 
     @ApiOperation("修改分类")
+    @SystemLog(businessName = "修改分类")
     @PreAuthorize("@ps.hasPermission('category:put')")
     @PutMapping
     public ResponseResult updateCategory(@RequestBody Category category) {
@@ -90,6 +93,7 @@ public class CategoryController {
     }
 
     @ApiOperation("删除分类")
+    @SystemLog(businessName = "删除分类")
     @PreAuthorize("@ps.hasPermission('category:delete')")
     @DeleteMapping("/{id}")
     public ResponseResult deleteCategory(@PathVariable Long id) {
