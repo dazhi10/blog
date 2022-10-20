@@ -3,17 +3,17 @@
     <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
       <el-form-item label="分类名" prop="name">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入分类名"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
+            v-model="queryParams.name"
+            placeholder="请输入分类名"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择" clearable>
-          <el-option :key="'0'" label="正常" :value="'0'" />
-          <el-option :key="'1'" label="禁用" :value="'1'" />
+          <el-option :key="'0'" label="正常" :value="'0'"/>
+          <el-option :key="'1'" label="禁用" :value="'1'"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -24,93 +24,98 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
+            type="primary"
+            plain
+            icon="el-icon-plus"
+            size="mini"
+            @click="handleAdd"
+        >新增
+        </el-button>
       </el-col>
 
       <el-col :span="1.5">
         <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-        >删除</el-button>
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          :loading="exportLoading"
-          @click="handleExport"
-        >导出</el-button>
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            :loading="exportLoading"
+            @click="handleExport"
+        >导出
+        </el-button>
       </el-col>
     </el-row>
 
     <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
-      <el-table-column label="分类名" align="center" prop="name" />
-      <el-table-column label="描述" align="center" prop="description" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="id" align="center" prop="id"/>
+      <el-table-column label="分类名" align="center" prop="name"/>
+      <el-table-column label="描述" align="center" prop="description"/>
       <el-table-column prop="status" label="状态" align="center">
         <template slot-scope="scope">
           <el-switch
-            v-model="scope.row.status"
-            active-value="0"
-            inactive-value="1"
-            @change="handleStatusChange(scope.row)"
+              v-model="scope.row.status"
+              active-value="0"
+              inactive-value="1"
+              @change="handleStatusChange(scope.row)"
           />
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-          >修改</el-button>
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+          >修改
+          </el-button>
           <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-          >删除</el-button>
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-pagination
-      :page-size.sync="queryParams.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      :page-sizes="[10, 20, 30, 40]"
-      :current-page.sync="queryParams.pageNum"
-      @current-change="getList"
-      @size-change="getList"
+        :page-size.sync="queryParams.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        :page-sizes="[10, 20, 30, 40]"
+        :current-page.sync="queryParams.pageNum"
+        @current-change="getList"
+        @size-change="getList"
     />
 
     <!-- 添加或修改分类对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="分类名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入分类名" />
+          <el-input v-model="form.name" placeholder="请输入分类名"/>
         </el-form-item>
         <el-form-item label="描述" prop="description">
-          <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.description" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
 
         <el-form-item label="状态">
           <el-select v-model="form.status" placeholder="请选择">
-            <el-option :key="'0'" label="正常" :value="'0'" />
-            <el-option :key="'1'" label="禁用" :value="'1'" />
+            <el-option :key="'0'" label="正常" :value="'0'"/>
+            <el-option :key="'1'" label="禁用" :value="'1'"/>
           </el-select>
         </el-form-item>
       </el-form>
@@ -123,7 +128,15 @@
 </template>
 
 <script>
-import { listCategory, getCategory, delCategory, addCategory, updateCategory, exportCategory } from '@/api/content/category'
+import {
+  listCategory,
+  getCategory,
+  delCategory,
+  addCategory,
+  updateCategory,
+  exportCategory
+} from '@/api/content/category'
+import {changeUserStatus} from "@/api/system/user";
 
 export default {
   name: 'Category',
@@ -162,8 +175,7 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      }
+      rules: {}
     }
   },
   created() {
@@ -257,12 +269,22 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除分类编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除分类编号为"' + ids + '"的数据项？').then(function () {
         return delCategory(ids)
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess('删除成功')
-      }).catch(() => {})
+      }).catch(() => {
+      })
+    },
+    /** 修改分类状态 */
+    handleStatusChange(category) {
+
+      this.form = category
+      updateCategory(this.form).then(response => {
+        this.$modal.msgSuccess('修改成功')
+        this.getList()
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -270,9 +292,9 @@ export default {
         this.exportLoading = true
         return exportCategory()
       }).then(response => {
-        // this.$download.name(response.msg)
         this.exportLoading = false
-      }).catch(() => {})
+      }).catch(() => {
+      })
     }
   }
 }
