@@ -3,6 +3,9 @@ package com.nhb.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.nhb.domain.ResponseResult;
 import com.nhb.domain.entity.Comment;
+import com.nhb.domain.vo.PageVo;
+
+import java.util.List;
 
 
 /**
@@ -30,4 +33,19 @@ public interface CommentService extends IService<Comment> {
      * @return ResponseResult
      */
     ResponseResult addComment(Comment comment);
+
+    /**
+     * 查看评论列表
+     *
+     * @param pageNum  页码
+     * @param pageSize 每页个数
+     * @param content  评论内容
+     */
+    ResponseResult<PageVo> pageCommentList(Integer pageNum, Integer pageSize, String content);
+
+    /**
+     * 删除评论
+     * @param ids id集
+     */
+    ResponseResult deleteComment(List<Long> ids);
 }

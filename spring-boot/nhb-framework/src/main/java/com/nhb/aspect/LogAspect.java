@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 日志AOP
+ *
  * @author 大只
  * @date 2022/10/2 14:06
  */
@@ -25,12 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 public class LogAspect {
 
     @Pointcut("@annotation(com.nhb.annotation.SystemLog)")
-    public void pt(){
+    public void pt() {
 
     }
 
     @Around("pt()")
-    public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable{
+    public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable {
         Object ret;
         try {
             handleBefore(joinPoint);
@@ -50,24 +51,23 @@ public class LogAspect {
     }
 
     private void handleBefore(ProceedingJoinPoint joinPoint) {
-
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
         //获取被增强方法上的注解对象
         SystemLog systemLog = getSystemLog(joinPoint);
         log.info("=======Start=======");
         // 打印请求 URL
-        log.info("URL            : {}",request.getRequestURL());
+        log.info("URL            : {}", request.getRequestURL());
         // 打印描述信息
-        log.info("BusinessName   : {}",systemLog.businessName());
+        log.info("BusinessName   : {}", systemLog.businessName());
         // 打印 Http method
-        log.info("HTTP Method    : {}",request.getMethod());
+        log.info("HTTP Method    : {}", request.getMethod());
         // 打印调用 controller 的全路径以及执行方法
-        log.info("Class Method   : {}.{}",joinPoint.getSignature().getDeclaringTypeName(),((MethodSignature) joinPoint.getSignature()).getName());
+        log.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringTypeName(), ((MethodSignature) joinPoint.getSignature()).getName());
         // 打印请求的 IP
-        log.info("IP             : {}",request.getRemoteHost());
+        log.info("IP             : {}", request.getRemoteHost());
         // 打印请求入参
-        log.info("Request Args   : {}", JSON.toJSONString(joinPoint.getArgs()) );
+        log.info("Request Args   : {}", JSON.toJSONString(joinPoint.getArgs()));
     }
 
     private SystemLog getSystemLog(ProceedingJoinPoint joinPoint) {

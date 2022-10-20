@@ -44,7 +44,6 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          v-hasPermission="['content:category:export']"
           type="warning"
           plain
           icon="el-icon-download"

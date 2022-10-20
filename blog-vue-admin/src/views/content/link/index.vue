@@ -89,14 +89,12 @@
       >
         <template slot-scope="scope">
           <el-button
-            v-hasPermission="['content:link:edit']"
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
           >修改</el-button>
           <el-button
-            v-hasPermission="['content:link:remove']"
             size="mini"
             type="text"
             icon="el-icon-delete"

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -33,15 +34,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private UserService userService;
 
     @Override
-    public ResponseResult commentList(String commentType,Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         //查询对应文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         //对articleId进行判断
-        queryWrapper.eq(SystemConstant.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId,articleId);
+        queryWrapper.eq(SystemConstant.ARTICLE_COMMENT.equals(commentType), Comment::getArticleId, articleId);
         //根评论rootId为-1
         queryWrapper.eq(Comment::getRootId, -1);
         //评论类型
-        queryWrapper.eq(Comment::getType,commentType);
+        queryWrapper.eq(Comment::getType, commentType);
         //分页查询
         Page<Comment> page = new Page<>(pageNum, pageSize);
         page(page, queryWrapper);
@@ -60,10 +61,26 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public ResponseResult addComment(Comment comment) {
         //评论内容不能为空
-        if(!StringUtils.hasText(comment.getContent())){
+        if (!StringUtils.hasText(comment.getContent())) {
             throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
         }
         save(comment);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult<PageVo> pageCommentList(Integer pageNum, Integer pageSize, String content) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Objects.nonNull(content), Comment::getContent, content);
+        Page<Comment> commentPage = new Page<>(pageNum, pageSize);
+        page(commentPage, queryWrapper);
+        PageVo pageVo = new PageVo(commentPage.getRecords(), commentPage.getTotal());
+        return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult deleteComment(List<Long> ids) {
+        removeByIds(ids);
         return ResponseResult.okResult();
     }
 
