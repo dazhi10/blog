@@ -23,16 +23,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SystemException.class)
     public ResponseResult systemExceptionHandler(SystemException e) {
         //打印异常信息
-        log.error("出现了异常!", e);
+        log.error(e.getMessage());
         //从异常对象中获取提示信息封装返回
         return ResponseResult.errorResult(e.getCode(), e.getMsg());
     }
 
-
     @ExceptionHandler(Exception.class)
     public ResponseResult exceptionHandler(Exception e) {
         //打印异常信息
-        log.error("出现了异常", e);
+        log.error(e.getMessage());
+        if (e.getMessage().contains("java.lang.String cannot be cast to com.nhb.domain.entity.LoginUser")) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+        }
         //从异常对象中获取提示信息封装返回
         return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR.getCode(), e.getMessage());
     }
@@ -41,7 +43,7 @@ public class GlobalExceptionHandler {
      * 处理AccessDenied无权限异常
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseResult exceptionHandler(HttpServletResponse httpServletResponse, AccessDeniedException e) {
+    public ResponseResult exceptionHandler(AccessDeniedException e) {
         log.error("不允许访问！原因是:", e);
         return ResponseResult.errorResult(AppHttpCodeEnum.NO_OPERATOR_AUTH);
     }
