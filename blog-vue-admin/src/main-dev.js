@@ -43,6 +43,8 @@ Vue.use(plugins);
 Vue.use(mavonEditor);
 Vue.config.productionTip = false;
 
+console.log(process.env.VUE_APP_BASE_API)
+
 new Vue({
   el: "#app",
   router,

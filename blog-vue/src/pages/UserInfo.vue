@@ -186,7 +186,7 @@ export default {
   created() {
     //生命周期函数
     this.routeChange();
-    this.uploadURL = store.state.baseURL + "upload";
+    this.uploadURL = process.env.VUE_APP_BASE_API + "upload";
   }
 };
 </script>
