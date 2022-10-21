@@ -35,6 +35,9 @@ node_modules
 /dist
 dist/
 
+application-dev.yml
+application-prod.yml
+
 
 # local env files
 .env.local
