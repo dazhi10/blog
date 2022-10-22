@@ -61,6 +61,10 @@ public class UserController {
     @ApiOperation("发送邮箱验证码")
     @GetMapping("/code")
     public ResponseResult sendCode(@RequestParam  String gmail) {
+        //查询用户名是否存在
+        if (!userService.checkUserNameUnique(gmail)) {
+            throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
+        }
         return userService.sendCode(gmail);
     }
 }
