@@ -11,6 +11,7 @@ import com.nhb.domain.vo.PageVo;
 import com.nhb.domain.vo.UserInfoVo;
 import com.nhb.domain.vo.UserVo;
 import com.nhb.enums.AppHttpCodeEnum;
+import com.nhb.exception.SystemException;
 import com.nhb.mapper.UserMapper;
 import com.nhb.service.UserRoleService;
 import com.nhb.service.UserService;
@@ -46,6 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Autowired
     JavaMailSender mailSender;
@@ -85,68 +87,77 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ResponseResult register(User user) {
+        //从redis中取出验证码
+        String code = redisCache.getCacheObject(user.getUserName());
 
-        //根据用户注册信息进行注册链接的的生成和发送
-        MimeMessage message = mailSender.createMimeMessage();
-        try{
-            MimeMessageHelper messageHelper = new MimeMessageHelper(message);
-            String mailId = UUID.randomUUID().toString(); // 生成UUID
-            //key存入redis中
-            redisCache.setCacheObject(mailId,user);
-            //key五分钟过期
-            redisCache.expire(mailId,300, TimeUnit.SECONDS);
-            messageHelper.setFrom(mailKey); //发送方的邮箱地址，而不是接收方的邮箱地址
-            messageHelper.setTo(user.getUserName()); // 接收方的邮箱地址
-            messageHelper.setSubject("注册");  // 邮箱标题
-            String html = "<html>\n" +
-                    "<body>\n" +
-                    "<p>请点击下方链接注册</p>\n" +
-                    "<a href="+url+":"+port+"/user/lookCode?mailId="+mailId + "\">"+url+":"+port+"/user/lookCode?mailId="+mailId+"</a>" +
-                    "</body>\n" +
-                    "</html>";
-            messageHelper.setText(html,true); // 邮箱内容
-            mailSender.send(message);  // 发送邮箱
-            return ResponseResult.okResult("邮箱发送成功,请前往邮箱确认");
-
-        }catch (Exception e){
-            return ResponseResult.errorResult(AppHttpCodeEnum.EMAIL_ERROR);
+        if (Objects.isNull(code)) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.CODE_PAST_ERROR);
         }
-    }
-
-    @Override
-    public ResponseResult lookCode(String mailId) {
-        //从redis中取出邮箱和密码
-        User user = redisCache.getCacheObject(mailId);
-        if(Objects.isNull(user)){
-            return ResponseResult.okResult("认证时间过期");
+        //对比验证码
+        if (!code.equals(user.getCode())) {
+            throw new SystemException(AppHttpCodeEnum.CODE_ERROR);
         }
         //用户随机昵称
         StringBuffer randomNum = RandomNum.getRandomNum(6);
-        user.setNickName("用户"+ randomNum);
+        user.setNickName("用户" + randomNum);
         //对密码进行加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
         //存入数据库
-        save(user);
-        return ResponseResult.okResult("注册成功");
+        boolean save = save(user);
+        if(save){
+            return ResponseResult.okResult("注册成功");
+        }
+        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+
     }
+
 
     @Override
     public boolean checkUserNameUnique(String userName) {
-        return count(Wrappers.<User>lambdaQuery().eq(User::getUserName,userName)) == 0;
+        return count(Wrappers.<User>lambdaQuery().eq(User::getUserName, userName)) == 0;
+    }
+
+    @Override
+    public ResponseResult sendCode(String gmail) {
+        //根据用户注册信息进行注册链接的的生成和发送
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message);
+            String mailId = String.valueOf(RandomNum.getRandomNum(6));
+            //key存入redis中
+            redisCache.setCacheObject(gmail,mailId);
+            //key五分钟过期
+            redisCache.expire(mailId, 300, TimeUnit.SECONDS);
+            messageHelper.setFrom(mailKey); //发送方的邮箱地址，而不是接收方的邮箱地址
+            messageHelper.setTo(gmail); // 接收方的邮箱地址
+            messageHelper.setSubject("注册验证码");  // 邮箱标题
+            String html = "<html>\n" +
+                    "<body>\n" +
+                    "<p>验证码5分钟内有效</p>\n" +
+                    "<p>" + mailId + "</p>" +
+                    "</body>\n" +
+                    "</html>";
+            messageHelper.setText(html, true); // 邮箱内容
+            mailSender.send(message);  // 发送邮箱
+            return ResponseResult.okResult("验证码发送成功,请前往邮箱查看~");
+
+        } catch (Exception e) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.EMAIL_ERROR);
+        }
     }
 
     @Override
     public ResponseResult selectUserPage(User user, Integer pageNum, Integer pageSize) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
 
-        queryWrapper.like(StringUtils.hasText(user.getUserName()),User::getUserName,user.getUserName());
-        queryWrapper.eq(StringUtils.hasText(user.getStatus()),User::getStatus,user.getStatus());
+        queryWrapper.like(StringUtils.hasText(user.getUserName()), User::getUserName, user.getUserName());
+        queryWrapper.eq(StringUtils.hasText(user.getStatus()), User::getStatus, user.getStatus());
 
         Page<User> page = new Page<>();
         page.setCurrent(pageNum);
         page.setSize(pageSize);
-        page(page,queryWrapper);
+        page(page, queryWrapper);
 
         //转换成VO
         List<User> users = page.getRecords();
@@ -167,7 +178,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         save(user);
 
-        if(user.getRoleIds()!=null&&user.getRoleIds().length>0){
+        if (user.getRoleIds() != null && user.getRoleIds().length > 0) {
             insertUserRole(user);
         }
         return ResponseResult.okResult();
@@ -177,7 +188,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateUser(User user) {
         // 删除用户与角色关联
         LambdaQueryWrapper<UserRole> userRoleUpdateWrapper = new LambdaQueryWrapper<>();
-        userRoleUpdateWrapper.eq(UserRole::getUserId,user.getId());
+        userRoleUpdateWrapper.eq(UserRole::getUserId, user.getId());
         userRoleService.remove(userRoleUpdateWrapper);
 
         // 新增用户与角色管理
@@ -185,7 +196,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新用户信息
         updateById(user);
     }
-
 
 
     private void insertUserRole(User user) {

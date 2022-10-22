@@ -46,6 +46,10 @@ public class UserController {
         if (!StringUtils.hasText(user.getPassword())) {
             throw new SystemException(AppHttpCodeEnum.PASSWORD_NOT_NULL);
         }
+        //判断邮箱验证码不为空
+        if (!StringUtils.hasText(user.getCode())) {
+            throw new SystemException(AppHttpCodeEnum.CODE_NOT_NULL);
+        }
         //查询用户名是否存在
         if (!userService.checkUserNameUnique(user.getUserName())) {
             throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
@@ -54,10 +58,10 @@ public class UserController {
         return userService.register(user);
     }
 
-    @ApiOperation("确定邮箱注册")
-    @GetMapping("/lookCode")
-    public ResponseResult lookCode(@RequestParam String mailId) {
-        return userService.lookCode(mailId);
+    @ApiOperation("发送邮箱验证码")
+    @GetMapping("/code")
+    public ResponseResult sendCode(@RequestParam  String gmail) {
+        return userService.sendCode(gmail);
     }
 }
 

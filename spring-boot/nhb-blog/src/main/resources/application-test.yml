@@ -10,7 +10,6 @@ spring:
     host: xxxxx    # 邮箱协议
     username: xxxxxx          # 发送的邮箱地址
     password: xxxxxx    # 邮箱的授权码
-    url: http://localhost #邮箱域名
 
   datasource:
     url: jdbc:mysql://localhost:3306/sg_blog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai

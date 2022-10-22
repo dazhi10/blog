@@ -40,7 +40,7 @@
                   >
                 </div>
                 <div v-show="haslogin" class="haslogin">
-                  <el-avatar :size="38" :src="headTou"></el-avatar>
+                  <el-avatar :size="38" :src="headTou?headTou:'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'"></el-avatar>
                   <ul class="haslogin-info">
                     <li>
                       <a href="#/UserInfo">个人中心</a>

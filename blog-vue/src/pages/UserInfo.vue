@@ -1,102 +1,104 @@
 <!-- 用户中心 -->
 <template>
-    <div>
-        <wbc-nav></wbc-nav>
-        <div class="container">
-            <div v-show="isEdit" class="tcommonBox">
-                <header>
-                    <h1>
-                            编辑个人资料
-                    </h1>
-                </header>
-                <section>
-                    <ul class="userInfoBox">
-                        <li class="avatarlist">
-                            <span class="leftTitle">头像</span>
-                            <el-upload
-                              class="avatar-uploader"
-                              name="img"
-                              :action="uploadURL"
-                              :show-file-list="false"
-                              :on-success="handleAvatarSuccess"
-                              :before-upload="beforeAvatarUpload">
-                              <img v-if="userInfoObj.avatar" :src="userInfoObj.avatar"  class="avatar">
-                              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                              <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
-                            </el-upload>
-                        </li>
-                        <li class="username">
-                            <span class="leftTitle">昵称</span>
-                            <el-input v-model="userInfoObj.nickName" placeholder="昵称"></el-input> <i  class="fa fa-wa fa-asterisk"></i>
-                        </li>
-                        <li>
-                            <span class="leftTitle">电子邮件</span>
-                            <span>{{userInfoObj.userName}}</span>
-                        </li>
-                        <li>
-                            <span class="leftTitle">性别</span>
-                            <template>
-                              <el-radio class="radio" v-model="userInfoObj.sex" label="0">男</el-radio>
-                              <el-radio class="radio" v-model="userInfoObj.sex" label="1">女</el-radio>
-                            </template>
-                        </li>
+  <div>
+    <wbc-nav></wbc-nav>
+    <div class="container">
+      <div v-show="isEdit" class="tcommonBox">
+        <header>
+          <h1>
+            编辑个人资料
+          </h1>
+        </header>
+        <section>
+          <ul class="userInfoBox">
+            <li class="avatarlist">
+              <span class="leftTitle">头像</span>
+              <el-upload
+                  class="avatar-uploader"
+                  name="img"
+                  :action="uploadURL"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload">
+                <img v-if="userInfoObj.avatar" :src="userInfoObj.avatar" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
+              </el-upload>
+            </li>
+            <li class="username">
+              <span class="leftTitle">昵称</span>
+              <el-input v-model="userInfoObj.nickName" placeholder="昵称"></el-input>
+              <i class="fa fa-wa fa-asterisk"></i>
+            </li>
+            <li>
+              <span class="leftTitle">电子邮件</span>
+              <span>{{ userInfoObj.userName }}</span>
+            </li>
+            <li>
+              <span class="leftTitle">性别</span>
+              <template>
+                <el-radio class="radio" v-model="userInfoObj.sex" label="0">男</el-radio>
+                <el-radio class="radio" v-model="userInfoObj.sex" label="1">女</el-radio>
+              </template>
+            </li>
 
 
-                    </ul>
-                    <div class=" saveInfobtn">
-                        <a class="tcolors-bg"  href="javascript:void(0);" @click="isEdit=!isEdit">返 回</a>
-                        <a class="tcolors-bg" href="javascript:void(0);" @click="saveInfoFun">保 存</a>
-                    </div>
-                </section>
-            </div>
-            <div v-show="!isEdit" class="tcommonBox">
-                <header>
-                  <h1>
-                          个人中心
-                      <span class="gotoEdit" @click="isEdit=!isEdit"><i class="fa fa-wa fa-edit"></i>编辑</span>
-                  </h1>
-                </header>
+          </ul>
+          <div class=" saveInfobtn">
+            <a class="tcolors-bg" href="javascript:void(0);" @click="isEdit=!isEdit">返 回</a>
+            <a class="tcolors-bg" href="javascript:void(0);" @click="saveInfoFun">保 存</a>
+          </div>
+        </section>
+      </div>
+      <div v-show="!isEdit" class="tcommonBox">
+        <header>
+          <h1>
+            个人中心
+            <span class="gotoEdit" @click="isEdit=!isEdit"><i class="fa fa-wa fa-edit"></i>编辑</span>
+          </h1>
+        </header>
 
-                <section>
-                  <el-skeleton :rows="6" animated :loading="loading"> 
-                    <ul class="userInfoBox">
-                        <li class="avatarlist">
-                            <span class="leftTitle">头像</span>
-                            <div class="avatar-uploader">
-                                <img  :src="userInfoObj.avatar"  class="avatar">
-                            </div>
-                        </li>
-                        <li class="username">
-                            <span class="leftTitle">昵称</span>
-                            <span>{{userInfoObj.nickName}}</span>
+        <section>
+          <el-skeleton :rows="6" animated :loading="loading">
+            <ul class="userInfoBox">
+              <li class="avatarlist">
+                <span class="leftTitle">头像</span>
+                <div class="avatar-uploader">
+                  <img :src="userInfoObj.avatar" class="avatar">
+                </div>
+              </li>
+              <li class="username">
+                <span class="leftTitle">昵称</span>
+                <span>{{ userInfoObj.nickName }}</span>
 
-                        </li>
-                        <li>
-                            <span class="leftTitle">电子邮件</span>
-                            <span>{{userInfoObj.userName}}</span>
-                        </li>
-                        <li>
-                            <span class="leftTitle">性别</span>
-                            <span>{{userInfoObj.sex==0?'男':'女'}}</span>
-                        </li>
+              </li>
+              <li>
+                <span class="leftTitle">电子邮件</span>
+                <span>{{ userInfoObj.userName }}</span>
+              </li>
+              <li>
+                <span class="leftTitle">性别</span>
+                <span>{{ userInfoObj.sex == 0 ? '男' : '女' }}</span>
+              </li>
 
-                        <li>
-                            <span class="leftTitle">注册日期</span>
-                            <span>{{userInfoObj.createTime}}</span>
-                        </li>
-                    </ul>
-                  </el-skeleton>
-                </section>
+              <li>
+                <span class="leftTitle">注册日期</span>
+                <span>{{ userInfoObj.createTime }}</span>
+              </li>
+            </ul>
+          </el-skeleton>
+        </section>
 
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 import header from "../components/header.vue";
-import { getUserInfo, savaUserInfo } from "../api/user.js"; //获取用户信息，保存用户信息
+import {getUserInfo, savaUserInfo} from "../api/user.js"; //获取用户信息，保存用户信息
 import store from "../store";
+
 export default {
   name: "UserInfo",
   data() {
@@ -105,7 +107,13 @@ export default {
       uploadURL: "",
       isEdit: false,
       userInfo: {}, //本地存储的用户信
-      userInfoObj: "", //用户的信息
+      userInfoObj: {
+        userName: null,
+        nickName: null,
+        sex: null,
+        createTime: null,
+        avatar: 'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'
+      }, //用户的信息
       loading: true
     };
   },
@@ -113,7 +121,7 @@ export default {
     //事件处理器
     handleAvatarSuccess(res, file) {
       //上传头像
-      if (res.code == 200) {
+      if (res.code === 200) {
         this.userInfoObj.avatar = res.data;
         this.userInfoObj.head_start = 1;
       } else {
@@ -123,9 +131,9 @@ export default {
     beforeAvatarUpload(file) {
       //判断头像大小
       const isJPG =
-        file.type == "image/png" ||
-        file.type == "image/jpg" ||
-        file.type == "image/jpeg";
+          file.type === "image/png" ||
+          file.type === "image/jpg" ||
+          file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 1;
       // console.log(file);
       if (!isJPG) {
@@ -137,37 +145,45 @@ export default {
       return isJPG && isLt2M;
     },
 
-    saveInfoFun: function() {
-      //保存编辑的用户信息
-      var that = this;
 
-      if (!that.userInfoObj.nickName) {
+    saveInfoFun() {
+      //保存编辑的用户信息
+      if (!this.userInfoObj.nickName) {
         //昵称为必填
-        that.$message.error("昵称为必填项，请填写昵称");
+        this.$message.error("昵称为必填项，请填写昵称");
         return;
       }
-
-      savaUserInfo(that.userInfoObj).then(response => {
+      savaUserInfo(this.userInfoObj).then(response => {
         //保存信息接口，返回展示页
-        that.$message.success("保存成功！");
-        that.isEdit = false;
-        that.routeChange();
+        this.$message.success("保存成功！");
+        this.isEdit = false;
+        this.routeChange();
       });
     },
-    routeChange: function() {
+
+    routeChange() {
       //展示页面信息
-      var that = this;
-      // console.log(this.$router,this.$route);
       if (localStorage.getItem("userInfo")) {
-        that.haslogin = true;
-        that.userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        that.userId = that.userInfo.id;
-        getUserInfo(that.userId).then(response => {
-          that.userInfoObj = response;
-          that.userInfoObj.head_start = 0;
+        this.haslogin = true;
+        this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        this.userId = this.userInfo.id;
+        getUserInfo(this.userId).then(response => {
+          console.log(response)
+          this.userInfoObj.userName = response.userName
+          this.userInfoObj.nickName = response.nickName
+          this.userInfoObj.sex = response.sex
+          this.userInfoObj.createTime = response.createTime
+          if (typeof response.avatar == "undefined" || response.avatar
+              || response.avatar === "") {
+
+          } else {
+            this.userInfoObj.avatar = response.avatar
+          }
+
+          this.userInfoObj.head_start = 0;
         });
       } else {
-        that.haslogin = false;
+        this.haslogin = false;
       }
 
       this.timeout = setTimeout(() => {
@@ -186,7 +202,7 @@ export default {
   created() {
     //生命周期函数
     this.routeChange();
-    this.uploadURL = process.env.VUE_APP_BASE_API + "upload";
+    this.uploadURL = process.env.VUE_APP_BASE_API + "/upload";
   }
 };
 </script>
@@ -200,6 +216,7 @@ export default {
   display: inline-block;
   vertical-align: top;
 }
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 50%;
@@ -209,9 +226,11 @@ export default {
   width: 120px;
   height: 120px;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #20a0ff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -223,6 +242,7 @@ export default {
   top: 0;
   left: 0;
 }
+
 .avatar {
   width: 120px;
   height: 120px;
@@ -230,33 +250,40 @@ export default {
   display: block;
   object-fit: cover;
 }
+
 .gotoEdit {
   font-size: 15px;
   float: right;
   cursor: pointer;
   color: #999;
 }
+
 .gotoEdit:hover {
   color: #333;
 }
+
 /*个人设置*/
 .userInfoBox .leftTitle {
   display: inline-block;
   width: 100px;
   padding: 10px 0;
 }
+
 .userInfoBox .rightInner {
   display: inline-block;
   max-width: calc(100% - 140px);
   vertical-align: top;
 }
+
 .userInfoBox li {
   padding: 20px;
   border-bottom: 1px solid #ddd;
 }
+
 .userInfoBox li:last-child {
   border-bottom: 1px solid transparent;
 }
+
 .userInfoBox .el-input,
 .userInfoBox .el-textarea {
   max-width: 300px;
@@ -266,13 +293,16 @@ export default {
 .userInfoBox .el-input__inner {
   border-radius: 4px;
 }
+
 .userInfoBox .el-textarea {
   vertical-align: top;
 }
+
 .saveInfobtn {
   margin: 20px 0;
   text-align: center;
 }
+
 .saveInfobtn a {
   color: #fff;
   padding: 6px 20px;
@@ -280,6 +310,7 @@ export default {
   border-radius: 5px;
   font-size: 14px;
 }
+
 .userInfoBox .fa-asterisk {
   color: #df2050;
 }

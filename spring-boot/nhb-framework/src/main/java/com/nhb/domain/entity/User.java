@@ -54,6 +54,10 @@ public class User  {
     @TableField(exist = false)
     private Long[] roleIds;
 
+    //邮箱验证码
+    @TableField(exist = false)
+    private String code;
+
 
 
 }

@@ -33,13 +33,14 @@ public interface UserService extends IService<User> {
 
     void updateUser(User user);
 
-    /**
-     * 确认邮箱注册
-     */
-    ResponseResult lookCode(String mailId);
 
     /**
      * 校验用户名是否存在
      */
     boolean checkUserNameUnique(String userName);
+
+    /**
+     * 发送邮箱验证码
+     */
+    ResponseResult sendCode(String gmail);
 }

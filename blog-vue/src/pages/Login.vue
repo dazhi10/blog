@@ -1,82 +1,102 @@
 <!-- 登录注册 -->
 <template>
-    <div>
-      <div class="container">
-          <h1 class="loginTitle">
-          </h1>
-          <!-- 登录注册 -->
-          <div style="height: 500px;">
-              <div v-if="login==1" class="loginBox">
-                  <div class="lr-title">
-                      <h1>登录</h1>
-                      <p>
-                          新用户<a href="#/Login?login=0" class="tcolors">注册</a>
-                      </p>
-                  </div>
-                <el-form  :rules="rules" :model="userFrom" ref="userFrom" >  
-                  <el-form-item  prop="username">
-                      <el-input
-                          type="text"
-                          placeholder="邮箱"
-                          v-model="userFrom.username">
-                      </el-input>
-                   </el-form-item> 
-                  <el-form-item  prop="password" label-width="20"	>
-                    <el-input
-                        type="password"
-                        placeholder="密码"
-                        @keyup.enter.native="loginEnterFun"
-                        v-model="userFrom.password">
-                    </el-input>
-                  </el-form-item>   
-                </el-form> 
-                  <h3><a href="">忘记密码？</a></h3>
-                  <div class="lr-btn tcolors-bg" @click="gotoHome('userFrom')">登录</div>
-              </div>
-              <div v-else class="registerBox">
-                  <div class="lr-title">
-                      <h1>注册</h1>
-                      <p>
-                          已有账号<a href="#/Login?login=1" class="tcolors">登录</a>
-                      </p>
-                </div>
-
-                <el-form  :rules="rules" :model="userFrom" ref="userFrom" >  
-                  <el-form-item  prop="nusername">
-                      <el-input
-                        type="text"
-                        placeholder="邮箱"
-                        v-model="userFrom.nusername">
-                      </el-input>
-                   </el-form-item>   
-
-                  <el-form-item  prop="npassword">
-                    <el-input
-                      type="password"
-                      placeholder="密码: 6-12位英文、数字、下划线"
-                      v-model="userFrom.npassword">
-                    </el-input>
-                  </el-form-item>
-                    
-                  <el-form-item  prop="npassword2">  
-                    <el-input
-                      type="password"
-                      placeholder="确认密码"
-                      v-model="userFrom.npassword2">
-                    </el-input>
-                  </el-form-item>  
-                </el-form>    
-                  
-                <div class="lr-btn tcolors-bg" @click="newRegister('userFrom')">注册</div>
-              </div>
+  <div>
+    <div class="container">
+      <h1 class="loginTitle">
+      </h1>
+      <!-- 登录注册 -->
+      <div style="height: 500px;">
+        <div v-if="login==1" class="loginBox">
+          <div class="lr-title">
+            <h1>登录</h1>
+            <p>
+              新用户<a href="#/Login?login=0" class="tcolors">注册</a>
+            </p>
           </div>
+          <el-form :rules="rules" :model="userFrom" ref="userFrom">
+            <el-form-item prop="username">
+              <el-input
+                  type="text"
+                  placeholder="邮箱"
+                  v-model="userFrom.username">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password" label-width="20">
+              <el-input
+                  type="password"
+                  placeholder="密码"
+                  @keyup.enter.native="loginEnterFun"
+                  v-model="userFrom.password">
+              </el-input>
+            </el-form-item>
+          </el-form>
+          <h3><a href="">忘记密码？</a></h3>
+          <div class="lr-btn tcolors-bg" @click="gotoHome('userFrom')">登录</div>
+        </div>
+        <div v-else class="registerBox">
+          <div class="lr-title">
+            <h1>注册</h1>
+            <p>
+              已有账号<a href="#/Login?login=1" class="tcolors">登录</a>
+            </p>
+          </div>
+
+          <el-form :rules="rules" :model="userFrom" ref="userFrom">
+            <el-form-item prop="nusername">
+              <el-row :gutter="10">
+                <el-col :span="15" style="height: 10px">
+                  <el-input
+                      type="text"
+                      placeholder="邮箱"
+                      v-model="userFrom.nusername">
+                  </el-input>
+                </el-col>
+                <el-col :span="6">
+                  <el-button type="primary" plain @click="getNumCode">
+                    <span v-if="isShowNucTime" style="font-size:16px">{{ Nuc_time }} S</span>
+                    <span v-else>获取验证码</span>
+                  </el-button>
+                </el-col>
+
+              </el-row>
+            </el-form-item>
+
+            <el-form-item prop="npassword">
+              <el-input
+                  type="password"
+                  placeholder="密码: 6-12位英文、数字、下划线"
+                  v-model="userFrom.npassword">
+              </el-input>
+            </el-form-item>
+
+            <el-form-item prop="npassword2">
+              <el-input
+                  type="password"
+                  placeholder="确认密码"
+                  v-model="userFrom.npassword2">
+              </el-input>
+            </el-form-item>
+
+            <el-form-item prop="code">
+              <el-input
+                  type="text"
+                  placeholder="邮箱验证码"
+                  v-model="userFrom.code">
+              </el-input>
+            </el-form-item>
+          </el-form>
+
+          <div class="lr-btn tcolors-bg" @click="newRegister('userFrom')">注册</div>
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
-import { userLogin, userRegister } from "../api/user.js";
-import { setToken } from "../utils/auth.js";
+import {sendCode, userLogin, userRegister} from "../api/user.js";
+import {setToken} from "../utils/auth.js";
+
 export default {
   name: "Login",
   data() {
@@ -87,8 +107,13 @@ export default {
         password: "", //密码
         nusername: "", //新用户注册名
         npassword: "", //新用户注册密码
-        npassword2: "" //新用户注册重复密码
+        npassword2: "", //新用户注册重复密码
+        code: "",//邮箱验证码
       },
+
+      Nuc_time: 60,
+      isShowNucTime: false,
+      end_time: 0,
 
       login: 0, //是否已经登录
       loginErr: false, //登录错误
@@ -96,7 +121,7 @@ export default {
       urlstate: 0, //重新注册
       rules: {
         username: [
-          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {required: true, message: "请输入邮箱地址", trigger: "blur"},
           {
             type: "email",
             message: "请输入正确的邮箱地址",
@@ -104,11 +129,11 @@ export default {
           }
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+          {required: true, message: "请输入密码", trigger: "blur"},
+          {min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur"}
         ],
         nusername: [
-          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {required: true, message: "请输入邮箱地址", trigger: "blur"},
           {
             type: "email",
             message: "请输入正确的邮箱地址",
@@ -116,12 +141,15 @@ export default {
           }
         ],
         npassword: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+          {required: true, message: "请输入密码", trigger: "blur"},
+          {min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur"}
         ],
         npassword2: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }
+          {required: true, message: "请输入密码", trigger: "blur"},
+          {min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur"}
+        ],
+        code: [
+          {required: true, message: "请输入邮箱验证码", trigger: "blur"},
         ]
       }
     };
@@ -132,23 +160,23 @@ export default {
         if (valid) {
           //用户登录
           userLogin(this.userFrom.username, this.userFrom.password).then(
-            response => {
-              // 登录成功记录token和用户信息，登录失败给对应提示
-              setToken(response.token);
-              // 存储用户信息
-              localStorage.setItem(
-                "userInfo",
-                JSON.stringify(response.userInfo)
-              );
+              response => {
+                // 登录成功记录token和用户信息，登录失败给对应提示
+                setToken(response.token);
+                // 存储用户信息
+                localStorage.setItem(
+                    "userInfo",
+                    JSON.stringify(response.userInfo)
+                );
 
-              this.userFrom = {};
-              this.resetForm(formName);
-              this.$message({
-                message: "登录成功",
-                type: "success"
-              });
-              this.$router.push("/Home");
-            }
+                this.userFrom = {};
+                this.resetForm(formName);
+                this.$message({
+                  message: "登录成功",
+                  type: "success"
+                });
+                this.$router.push("/Home");
+              }
           );
         } else {
           console.log("error submit!!");
@@ -159,19 +187,61 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+
+    //点击发送邮箱验证码
+    async getNumCode() {
+      if (typeof this.userFrom.nusername == "undefined" || this.userFrom.nusername == null
+          || this.userFrom.nusername === "") return this.$message({
+        message: "请输入邮箱，才能发送验证码!",
+        type: "error"
+      });
+
+      //发送邮箱请求
+      const data = await sendCode(this.userFrom.nusername)
+
+      this.$message({
+        message: data,
+        type: "success"
+      });
+
+
+      let clickTime = new Date().getTime() + 60000;
+      // 本地存储
+      localStorage.setItem('endTime', JSON.stringify(clickTime));
+      this.timeDown(clickTime);
+
+    },
+
+    // 验证码倒计时
+    timeDown() {
+      // 判断是否正在倒计时
+      if (this.isShowNucTime) return;
+      this.isShowNucTime = true;
+      this.end_time = Number(localStorage.getItem('endTime'));
+      this.Nuc_time = Math.ceil((this.end_time - new Date().getTime()) / 1000);
+      let interval = setInterval(() => {
+        this.Nuc_time--;
+        if (this.Nuc_time < 1) {
+          this.Nuc_time = 60;
+          this.isShowNucTime = false;
+          localStorage.removeItem('endTime');
+          clearInterval(interval);
+        }
+      }, 1000)
+    },
     //事件处理器
-    routeChange: function() {
+    routeChange: function () {
       var that = this;
       that.login =
-        that.$route.query.login == undefined
-          ? 1
-          : parseInt(that.$route.query.login); //获取传参的login
+          that.$route.query.login == undefined
+              ? 1
+              : parseInt(that.$route.query.login); //获取传参的login
       that.urlstate =
-        that.$route.query.urlstate == undefined
-          ? 0
-          : that.$route.query.urlstate; //获取传参的usrlstate状态码
+          that.$route.query.urlstate == undefined
+              ? 0
+              : that.$route.query.urlstate; //获取传参的usrlstate状态码
     },
-    registerEnterFun: function(e) {
+    registerEnterFun: function (e) {
       var keyCode = window.event ? e.keyCode : e.which;
       if (keyCode == 13) {
         this.newRegister();
@@ -182,18 +252,18 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.userFrom.npassword === this.userFrom.npassword2) {
-            userRegister(this.userFrom.nusername, this.userFrom.npassword).then(
-              response => {
-                this.$message({
-                  message: response,
-                  type: "success"
-                });
+            userRegister(this.userFrom.nusername, this.userFrom.npassword,this.userFrom.code).then(
+                response => {
+                  this.$message({
+                    message: response,
+                    type: "success"
+                  });
 
-                this.userFrom = {};
-                this.resetForm(formName);
-                //去登录
-                this.$router.push({ path: "/Login?login=1" });
-              }
+                  this.userFrom = {};
+                  this.resetForm(formName);
+                  //去登录
+                  this.$router.push({path: "/Login?login=1"});
+                }
             );
           } else {
             this.$message({
@@ -208,24 +278,26 @@ export default {
         }
       });
     },
-    goLogin: function() {
+    goLogin: function () {
       //去登录
-      this.$router.push({ path: "/Login?login=1" });
+      this.$router.push({path: "/Login?login=1"});
     },
-    goRegister: function() {
+    goRegister: function () {
       //去注册
-      this.$router.push({ path: "/Login?login=0" });
+      this.$router.push({path: "/Login?login=0"});
     }
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
     $route: "routeChange"
-    
+
   },
   created() {
     //生命周期函数
     var that = this;
     that.routeChange();
+    let myEndTime = localStorage.getItem('endTime');
+    myEndTime && this.timeDown();
   }
 };
 </script>
@@ -234,6 +306,7 @@ export default {
 .el-form-item__content {
   height: 45px !important;
 }
+
 /*登录注册标题*/
 .loginTitle {
   text-align: center;
@@ -241,6 +314,7 @@ export default {
   padding-top: 50px;
   margin-bottom: 100px;
 }
+
 .loginBox,
 .registerBox {
   background: #fff;
@@ -250,22 +324,26 @@ export default {
 
   margin: 0 auto;
 }
+
 .loginBox {
   padding-bottom: 0;
   height: 300px;
 }
+
 .lr-title {
   position: relative;
   height: 32px;
   line-height: 32px;
   margin-bottom: 20px;
 }
+
 .lr-title h1 {
   font-size: 24px;
   color: #666;
   font-weight: bold;
   /*width:50%;*/
 }
+
 .lr-title p {
   font-size: 12px;
   color: #999;
@@ -273,6 +351,7 @@ export default {
   right: 0;
   top: 0;
 }
+
 .lr-btn {
   color: #fff;
   text-align: center;
@@ -282,29 +361,35 @@ export default {
   cursor: pointer;
   margin-bottom: 30px;
 }
+
 .loginBox .el-input,
 .registerBox .el-input {
   margin-bottom: 20px;
 }
+
 .loginBox .el-alert,
 .registerBox .el-alert {
   top: -18px;
   background-color: #888;
 }
+
 .loginBox .el-input input,
 .registerBox .el-input input {
   border-radius: 4px;
 }
+
 .loginBox h3,
 .registerBox h3 {
   text-align: right;
   margin-bottom: 20px;
 }
+
 .loginBox h3 a,
 .registerBox h3 a {
   font-size: 13px;
   color: #999;
 }
+
 .loginBox .otherLogin {
   max-width: 320px;
   padding: 30px 40px;
@@ -314,10 +399,12 @@ export default {
   margin-right: -40px;
   visibility: hidden;
 }
+
 .loginBox .otherLogin p {
   margin-bottom: 20px;
   font-size: 16px;
 }
+
 .loginBox .otherLogin a i {
   display: inline-block;
   width: 42px;
@@ -328,12 +415,15 @@ export default {
   color: #fff;
   margin: 0 10px;
 }
+
 .loginBox .otherLogin a i.fa-wechat {
   background: #7bc549;
 }
+
 .loginBox .otherLogin a i.fa-qq {
   background: #56b6e7;
 }
+
 .loginBox .otherLogin a i.fa-weibo {
   background: #ff763b;
 }
@@ -343,21 +433,25 @@ export default {
   padding: 40px;
   margin: 0 auto;
 }
+
 .registerSuc .sucIcon {
   text-align: center;
   margin-bottom: 30px;
   padding-left: 60px;
 }
+
 .registerSuc .sucContent {
   line-height: 1.5;
   font-size: 15px;
   text-align: center;
 }
+
 .registerSuc .sucContent p {
   margin-top: 10px;
   font-size: 13px;
   color: #999;
 }
+
 .registerSuc .sucContent .lastbtn {
   display: inline-block;
   font-size: 14px;
@@ -366,6 +460,7 @@ export default {
   color: #fff;
   cursor: pointer;
 }
+
 .registerSuc .sucContent .el-icon-close {
   font-size: 13px;
 }
