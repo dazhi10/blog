@@ -56,7 +56,7 @@
           >
             <article class="">
               <header>
-                <img :src="item.avatar" />
+                <img :src="item.avatar?item.avatar:'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'" />
                 <div class="i-name">
                   {{ item.username }}
                 </div>
@@ -90,7 +90,7 @@
               >
                 <article class="">
                   <header>
-                    <img :src="citem.avatar" />
+                    <img :src="citem.avatar?citem.avatar:'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'" />
                     <div class="i-name">
                       {{ citem.username }}
                       <span class="el-icon-caret-right"></span>

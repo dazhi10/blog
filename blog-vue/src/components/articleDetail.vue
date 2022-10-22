@@ -17,7 +17,6 @@
             style="
               display: flex;
               align-items: center;
-              justify-items: space-between;
               margin-top: 30px;
               height: 16px;
             "

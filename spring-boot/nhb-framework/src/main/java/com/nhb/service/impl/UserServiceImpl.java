@@ -58,11 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Value("${spring.mail.username}")
     private String mailKey;
 
-    @Value("${spring.mail.url}")
-    private String url;
 
-    @Value("${server.port}")
-    private String port;
 
     @Autowired
     private UserRoleService userRoleService;

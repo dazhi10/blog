@@ -64,7 +64,7 @@
               <li class="avatarlist">
                 <span class="leftTitle">头像</span>
                 <div class="avatar-uploader">
-                  <img :src="userInfoObj.avatar" class="avatar">
+                  <img :src="userInfoObj.avatar?userInfoObj.avatar:'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'" class="avatar">
                 </div>
               </li>
               <li class="username">
@@ -108,11 +108,12 @@ export default {
       isEdit: false,
       userInfo: {}, //本地存储的用户信
       userInfoObj: {
+        id: null,
         userName: null,
         nickName: null,
         sex: null,
         createTime: null,
-        avatar: 'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'
+        avatar: null
       }, //用户的信息
       loading: true
     };
@@ -168,18 +169,15 @@ export default {
         this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
         this.userId = this.userInfo.id;
         getUserInfo(this.userId).then(response => {
-          console.log(response)
+          this.userInfoObj.id = response.id
           this.userInfoObj.userName = response.userName
           this.userInfoObj.nickName = response.nickName
           this.userInfoObj.sex = response.sex
           this.userInfoObj.createTime = response.createTime
-          if (typeof response.avatar == "undefined" || response.avatar
-              || response.avatar === "") {
 
-          } else {
+          if (typeof response.avatar !== "undefined") {
             this.userInfoObj.avatar = response.avatar
           }
-
           this.userInfoObj.head_start = 0;
         });
       } else {
