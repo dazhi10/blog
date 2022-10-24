@@ -33,11 +33,9 @@
 
               <div class="userInfo">
                 <div v-show="!haslogin" class="nologin">
-                  <a href="javascript:void(0);" @click="logoinFun(1)"
-                    >登录&nbsp;</a
-                  >|<a href="javascript:void(0);" @click="logoinFun(0)"
-                    >&nbsp;注册</a
-                  >
+                  <a href="javascript:void(0);" @click="logoinFun(1)">登录&nbsp;</a
+                  >|<a href="javascript:void(0);" @click="logoinFun(0)">&nbsp;注册</a>
+                  |<a href="http://182.61.21.196:8055/" target="_blank" >&nbsp;后台管理</a>
                 </div>
                 <div v-show="haslogin" class="haslogin">
                   <el-avatar :size="38" :src="headTou?headTou:'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'"></el-avatar>
