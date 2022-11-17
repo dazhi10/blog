@@ -33,12 +33,21 @@
 
               <div class="userInfo">
                 <div v-show="!haslogin" class="nologin">
-                  <a href="javascript:void(0);" @click="logoinFun(1)">登录&nbsp;</a
-                  >|<a href="javascript:void(0);" @click="logoinFun(0)">&nbsp;注册</a>
-                  |<a href="http://182.61.21.196:8055/" target="_blank" >&nbsp;后台管理</a>
+                  <a href="javascript:void(0);" @click="logoinFun(1)"
+                    >登录&nbsp;</a
+                  >|<a href="javascript:void(0);" @click="logoinFun(0)"
+                    >&nbsp;注册</a
+                  >
                 </div>
                 <div v-show="haslogin" class="haslogin">
-                  <el-avatar :size="38" :src="headTou?headTou:'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'"></el-avatar>
+                  <el-avatar
+                    :size="38"
+                    :src="
+                      headTou
+                        ? headTou
+                        : 'http://rjvy8zm3g.hn-bkt.clouddn.com/tou.gif'
+                    "
+                  ></el-avatar>
                   <ul class="haslogin-info">
                     <li>
                       <a href="#/UserInfo">个人中心</a>
@@ -96,7 +105,7 @@ export default {
       pMenu: true, //手机端菜单打开
       // path:'',//当前打开页面的路径
       input: "", //input输入内容
-      headBg: "url(http://rjvy8zm3g.hn-bkt.clouddn.com/headbg05.jpg)", //头部背景图
+      headBg: "url(http://cnd.abinya.top/headbg05.jpg)", //头部背景图
       headTou: "", //头像
       projectList: "", //项目列表
       loading: true,

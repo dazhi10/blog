@@ -60,10 +60,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public ResponseResult addComment(Comment comment) {
+
+
+
         //评论内容不能为空
         if (!StringUtils.hasText(comment.getContent())) {
             throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
         }
+
+        //TODO AI识别敏感词
+
+
         save(comment);
         return ResponseResult.okResult();
     }
